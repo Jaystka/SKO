@@ -8,7 +8,7 @@
 <!-- Start Content Section -->
 <section>
     <div class="text-center  pt-[50px] 2xl:pt-[100px] ">
-        <p class="text-[13vw] 2xl:text-[20vw]" id="jumbotron">SEPATU LOKAL</p>
+        <p class="text-[13vw]" id="jumbotron">SEPATU LOKAL</p>
     </div>
 
     <div class="container max-w-[1200px] mt-[-150px] lg:mt-[-560px]">
@@ -30,7 +30,7 @@
                 </span>
             </div>
         </div>
-        <img class="h-[1000px]" src="dist/img/sepatu 1.png" alt="">
+        <img class="size-auto pt-32 xl:pt-0" src="dist/img/sepatu 1.png" alt="">
         <div class="hidden lg:block" id="shadow"></div>
         <img class="hidden absolute h-[350px] mt-[-500px] ml-[950px] lg:block" src="dist/img/sepatu 2.png" alt="">
         <div class=" lg:mt-[-220px]">
