@@ -8,7 +8,7 @@
 <!-- Start Content Section -->
 <section>
     <div class="text-center  pt-[50px] 2xl:pt-[100px] ">
-        <p class="text-[12vw] 2xl:text-[20vw]" id="jumbotron">SEPATU LOKAL</p>
+        <p class="text-[13vw] 2xl:text-[20vw]" id="jumbotron">SEPATU LOKAL</p>
     </div>
 
     <div class="container max-w-[1200px] mt-[-150px] lg:mt-[-560px]">

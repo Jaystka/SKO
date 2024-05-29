@@ -94,16 +94,15 @@ body {
 }
 
 #jumbotron {
-  font-size: 80px;
   color: rgb(0 0 0 / var(--tw-text-opacity));
   --tw-text-opacity: 0.8;
 }
 
-@media (min-width: 1280px) {
+/* @media (min-width: 1280px) {
   #jumbotron {
     font-size: 200px;
   }
-}
+} */
 
 #jumbotron{
   @apply font-MadeTomy-Thin;
