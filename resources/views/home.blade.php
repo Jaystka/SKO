@@ -7,16 +7,16 @@
 @section('content')
 <!-- Start Content Section -->
 <section>
-    <div class="text-center   pt-[100px] lg:pt-[130px]">
-        <p id="jumbotron">SEPATU LOKAL</p>
+    <div class="text-center  pt-[50px] 2xl:pt-[100px] ">
+        <p class="text-[12vw] 2xl:text-[20vw]" id="jumbotron">SEPATU LOKAL</p>
     </div>
 
     <div class="container max-w-[1200px] mt-[-150px] lg:mt-[-560px]">
-        <p id="quote" class="hidden absolute mt-[580px] text-[17px] xl:block ">Berkarya dengan gaya
+        <p id="quote" class="hidden absolute mt-[580px] text-[17px] lg:block ">Berkarya dengan gaya
             <br> SKO selalu
             tersedia.
         </p>
-        <div class="absolute hidden mt-[650px] xl:block">
+        <div class="absolute hidden mt-[1000px] 2xl:mt-[650px] xl:block">
             <div class="flex"><span class=""><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                         viewBox="0 0 24 24">
                         <path fill="currentColor"
@@ -30,9 +30,9 @@
                 </span>
             </div>
         </div>
-        <img class="mt-[50px] max-h-[900px]" src="dist/img/sepatu 1.png" alt="">
+        <img class="h-[1000px]" src="dist/img/sepatu 1.png" alt="">
         <div class="hidden lg:block" id="shadow"></div>
-        <img class="hidden absolute h-[350px] mt-[-500px] ml-[950px] xl:block" src="dist/img/sepatu 2.png" alt="">
+        <img class="hidden absolute h-[350px] mt-[-500px] ml-[950px] lg:block" src="dist/img/sepatu 2.png" alt="">
         <div class=" lg:mt-[-220px]">
             <a href="shop"><button
                     class="rounded-lg text-sm px-24 py-10 mx-auto flex justify-between items-center custom-btn btn-15 font-MadeTomy-Regular">Shop
