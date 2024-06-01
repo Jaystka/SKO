@@ -44,7 +44,7 @@
             <!-- Start Search -->
             <div class="w-5/6 md:w-1/4 xl:w-1/5">
                 <form class="flex mx-3" action="">
-                    <input class="focus:outline-none w-full mr-5 rounded-lg px-2" type="text" />
+                    <input class="focus:outline-none w-full mr-5 rounded-lg px-2 text-black" type="text" />
                     <button class="p-[6px] hover:bg-black hover:text-white rounded-full">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">
@@ -56,18 +56,19 @@
             </div>
             <!-- End Search -->
 
+            @auth
             <!-- Start Profile Icon -->
             <div class="relative inline-block text-left">
                 <button onclick="toggleDropdown('profileDropdown')"
                     class="profile-button flex items-center focus:outline-none">
-                    <img class="w-8 h-8 rounded-full" src="img/logo.png" alt="Profile">
+                    <img class="w-8 h-8 rounded-full" src="{{auth()->user()->profile_picture}}" alt="Profile">
                 </button>
                 <!-- Dropdown menu -->
                 <div id="profileDropdown"
                     class="dropdown-content hidden right-0 left-auto absolute mt-5 w-80 max-w-40 rounded-md shadow-lg bg-white">
                     <div class="py-3 px-5 m-2 bg-gray-100 rounded-t-lg">
                         <p class="text-sm text-gray-500">Signed in as</p>
-                        <p class="text-sm font-medium text-gray-800">skolocal@sko.com</p>
+                        <p class="text-sm font-medium text-gray-800 uppercase">{{auth()->user()->name}}</p>
                     </div>
                     <div class="mt-2 py-3 first:pt-3 last:pb-4">
                         <a class="py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-black hover:text-white focus:outline-none focus:bg-black mb-1"
@@ -89,7 +90,7 @@
                             <span class="transition-colors duration-300">Cart</span>
                         </a>
                         <a class="flex items-center gap-x-32 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-black hover:text-white focus:outline-none focus:bg-black"
-                            href="login" style="display: flex;column-gap: 7px">
+                            href="logout" style="display: flex;column-gap: 7px">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
                                 class="bi bi-box-arrow-right" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd"
@@ -104,6 +105,20 @@
 
             </div>
             <!-- End Profile Icon -->
+            @endauth
+
+            @guest
+            <div class="relative inline-block text-left">
+                <a href="login">
+                    <div class="rounded-full  {{ $textColor ?? null == 'text-white' ? 'border-white' : 'border-[#3c4043]' }}""><svg xmlns="
+                        http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 1024 1024">
+                        <path fill="currentColor"
+                            d="M521.7 82c-152.5-.4-286.7 78.5-363.4 197.7c-3.4 5.3.4 12.3 6.7 12.3h70.3c4.8 0 9.3-2.1 12.3-5.8c7-8.5 14.5-16.7 22.4-24.5c32.6-32.5 70.5-58.1 112.7-75.9c43.6-18.4 90-27.8 137.9-27.8s94.3 9.3 137.9 27.8c42.2 17.8 80.1 43.4 112.7 75.9s58.1 70.4 76 112.5C865.7 417.8 875 464.1 875 512s-9.4 94.2-27.8 137.8c-17.8 42.1-43.4 80-76 112.5s-70.5 58.1-112.7 75.9A352.8 352.8 0 0 1 520.6 866c-47.9 0-94.3-9.4-137.9-27.8A353.8 353.8 0 0 1 270 762.3c-7.9-7.9-15.3-16.1-22.4-24.5c-3-3.7-7.6-5.8-12.3-5.8H165c-6.3 0-10.2 7-6.7 12.3C234.9 863.2 368.5 942 520.6 942c236.2 0 428-190.1 430.4-425.6C953.4 277.1 761.3 82.6 521.7 82M395.02 624v-76h-314c-4.4 0-8-3.6-8-8v-56c0-4.4 3.6-8 8-8h314v-76c0-6.7 7.8-10.5 13-6.3l141.9 112a8 8 0 0 1 0 12.6l-141.9 112c-5.2 4.1-13 .4-13-6.3" />
+                        </svg>
+                    </div>
+                </a>
+            </div>
+            @endguest
         </div>
     </nav>
     <!-- End Navbar -->
