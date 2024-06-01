@@ -25,4 +25,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/profile', [ProfileController::class, 'profileView'])->name('profileView');
     Route::get('/editprofile', [ProfileController::class, 'profileEdit'])->name('ProfileEdit');
+    Route::get('/shop', [ShopController::class, 'shopView']);
+    Route::get('/ourstory', [OurstoryController::class, 'ourstoryView'])->name('ourstory');
+    Route::get('/blog', [BlogController::class, 'blogView'])->name('blog');
+    Route::get('/product', [ProductController::class, 'productView'])->name('product');
 });

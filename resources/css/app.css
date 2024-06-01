@@ -48,7 +48,7 @@
 }
 
 .bodycopy {
-  font-family: 'MADE TOMMY REG';
+  @apply font-MadeTomy-Regular;
 }
 
 body {
