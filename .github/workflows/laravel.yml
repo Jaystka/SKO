@@ -66,6 +66,9 @@ jobs:
       with:
         node-version: '22.2' # Sesuaikan dengan versi Node.js proyek Anda
 
+    - name: Composer Update
+      run : composer update
+      
     - name: Install Composer dependencies
       run: composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader --no-interaction
 
