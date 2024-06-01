@@ -1,20 +1,14 @@
 name: SKO-CI/CD
-name: SKO-CI/CD
 
 on:
   push:
     branches:
       - Jay
-    branches:
-      - Jay
   pull_request:
-    branches:
-      - Jay
     branches:
       - Jay
 
 jobs:
-  build:
   build:
     runs-on: ubuntu-latest
 
