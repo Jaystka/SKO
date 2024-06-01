@@ -114,7 +114,7 @@
     <div class="w-full lg:w-1/4 items-center md:items-start">
       <div class="space-y-2 text-center md:text-left">
         <div class="flex items-center justify-center md:justify-start">
-          <span class="text-yellow-500">★</span>
+          <span class="text-yellow-500">★★</span>
           <span class="pl-2">372 Reviews</span>
         </div>
         <div class="py-5">
