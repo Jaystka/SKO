@@ -130,6 +130,5 @@
                                 }
     </script>
     @yield('script')
-    <script src="dist/js/app.js"></script>
 </body>
 @endsection
