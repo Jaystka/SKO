@@ -32,7 +32,7 @@ return new class extends Migration
             $table->integer('price');
             $table->text('image');
             $table->text('description');
-            $table->text('slug')->unique();
+            $table->string('slug')->unique();
             $table->integer('rating');
             $table->string('material_id');
             $table->foreign('material_id')->references('material_id')->on('material');
