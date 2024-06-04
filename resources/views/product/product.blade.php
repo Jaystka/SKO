@@ -5,8 +5,7 @@
 @endsection
 
 @section('content')
-
-<main class="container px-4 md:px-28 pt-36 text-[#3C4043]">
+<main class="container px-4 md:px-18 pt-24 text-[#3C4043]">
   <div class="flex flex-wrap ">
     <!-- Left Column -->
     <div class="w-full lg:w-1/4 items-start">
@@ -14,16 +13,16 @@
         <div class="flex items-center space-x-4">
           <div
             class=" rounded-2xl h-16 w-16 p-2 shadow-xl flex justify-center items-center text-center outline outline-1 bg-[#F0EEE5]">
-            <p class="font-MadeTomy-Regular">12Oz</p>
+            <p class="font-MadeTomy-Regular">{{$product->material}}</p>
           </div>
-          <span>Using 12oz canvas material</span>
+          <span>{{$product->material_desc}}</span>
         </div>
         <div class="flex items-center space-x-4 py-8">
           <div
             class="rounded-2xl h-16 w-16 p-2 shadow-xl flex justify-center items-center text-center outline outline-1 bg-[#F0EEE5]">
-            <p class="font-MadeTomy-Regular">Low Cut</p>
+            <p class="font-MadeTomy-Regular">{{$product->category}}</p>
           </div>
-          <span>Low cut shoes</span>
+          <span>{{$product->category_desc}}</span>
         </div>
       </div>
 
@@ -85,10 +84,14 @@
     <!-- Center Column -->
     <div class="w-full lg:w-2/4 items-center justify-center space-y-6">
       <div class="relative ">
-        <div class="flex justify-center"><img src="dist/img/Cmp2.png" alt="Proto Lite Purple" class=" w-[80%]"></div>
+        <div class="flex justify-center"><img src="{{ asset($product['image']) }}" alt="Proto Lite Purple"
+            class=" w-[80%]">
+        </div>
         <div class="flex justify-center mt-4 space-x-2">
-          <img src="dist/img/Cmp2.png" alt="Proto Lite Purple" class="w-16 h-16 object-cover rounded-lg shadow-md">
-          <img src="dist/img/Cmp2.png" alt="Proto Lite Purple" class="w-16 h-16 object-cover rounded-lg shadow-md">
+          <img src="{{ asset('dist/img/Cmp2.png') }}" alt="Proto Lite Purple"
+            class="w-16 h-16 object-cover rounded-lg shadow-md">
+          <img src="{{ asset('dist/img/Cmp2.png') }}" alt="Proto Lite Purple"
+            class="w-16 h-16 object-cover rounded-lg shadow-md">
         </div>
         <button class="absolute left-10 top-1/2 transform -translate-y-1/2" onclick="scrollLeft('productImages')"
           aria-label="Scroll Left">
@@ -111,28 +114,39 @@
     </div>
 
     <!-- Right Column -->
+    @php
+    $isDisabled = function ($product, $size) {
+    $stock = $product->stock->firstWhere('size', $size);
+    return optional($stock)->total_stock == '0' ? 'disabled' : '';
+    };
+    @endphp
     <div class="w-full lg:w-1/4 items-center md:items-start">
       <div class="space-y-2 text-center md:text-left">
         <div class="flex items-center justify-center md:justify-start">
-          <span class="text-yellow-500">★★</span>
-          <span class="pl-2">372 Reviews</span>
+          <span class="text-yellow-500">
+            @php
+            for($x=1;$x<=$product->rating;$x++) { echo "★" ; } @endphp </span>
+          <span class="pl-2">372
+            Reviews</span>
         </div>
         <div class="py-5">
-          <h2 class="text-2xl font-bold">Sepatu Compass</h2>
-          <h1 class="text-3xl font-MadeTomy-Bold">Proto Lite Purple</h1>
+          <h2 class="text-2xl font-bold">Sepatu {{ $product->product }}</h2>
+          <h1 class="text-3xl font-MadeTomy-Bold">{{ $product->brand }}</h1>
         </div>
-        <p class="text-red-600 text-xl font-MadeTomy-Medium">IDR 578.000</p>
+        <p class="text-red-600 text-xl font-MadeTomy-Medium">IDR {{ number_format($product->price, 0, ',', '.')}}</p>
 
         <div class="grid grid-cols-5 gap-2 my-4">
           <label class="cursor-pointer">
-            <input id="option1" name="size" class="peer sr-only" type="radio" value="1">
+            <input {{ $isDisabled($product, '36' ) }} id="option1" name="size" class="peer sr-only" type="radio"
+              value="1">
             <div
               class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
               <p>36</p>
             </div>
           </label>
           <label class="cursor-pointer">
-            <input id="option2" name="size" class="peer sr-only" type="radio" value="2">
+            <input {{ $isDisabled($product, '37' ) }} id="option1" name="size" class="peer sr-only" type="radio"
+              value="1">
             <div
               class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
               <p>37</p>
@@ -150,11 +164,7 @@
 
         <div class="py-5">
           <p class="font-MadeTomy-Medium">About</p>
-          <p class="text-sm text-justify">Following the footsteps of the PROTO 1 article, Compass® RESEARCH & DESTROY
-            presents a
-            basic variation of its popular predecessor titled PROTO LITE. Signature R&D elements are simplified for a
-            more casual wear, while the four bold colours and metallic detail, add a punchy statement to your every
-            look.</p>
+          <p class="text-sm text-justify">{{$product->description}}</p>
         </div>
         <div class="flex justify-end"><button
             class="bg-yellow-300 text-black py-4 px-16 rounded-md shadow-md">Buy</button>

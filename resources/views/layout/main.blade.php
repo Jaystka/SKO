@@ -28,16 +28,16 @@
                 <ul id="navbar-nav" class="block lg:flex">
                     <li class="group"><a
                             class="mx-8 py-2 lg:py-0 lg:mx-14 after:border-b-[1px] after:{{ $textColor ?? null == 'text-white' ? 'border-white' : 'border-[#3c4043]' }}"
-                            href="/">Home</a></li>
+                            href="{{ route('/') }}">Home</a></li>
                     <li class="group"><a
                             class="mx-8 py-2 lg:py-0 lg:mx-14 after:border-b-[1px] after:{{ $textColor ?? null == 'text-white' ? 'border-white' : 'border-[#3c4043]' }}"
-                            href="shop">Shop</a></li>
+                            href="{{ route('shop') }}">Shop</a></li>
                     <li class="group"><a
                             class="mx-8 py-2 lg:py-0 lg:mx-14 after:border-b-[1px] after:{{ $textColor ?? null == 'text-white' ? 'border-white' : 'border-[#3c4043]' }}"
-                            href="ourstory">Our Story</a></li>
+                            href="{{ route('ourstory') }}">Our Story</a></li>
                     <li class="group"><a
                             class="mx-8 py-2 lg:py-0 lg:mx-14 after:border-b-[1px] after:{{ $textColor ?? null == 'text-white' ? 'border-white' : 'border-[#3c4043]' }}"
-                            href="blog">Blog</a></li>
+                            href="{{ route('blog') }}">Blog</a></li>
                 </ul>
             </div>
 
@@ -109,7 +109,7 @@
 
             @guest
             <div class="relative inline-block text-left">
-                <a href="login">
+                <a href="{{ route('login') }}">
                     <div class="rounded-full  {{ $textColor ?? null == 'text-white' ? 'border-white' : 'border-[#3c4043]' }}""><svg xmlns="
                         http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 1024 1024">
                         <path fill="currentColor"
