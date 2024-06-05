@@ -29,3 +29,6 @@ Route::get('shop', function () {
 Route::get('product', function () {
     return view('product');
 });
+Route::get('payment', function () {
+    return view('payment');
+});
