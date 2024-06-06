@@ -24,19 +24,19 @@
 
             <!-- Start Menu Navbar -->
             <div id="nav-menu"
-                class="hidden absolute pt-4 bg-white shadow-lg rounded-lg max-w-[150px] w-full top-full lg:block lg:static lg:max-w-fit lg:shadow-none lg:bg-transparent lg:pl-20">
+                class="hidden absolute bg-white shadow-lg rounded-lg max-w-[150px] w-full top-full lg:block lg:static lg:max-w-fit lg:shadow-none lg:bg-transparent lg:pl-20">
                 <ul id="navbar-nav" class="block lg:flex">
-                    <li class="group"><a
-                            class="mx-8 py-2 lg:py-0 lg:mx-14 after:border-b-[1px] after:{{ $textColor ?? null == 'text-white' ? 'border-white' : 'border-[#3c4043]' }}"
+                    <li class="group flex"><a
+                            class="mx-8 py-2 lg:py-2 lg:mx-14  after:border-b-[1px]  after:{{ $textColor ?? null == 'text-white' ? 'border-white' : 'border-[#3c4043]' }}"
                             href="{{ route('/') }}">Home</a></li>
-                    <li class="group"><a
-                            class="mx-8 py-2 lg:py-0 lg:mx-14 after:border-b-[1px] after:{{ $textColor ?? null == 'text-white' ? 'border-white' : 'border-[#3c4043]' }}"
+                    <li class="group flex"><a
+                            class="mx-8 py-2 lg:py-2 lg:mx-14 after:border-b-[1px] after:{{ $textColor ?? null == 'text-white' ? 'border-white' : 'border-[#3c4043]' }}"
                             href="{{ route('shop') }}">Shop</a></li>
-                    <li class="group"><a
-                            class="mx-8 py-2 lg:py-0 lg:mx-14 after:border-b-[1px] after:{{ $textColor ?? null == 'text-white' ? 'border-white' : 'border-[#3c4043]' }}"
+                    <li class="group flex"><a
+                            class="mx-8 py-2 lg:py-2 lg:mx-14 after:border-b-[1px] after:{{ $textColor ?? null == 'text-white' ? 'border-white' : 'border-[#3c4043]' }}"
                             href="{{ route('ourstory') }}">Our Story</a></li>
-                    <li class="group"><a
-                            class="mx-8 py-2 lg:py-0 lg:mx-14 after:border-b-[1px] after:{{ $textColor ?? null == 'text-white' ? 'border-white' : 'border-[#3c4043]' }}"
+                    <li class="group flex"><a
+                            class="mx-8 py-2 lg:py-2 lg:mx-14 after:border-b-[1px] after:{{ $textColor ?? null == 'text-white' ? 'border-white' : 'border-[#3c4043]' }}"
                             href="{{ route('blog') }}">Blog</a></li>
                 </ul>
             </div>
@@ -72,7 +72,7 @@
                     </div>
                     <div class="mt-2 py-3 first:pt-3 last:pb-4">
                         <a class="py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-black hover:text-white focus:outline-none focus:bg-black mb-1"
-                            href="profile" style="display: flex;column-gap: 7px">
+                            href="{{ route('profileView') }}" style="display: flex;column-gap: 7px">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
                                 class="bi bi-person" viewBox="0 0 16 16">
                                 <path
@@ -90,7 +90,7 @@
                             <span class="transition-colors duration-300">Cart</span>
                         </a>
                         <a class="flex items-center gap-x-32 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-black hover:text-white focus:outline-none focus:bg-black"
-                            href="logout" style="display: flex;column-gap: 7px">
+                            href="{{ route('logout') }}" style="display: flex;column-gap: 7px">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
                                 class="bi bi-box-arrow-right" viewBox="0 0 16 16">
                                 <path fill-rule="evenodd"

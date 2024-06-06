@@ -19,11 +19,23 @@
       <!-- Profile Details -->
       <div class="flex flex-col gap-y-10">
         <h2 class="text-2xl mb-4 font-medium bodycopy">Profile</h2>
-        <p class="text-lg"><span class="font-bold bodycopy">Username : </span>{{auth()->user()->name}}</p>
-        <p class="text-lg"><span class="font-bold bodycopy">Email : </span>{{auth()->user()->email}}</p>
-        <p class="text-lg"><span class="font-bold bodycopy">Phone : </span>{{ auth()->user()->phone == null ? '-' :
-          auth()->user()->phone }}</p>
-        <p class="text-lg"><span class="font-bold bodycopy">Address : </span>{{auth()->user()->address}}</p>
+        <div class="flex border-b-2 border-y-gray-400">
+          <p class="text-lg w-1/3 font-bold bodycopy">Username</p>
+          <p class="text-lg w-2/3">{{auth()->user()->name}}</p>
+        </div>
+        <div class="flex border-b-2 border-y-gray-400">
+          <p class="text-lg w-1/3"><span class="font-bold bodycopy">Email</span></p>
+          <p class="text-lg w-2/3"> {{auth()->user()->email}}</p>
+        </div>
+        <div class="flex border-b-2 border-y-gray-400">
+          <p class="text-lg w-1/3"><span class="font-bold bodycopy">Phone</span></p>
+          <p class="text-lg w-2/3">{{ auth()->user()->phone == null ? '-' :
+            auth()->user()->phone }}</p>
+        </div>
+        <div class="flex border-b-2 border-y-gray-400">
+          <p class="text-lg w-1/3"><span class="font-bold bodycopy">Address</span></p>
+          <p class="text-lg w-2/3">{{auth()->user()->address}}</p>
+        </div>
         <a class="self-end mt-4 w-fit py-5 px-10 bg-[#FFF3B2] hover:bg-black text-gray-800 hover:text-white rounded-xl shadow-md bodycopy"
           href="editprofile">Edit</a>
       </div>

@@ -13,6 +13,7 @@
 
     @yield('head')
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- BEGIN: CSS Assets-->
     <link rel="stylesheet" href="{{ mix('dist/css/app.css') }}">
     <script src="{{ mix('dist/js/app.js') }}" defer></script>

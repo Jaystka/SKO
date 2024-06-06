@@ -8,6 +8,7 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CartController;
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/register', [AuthController::class, 'registerView'])->name('register');
@@ -27,6 +28,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', [HomeController::class, 'index']);
     Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/profile', [ProfileController::class, 'profileView'])->name('profileView');
+    Route::get('/cart', [CartController::class, 'index'])->name('cart');
     Route::resource('/editprofile', ProfileController::class);
     Route::get('/product', [ProductController::class, 'productView'])->name('product');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');

@@ -17,7 +17,7 @@
           class="mt-4 bg-[#FFF3B2] hover:bg-black text-gray-800 hover:text-white py-4 px-8 rounded-full shadow-md bodycopy">Change</button>
       </div>
       <!-- Profile Details -->
-      <form action="{{ route('editprofile.update', auth()->user()->id) }}" method="POST">
+      <form class="formEdit" action="{{ route('editprofile.update', auth()->user()->id) }}" method="POST">
         @csrf
         @method('PUT')
 
@@ -57,10 +57,66 @@
 @endsection
 
 @section('script')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+  $.ajaxSetup({
 
+        headers: {
+
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+
+        }
+
+    });
+    $(".formEdit").submit(function (event) {
+        event.preventDefault(); //prevent default action
+        let post_url = $(this).attr("action"); //get form action url
+        let request_method = $(this).attr("method"); //get form GET/POST method
+        let form_data = $(this).serialize(); //Encode form elements for submission
+        Swal.fire({
+            title: 'Edit Data?',
+            text: "Pastikan data yang anda masukan sudah benar!",
+            icon: 'question',
+            showDenyButton: true,
+            confirmButtonColor: '#00397C',
+            denyButtonColor: '#7C0000',
+            confirmButtonText: 'Ya, Ubah',
+            denyButtonText: 'Batal',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: post_url,
+                    type: request_method,
+                    data: form_data,
+                    success: function (data) {
+                        if ($.isEmptyObject(data.error)) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Data Berhasil Diubah',
+                                timer: 1500,
+                                didOpen: () => {
+                                                },
+                                                willClose: () => {
+                                                location.href = "/profile"
+                                                }
+                            })
+                            
+                        } else {
+                            Swal.fire({
+                                title: 'Ada Kesalahan!',
+                                text: 'Terdapat kesalahan dalam proses update',
+                                icon: 'error',
+                                confirmButtonText: 'OK',
+                                confirmButtonColor: 'orange'
+                            }
+                            );
+                        }
+
+                    }
+                });
+            }
+        });
+    });
 </script>
 @endsection

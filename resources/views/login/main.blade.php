@@ -101,7 +101,7 @@
                 title: "Berhasil Login!",
                 text: "Selamat Datang, Selamat Belanja!",
                 showConfirmButton: false,
-                timer: 1500,
+                timer: 700,
                 didOpen: () => {
                 },
                 willClose: () => {
