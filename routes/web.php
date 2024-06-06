@@ -8,6 +8,7 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\AllprodukController;
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/register', [AuthController::class, 'registerView'])->name('register');
@@ -18,6 +19,7 @@ Route::group(['middleware' => 'guest'], function () {
 
 Route::get('/', [HomeController::class, 'index'])->name('/');
 Route::get('/shop', [ShopController::class, 'shopView'])->name('shop');
+Route::get('/allproduk', [AllprodukController::class, 'AllprodukView'])->name('allproduk');
 Route::get('/ourstory', [OurstoryController::class, 'ourstoryView'])->name('ourstory');
 Route::get('/blog', [BlogController::class, 'blogView'])->name('blog');
 Route::get('/product/{slug}', [ProductController::class, 'show'])

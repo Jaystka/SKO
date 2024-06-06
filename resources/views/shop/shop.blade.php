@@ -62,7 +62,7 @@
             </div>
         </div>
         <div class="flex justify-end">
-                <a href="next-page-url" class="page-arrow flex items-center justify-center w-7 h-7 bg-transparent border border-black  rounded-full">
+                <a href="allproduk" class="page-arrow flex items-center justify-center w-7 h-7 bg-transparent border border-black  rounded-full">
                     <img src="dist/img/right-arrow.png" alt="Arrow-Compas" class="w-3 h-3">
                 </a>
             </div>
@@ -123,7 +123,7 @@
             </div>
         </div>
         <div class="flex justify-end">
-                <a href="next-page-url" class="page-arrow flex items-center justify-center w-7 h-7 bg-transparent border border-black  rounded-full hover:bg-slate-400">
+                <a href="allproduk" class="page-arrow flex items-center justify-center w-7 h-7 bg-transparent border border-black  rounded-full hover:bg-slate-400">
                     <img src="dist/img/right-arrow.png" alt="Arrow-Compas" class="w-3 h-3">
                 </a>
             </div>
