@@ -21,7 +21,7 @@
             <!-- Product Card -->
             <a href="product" class="bg-transparent rounded-lg overflow-hidden">
                 <div class="h-30 md:h-40 xl:h-40 flex justify-center ">
-                    <img src="dist/img/Cmp1.png" alt="Product" class="scale-150">
+                    <img src="dist/img/Cmp1.png" alt="Product" class="scale-125 xl:scale-150 ">
                 </div>
                 <div class="p-4 text-center">
                     <h3 class="mb-2  text-xs sm:text-sm md:text-base lg:text-base xl:text-lg">Proto Lite Purple</h3>
@@ -33,7 +33,7 @@
             <!-- Product Card -->
             <a href="product" class="bg-transparent rounded-lg overflow-hidden">
                 <div class="h-30 md:h-40 xl:h-40 flex justify-center">
-                    <img src="dist/img/Cmp2.png" alt="Product" class="scale-150">
+                    <img src="dist/img/Cmp2.png" alt="Product" class="scale-125 xl:scale-150 ">
                 </div>
                 <div class="p-4 text-center">
                     <h3 class="mb-2  text-xs sm:text-sm md:text-base lg:text-base xl:text-lg">Proto Lite Purple</h3>
@@ -45,7 +45,7 @@
             <!-- Product Card -->
             <a href="product" class="bg-transparent rounded-lg overflow-hidden">
                 <div class="h-30 md:h-40 xl:h-40 flex justify-center">
-                    <img src="dist/img/Cmp3.png" alt="Product" class="scale-150 ">
+                    <img src="dist/img/Cmp3.png" alt="Product" class="scale-125 xl:scale-150  ">
                 </div>
                 <div class="p-4 text-center">
                     <h3 class="mb-2  text-xs sm:text-sm md:text-base lg:text-base xl:text-lg">Proto Lite Purple</h3>
@@ -56,7 +56,7 @@
             <!-- Product Card -->
             <a href="product" class="bg-transparent rounded-lg overflow-hidden">
                 <div class="h-30 md:h-40 xl:h-40 flex justify-center">
-                    <img src="dist/img/Cmp3.png" alt="Product" class="scale-150 ">
+                    <img src="dist/img/Cmp3.png" alt="Product" class="scale-125 xl:scale-150  ">
                 </div>
                 <div class="p-4 text-center">
                     <h3 class="mb-2  text-xs sm:text-sm md:text-base lg:text-base xl:text-lg">Proto Lite Purple</h3>
@@ -70,7 +70,7 @@
             <!-- Product Card -->
             <a href="product" class="bg-transparent rounded-lg overflow-hidden">
                 <div class="h-30 md:h-40 xl:h-40 flex justify-center ">
-                    <img src="dist/img/Cmp1.png" alt="Product" class="scale-150">
+                    <img src="dist/img/Cmp1.png" alt="Product" class="scale-125 xl:scale-150 ">
                 </div>
                 <div class="p-4 text-center">
                     <h3 class="mb-2  text-xs sm:text-sm md:text-base lg:text-base xl:text-lg">Proto Lite Purple</h3>
@@ -82,7 +82,7 @@
             <!-- Product Card -->
             <a href="product" class="bg-transparent rounded-lg overflow-hidden">
                 <div class="h-30 md:h-40 xl:h-40 flex justify-center">
-                    <img src="dist/img/Cmp2.png" alt="Product" class="scale-150">
+                    <img src="dist/img/Cmp2.png" alt="Product" class="scale-125 xl:scale-150 ">
                 </div>
                 <div class="p-4 text-center">
                     <h3 class="mb-2  text-xs sm:text-sm md:text-base lg:text-base xl:text-lg">Proto Lite Purple</h3>
@@ -94,7 +94,7 @@
             <!-- Product Card -->
             <a href="product" class="bg-transparent rounded-lg overflow-hidden">
                 <div class="h-30 md:h-40 xl:h-40 flex justify-center">
-                    <img src="dist/img/Cmp3.png" alt="Product" class="scale-150 ">
+                    <img src="dist/img/Cmp3.png" alt="Product" class="scale-125 xl:scale-150  ">
                 </div>
                 <div class="p-4 text-center">
                     <h3 class="mb-2  text-xs sm:text-sm md:text-base lg:text-base xl:text-lg">Proto Lite Purple</h3>
@@ -105,7 +105,7 @@
             <!-- Product Card -->
             <a href="product" class="bg-transparent rounded-lg overflow-hidden">
                 <div class="h-30 md:h-40 xl:h-40 flex justify-center">
-                    <img src="dist/img/Cmp3.png" alt="Product" class="scale-150 ">
+                    <img src="dist/img/Cmp3.png" alt="Product" class="scale-125 xl:scale-150  ">
                 </div>
                 <div class="p-4 text-center">
                     <h3 class="mb-2  text-xs sm:text-sm md:text-base lg:text-base xl:text-lg">Proto Lite Purple</h3>
