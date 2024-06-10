@@ -17,7 +17,7 @@
             <h1 class="text-2xl font-bold mb-4 pt-7 ">Sepatu Compas</h1>
         </div>
 
-        <div class="flex justify-center">
+        <div class="flex justify-between">
             <!-- Product Card -->
             <a href="product" class="bg-transparent rounded-lg overflow-hidden">
                 <div class="h-30 md:h-40 xl:h-40 flex justify-center ">
