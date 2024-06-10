@@ -18,49 +18,49 @@
         <div class="owl-carousel flex flex-col md:flex-row justify-between gap-2">
             <div class="text-center">
                 <a href="product">
-                    <img src="dist/img/Cmp2.png" alt="Proto Lite Purple" class="mx-auto">
+                    <img src="dist/img/Cmp2.png" alt="Proto Lite Purple" class="p-16">
                     <h3 class="mt-4">Proto Lite Purple</h3>
                     <p class="text-red-600">IDR 578.000</p>
                 </a>
             </div>
             <div class="text-center">
                 <a href="product">
-                    <img src="dist/img/Cmp2.png" alt="Proto Lite Purple" class="mx-auto">
+                    <img src="dist/img/Cmp2.png" alt="Proto Lite Purple" class="p-16">
                     <h3 class="mt-4">Proto Lite Purple</h3>
                     <p class="text-red-600">IDR 578.000</p>
                 </a>
             </div>
             <div class="text-center">
                 <a href="product">
-                    <img src="dist/img/Cmp2.png" alt="Proto Lite Purple" class="mx-auto">
+                    <img src="dist/img/Cmp2.png" alt="Proto Lite Purple" class="p-16">
                     <h3 class="mt-4">Proto Lite Purple</h3>
                     <p class="text-red-600">IDR 578.000</p>
                 </a>
             </div>
             <div class="text-center">
                 <a href="product">
-                    <img src="dist/img/Cmp2.png" alt="Proto Lite Purple" class="mx-auto">
+                    <img src="dist/img/Cmp2.png" alt="Proto Lite Purple" class="p-16">
                     <h3 class="mt-4">Proto Lite Purple</h3>
                     <p class="text-red-600">IDR 578.000</p>
                 </a>
             </div>
             <div class="text-center">
                 <a href="product">
-                    <img src="dist/img/Cmp2.png" alt="Proto Lite Purple" class="mx-auto">
+                    <img src="dist/img/Cmp2.png" alt="Proto Lite Purple" class="p-16">
                     <h3 class="mt-4">Proto Lite Purple</h3>
                     <p class="text-red-600">IDR 578.000</p>
                 </a>
             </div>
             <div class="text-center">
                 <a href="product">
-                    <img src="dist/img/Cmp2.png" alt="Proto Lite Purple" class="mx-auto">
+                    <img src="dist/img/Cmp2.png" alt="Proto Lite Purple" class="p-16">
                     <h3 class="mt-4">Proto Lite Purple</h3>
                     <p class="text-red-600">IDR 578.000</p>
                 </a>
             </div>
             <div class="text-center">
                 <a href="product">
-                    <img src="dist/img/Cmp2.png" alt="Proto Lite Purple" class="mx-auto">
+                    <img src="dist/img/Cmp2.png" alt="Proto Lite Purple" class="p-16">
                     <h3 class="mt-4">Proto Lite Purple</h3>
                     <p class="text-red-600">IDR 578.000</p>
                 </a>
