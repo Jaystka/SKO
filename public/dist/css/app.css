@@ -1,5 +1,5 @@
 /*
-! tailwindcss v3.4.3 | MIT License | https://tailwindcss.com
+! tailwindcss v3.4.4 | MIT License | https://tailwindcss.com
 *//*
 1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
 2. Allow adding a border to an element by just adding a border-width. (https://github.com/tailwindcss/tailwindcss/pull/116)
@@ -785,10 +785,13 @@ video {
 .h-screen {
   height: 100vh;
 }
+<<<<<<< HEAD
+=======
 .h-fit {
   height: -moz-fit-content;
   height: fit-content;
 }
+>>>>>>> f82bd740ae28cb197d306fd4749ffe915eb9a9f0
 .max-h-\[900px\] {
   max-height: 900px;
 }
@@ -1259,10 +1262,6 @@ video {
   padding-left: 0.75rem;
   padding-right: 0.75rem;
 }
-.px-32 {
-  padding-left: 8rem;
-  padding-right: 8rem;
-}
 .px-4 {
   padding-left: 1rem;
   padding-right: 1rem;
@@ -1307,10 +1306,6 @@ video {
   padding-top: 6rem;
   padding-bottom: 6rem;
 }
-.py-28 {
-  padding-top: 7rem;
-  padding-bottom: 7rem;
-}
 .py-3 {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
@@ -1345,6 +1340,8 @@ video {
 }
 .pt-7 {
   padding-top: 1.75rem;
+<<<<<<< HEAD
+=======
 }
 .pt-\[100px\] {
   padding-top: 100px;
@@ -1363,6 +1360,10 @@ video {
 }
 .pl-12 {
   padding-left: 3rem;
+>>>>>>> f82bd740ae28cb197d306fd4749ffe915eb9a9f0
+}
+.pt-\[100px\] {
+  padding-top: 100px;
 }
 .text-left {
   text-align: left;
