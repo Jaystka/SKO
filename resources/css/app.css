@@ -3,180 +3,205 @@
 @tailwind utilities;
 
 @font-face {
-    font-family: 'MadeTomy-Regular';
-    src: url('font/MADE TOMMY Regular_PERSONAL USE.otf') format("opentype");
+    font-family: "MadeTomy-Regular";
+    src: url("font/MADE TOMMY Regular_PERSONAL USE.otf") format("opentype");
 }
 
 @font-face {
-    font-family: 'MadeTomy-Light';
-    src: url('font/MADE TOMMY Light_PERSONAL USE.otf') format("opentype");
+    font-family: "MadeTomy-Light";
+    src: url("font/MADE TOMMY Light_PERSONAL USE.otf") format("opentype");
 }
 
 @font-face {
-    font-family: 'MadeTomy-Bold';
-    src: url('font/MADE TOMMY Bold_PERSONAL USE.otf') format("opentype");
+    font-family: "MadeTomy-Bold";
+    src: url("font/MADE TOMMY Bold_PERSONAL USE.otf") format("opentype");
 }
 
 @font-face {
-    font-family: 'MadeTomy-ExtraBold';
-    src: url('font/MADE TOMMY ExtraBold_PERSONAL USE.otf') format("opentype");
+    font-family: "MadeTomy-ExtraBold";
+    src: url("font/MADE TOMMY ExtraBold_PERSONAL USE.otf") format("opentype");
 }
 
 @font-face {
-    font-family: 'MadeTomy-Medium';
-    src: url('font/MADE TOMMY Medium_PERSONAL USE.otf') format("opentype");
+    font-family: "MadeTomy-Medium";
+    src: url("font/MADE TOMMY Medium_PERSONAL USE.otf") format("opentype");
 }
 
 @font-face {
-    font-family: 'MadeTomy-Thin';
-    src: url('font/MADE TOMMY Thin_PERSONAL USE.otf') format("opentype");
+    font-family: "MadeTomy-Thin";
+    src: url("font/MADE TOMMY Thin_PERSONAL USE.otf") format("opentype");
 }
 
-@font-face /*perintah untuk memanggil font eksternal*/
-  {
-  font-family: 'Azonix';
+@font-face /*perintah untuk memanggil font eksternal*/ {
+    font-family: "Azonix";
 
-  /*memberikan nama bebas untuk font*/
+    /*memberikan nama bebas untuk font*/
 
-  src: url('font/Azonix.otf');
+    src: url("font/Azonix.otf");
 
-  /*memanggil file font eksternalnya di folder nexa*/
+    /*memanggil file font eksternalnya di folder nexa*/
 }
 
 .logosko {
-  font-family: 'Azonix';
+    font-family: "Azonix";
 }
 
 .bodycopy {
-  @apply font-MadeTomy-Regular;
+    @apply font-MadeTomy-Regular;
 }
 
 body {
-  background-color: #F8F7F3;
-  @apply font-MadeTomy-Light;
+    background-color: #f8f7f3;
+    @apply font-MadeTomy-Light;
 }
 
-
 .navbar-fixed {
-  position: fixed;
-  z-index: 9999;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-  --tw-bg-opacity: 0.6;
-  -webkit-backdrop-filter:  blur(5px);
-          backdrop-filter:  blur(5px);
-  box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.3);
+    position: fixed;
+    z-index: 9999;
+    background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+    --tw-bg-opacity: 0.6;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.3);
 }
 
 #logo {
-  font-family: Azonix;
+    font-family: Azonix;
 }
 
-#nav-menu{
-  font-size: 14px;
+#nav-menu {
+    font-size: 14px;
 }
 
-#navbar-nav a{
+#navbar-nav a {
     position: relative;
-  @apply z-[9999];
+    @apply z-[9999];
 }
 
-#navbar-nav  a::after {
-  background: none repeat scroll 0 0 transparent;
-  bottom: 0;
-  content: "";
-  display: block;
-  height: 1px;
-  left: 50%;
-  position: absolute;
-  background: #3c4043;
-  transition: width 0.2s ease 0s, left 0.2s ease 0s;
-  width: 0;
+#navbar-nav a::after {
+    background: none repeat scroll 0 0 transparent;
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 1px;
+    left: 50%;
+    position: absolute;
+    background: #3c4043;
+    transition: width 0.2s ease 0s, left 0.2s ease 0s;
+    width: 0;
 }
 
-#navbar-nav  a:hover::after {
-  width: 110%; 
-  left: 0; 
+#navbar-nav a:hover::after {
+    width: 110%;
+    left: 0;
 }
 
 #jumbotron {
-  font-size: 80px;
-  color: rgb(0 0 0 / var(--tw-text-opacity));
-  --tw-text-opacity: 0.8;
+    font-size: 80px;
+    color: rgb(0 0 0 / var(--tw-text-opacity));
+    --tw-text-opacity: 0.8;
 }
 
 @media (min-width: 1280px) {
-  #jumbotron {
-    font-size: 200px;
-  }
+    #jumbotron {
+        font-size: 200px;
+    }
 }
 
-#jumbotron{
-  @apply font-MadeTomy-Thin;
+#jumbotron {
+    @apply font-MadeTomy-Thin;
 }
 
-#quote{
-  font-weight: 400;
-  line-height: 21px;
-  font-size: 17px;
-  color: #3c4043;
-  letter-spacing: 0.05em;
+#quote {
+    font-weight: 400;
+    line-height: 21px;
+    font-size: 17px;
+    color: #3c4043;
+    letter-spacing: 0.05em;
 }
 
 #shadow {
-  margin-left: 300px;
-  margin-top: -70px;
-  position: absolute;
-  width: 600px;
-  height: 30px;
-  background: #000000;
-  opacity: 0.4;
-  filter: blur(25px);
-  transform: rotate(-2.1deg);
+    margin-left: 300px;
+    margin-top: -70px;
+    position: absolute;
+    width: 600px;
+    height: 30px;
+    background: #000000;
+    opacity: 0.4;
+    filter: blur(25px);
+    transform: rotate(-2.1deg);
 }
 
 .custom-btn {
-  width: 210px;
-  height: 90px;
-  padding: 10px 70px;
-  font-weight: 500;
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  border-radius: 3px;
-  border: none;
+    width: 210px;
+    height: 90px;
+    padding: 10px 70px;
+    font-weight: 500;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    border-radius: 3px;
+    border: none;
 }
 
 .btn-15 {
-  background: #FFF3B2;
-  opacity: 0.85;
-  color: #000;
-  z-index: 1;
-  border-radius: 10px;
+    background: #fff3b2;
+    opacity: 0.85;
+    color: #000;
+    z-index: 1;
+    border-radius: 10px;
 }
 
 .btn-15:after {
-  position: absolute;
-  content: "";
-  width: 0;
-  height: 100%;
-  top: 0;
-  right: 0;
-  z-index: -1;
-  background: #000;
-  transition: all 0.3s ease;
-  border-radius: 3px;
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 100%;
+    top: 0;
+    right: 0;
+    z-index: -1;
+    background: #000;
+    transition: all 0.3s ease;
+    border-radius: 3px;
 }
 
 .btn-15:hover {
-  color: #fffced;
+    color: #fffced;
 }
 
 .btn-15:hover:after {
-  left: 0;
-  width: 100%;
+    left: 0;
+    width: 100%;
 }
 
 .btn-15:active {
-  top: 2px;
+    top: 2px;
+}
+.owl-prev,
+.owl-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: white;
+    padding: 20px; /* Increase padding for larger buttons */
+    cursor: pointer;
+    z-index: 1000; /* Ensure buttons are on top */
+}
+.owl-prev {
+    left: 10px;
+}
+.owl-next {
+    right: 10px;
+}
+.owl-prev svg,
+.owl-next svg {
+    width: 32px; /* Increase size of the SVG */
+    height: 32px;
+    stroke: grey; /* Set color to grey */
+}
+.nav-button.active {
+    border: 2px solid black;
 }
