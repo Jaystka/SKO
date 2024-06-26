@@ -58,48 +58,61 @@
 
             @auth
             <!-- Start Profile Icon -->
-            <div class="relative inline-block text-left">
-                <button onclick="toggleDropdown('profileDropdown')"
-                    class="profile-button flex items-center focus:outline-none">
-                    <img class="w-8 h-8 rounded-full" src="{{auth()->user()->profile_picture}}" alt="Profile">
-                </button>
-                <!-- Dropdown menu -->
-                <div id="profileDropdown"
-                    class="dropdown-content hidden right-0 left-auto absolute mt-5 w-80 max-w-40 rounded-md shadow-lg bg-white">
-                    <div class="py-3 px-5 m-2 bg-gray-100 rounded-t-lg">
-                        <p class="text-sm text-gray-500">Signed in as</p>
-                        <p class="text-sm font-medium text-gray-800 uppercase">{{auth()->user()->name}}</p>
+            <div class="flex items-center text-left">
+                <!-- Start Cart -->
+                <a class="hidden lg:block lg:pr-10" href="cart">
+                    <div
+                        class="rounded-full p-[6px] text-sm text-gray-800 hover:bg-black hover:text-white focus:outline-none focus:bg-black">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor"
+                                d="M17 18a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2c0-1.11.89-2 2-2M1 2h3.27l.94 2H20a1 1 0 0 1 1 1c0 .17-.05.34-.12.5l-3.58 6.47c-.34.61-1 1.03-1.75 1.03H8.1l-.9 1.63l-.03.12a.25.25 0 0 0 .25.25H19v2H7a2 2 0 0 1-2-2c0-.35.09-.68.24-.96l1.36-2.45L3 4H1zm6 16a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2c0-1.11.89-2 2-2m9-7l2.78-5H6.14l2.36 5z" />
+                        </svg>
                     </div>
-                    <div class="mt-2 py-3 first:pt-3 last:pb-4">
-                        <a class="py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-black hover:text-white focus:outline-none focus:bg-black mb-1"
-                            href="{{ route('profileView') }}" style="display: flex;column-gap: 7px">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
-                                class="bi bi-person" viewBox="0 0 16 16">
-                                <path
-                                    d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z" />
-                            </svg>
-                            <p class="transition-colors duration-300">Profile</p>
-                        </a>
-                        <a class="flex items-center gap-32 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-black hover:text-white focus:outline-none focus:bg-black mb-1"
-                            href="cart" style="display: flex;column-gap: 7px">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
-                                class="bi bi-cart" viewBox="0 0 16 16">
-                                <path
-                                    d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
-                            </svg>
-                            <span class="transition-colors duration-300">Cart</span>
-                        </a>
-                        <a class="flex items-center gap-x-32 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-black hover:text-white focus:outline-none focus:bg-black"
-                            href="{{ route('logout') }}" style="display: flex;column-gap: 7px">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
-                                class="bi bi-box-arrow-right" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd"
-                                    d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z" />
-                                <path fill-rule="evenodd"
-                                    d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
-                            </svg>
-                            <span class="transition-colors duration-300">Logout</span>
-                        </a>
+                </a>
+                <div class="relative">
+                    <!-- End Cart -->
+                    <button onclick="toggleDropdown('profileDropdown')"
+                        class="profile-button flex items-center focus:outline-none">
+                        <img class="w-8 h-8 rounded-full" src="{{auth()->user()->profile_picture}}" alt="Profile">
+                    </button>
+                    <!-- Dropdown menu -->
+                    <div id="profileDropdown"
+                        class="dropdown-content hidden right-0 left-auto absolute mt-5 w-80 max-w-40 rounded-md shadow-lg bg-white">
+                        <div class="py-3 px-5 m-2 bg-gray-100 rounded-t-lg">
+                            <p class="text-sm text-gray-500">Signed in as</p>
+                            <p class="text-sm font-medium text-gray-800 uppercase">{{auth()->user()->name}}</p>
+                        </div>
+                        <div class="mt-2 py-3 first:pt-3 last:pb-4">
+                            <a class="py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-black hover:text-white focus:outline-none focus:bg-black mb-1"
+                                href="{{ route('profileView') }}" style="display: flex;column-gap: 7px">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                                    class="bi bi-person" viewBox="0 0 16 16">
+                                    <path
+                                        d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z" />
+                                </svg>
+                                <p class="transition-colors duration-300">Profile</p>
+                            </a>
+                            <a class="flex items-center gap-32 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-black hover:text-white focus:outline-none focus:bg-black mb-1"
+                                href="{{ route('cart.index') }}" style="display: flex;column-gap: 7px">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                                    class="bi bi-cart" viewBox="0 0 16 16">
+                                    <path
+                                        d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+                                </svg>
+                                <span class="transition-colors duration-300">Cart</span>
+                            </a>
+                            <a class="flex items-center gap-x-32 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-black hover:text-white focus:outline-none focus:bg-black"
+                                href="{{ route('logout') }}" style="display: flex;column-gap: 7px">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                                    class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                        d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z" />
+                                    <path fill-rule="evenodd"
+                                        d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
+                                </svg>
+                                <span class="transition-colors duration-300">Logout</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
 
@@ -143,6 +156,26 @@
                                         }
                                     }
                                 }
+    </script>
+    <script>
+        // Navbar Fixed
+        window.onscroll = function(){
+        const header = document.querySelector('nav');
+        const fixedNav = header.offsetTop;
+        
+        if(window.pageYOffset > fixedNav){
+        header.classList.add('navbar-fixed');
+        }else{
+        header.classList.remove('navbar-fixed');
+        }
+        }
+        
+        //Menu Button
+        const btn = document.querySelector("button.mobile-menu-button");
+        const menu = document.getElementById("nav-menu");
+        btn.addEventListener("click", () => {
+        menu.classList.toggle("hidden");
+        });
     </script>
     @yield('script')
 </body>

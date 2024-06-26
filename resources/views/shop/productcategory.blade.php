@@ -10,7 +10,7 @@
 
     <div class="container mx-auto px-4 sm:px-6 lg:px-28">
         <!-- Tombol Kembali -->
-        <div class="pl-12"><a href="shop"
+        <div class="pl-4 xl:pl-12"><a href="shop"
                 class="page-arrow flex items-center justify-center w-7 h-7 bg-transparent border border-black  rounded-full hover:bg-slate-400">
                 <img src="dist/img/right-arrow.png" alt="Arrow-Compas" class="w-3 h-3 rotate-180">
             </a>
@@ -19,8 +19,8 @@
 
         <div class="flex justify-center py-10">
             <!-- Product Card -->
-            <a href="product" class="bg-transparent rounded-lg w-1/4">
-                <div class="flex justify-center ">
+            <a href="product" class="bg-transparent rounded-lg w-1/3 xl:w-1/4">
+                <div class="flex justify-center">
                     <img src="dist/img/Cmp1.png" alt="Product" class="size-[70%]">
                 </div>
                 <div class="py-4 text-center">
@@ -31,7 +31,7 @@
             <!-- End Product Card -->
 
             <!-- Product Card -->
-            <a href="product" class="bg-transparent rounded-lg w-1/4">
+            <a href="product" class="bg-transparent rounded-lg w-1/3 xl:w-1/4">
                 <div class="flex justify-center">
                     <img src="dist/img/Cmp2.png" alt="Product" class="size-[70%]">
                 </div>
@@ -43,7 +43,7 @@
             <!-- End Product Card -->
 
             <!-- Product Card -->
-            <a href="product" class="bg-transparent rounded-lg w-1/4">
+            <a href="product" class="bg-transparent rounded-lg w-1/3 xl:w-1/4">
                 <div class="flex justify-center">
                     <img src="dist/img/Cmp3.png" alt="Product" class="size-[70%]">
                 </div>
@@ -54,7 +54,7 @@
             </a>
             <!-- End Product Card -->
             <!-- Product Card -->
-            <a href="product" class="bg-transparent rounded-lg w-1/4">
+            <a href="product" class="bg-transparent rounded-lg hidden lg:block lg:w-1/4">
                 <div class="flex justify-center">
                     <img src="dist/img/Cmp3.png" alt="Product" class="size-[70%]">
                 </div>
@@ -68,7 +68,7 @@
         <div class="flex justify-center py-10">
             <!-- Product Card -->
             <a href="product" class="bg-transparent rounded-lg w-1/4">
-                <div class="flex justify-center ">
+                <div class="flex justify-center">
                     <img src="dist/img/Cmp1.png" alt="Product" class="size-[70%]">
                 </div>
                 <div class="py-4 text-center">
@@ -80,7 +80,7 @@
 
             <!-- Product Card -->
             <a href="product" class="bg-transparent rounded-lg w-1/4">
-                <div class="flex justify-center">
+                <div class="flex justify-center ">
                     <img src="dist/img/Cmp2.png" alt="Product" class="size-[70%]">
                 </div>
                 <div class="py-4 text-center">

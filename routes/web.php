@@ -9,7 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\AllprodukController;
+use App\Http\Controllers\ProductCategoryController;
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/register', [AuthController::class, 'registerView'])->name('register');
@@ -20,7 +20,7 @@ Route::group(['middleware' => 'guest'], function () {
 
 Route::get('/', [HomeController::class, 'index'])->name('/');
 Route::get('/shop', [ShopController::class, 'shopView'])->name('shop');
-Route::get('/allproduk', [AllprodukController::class, 'AllprodukView'])->name('allproduk');
+Route::get('/productcategory', [ProductCategoryController::class, 'ProductCategoryView'])->name('productcategory');
 Route::get('/ourstory', [OurstoryController::class, 'ourstoryView'])->name('ourstory');
 Route::get('/blog', [BlogController::class, 'blogView'])->name('blog');
 Route::get('/product/{slug}', [ProductController::class, 'show'])
@@ -30,8 +30,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', [HomeController::class, 'index']);
     Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/profile', [ProfileController::class, 'profileView'])->name('profileView');
-    Route::get('/cart', [CartController::class, 'index'])->name('cart');
     Route::resource('/editprofile', ProfileController::class);
+    Route::resource('/cart', CartController::class);
     Route::get('/product', [ProductController::class, 'productView'])->name('product');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });

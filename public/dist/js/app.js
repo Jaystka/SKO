@@ -18,24 +18,6 @@ __webpack_require__.r(__webpack_exports__);
 window.axios = axios__WEBPACK_IMPORTED_MODULE_2__["default"];
 window.helper = _helper__WEBPACK_IMPORTED_MODULE_1__["default"];
 
-// Navbar Fixed
-window.onscroll = function () {
-  var header = document.querySelector('nav');
-  var fixedNav = header.offsetTop;
-  if (window.pageYOffset > fixedNav) {
-    header.classList.add('navbar-fixed');
-  } else {
-    header.classList.remove('navbar-fixed');
-  }
-};
-
-//Menu Button
-var btn = document.querySelector("button.mobile-menu-button");
-var menu = document.getElementById("nav-menu");
-btn.addEventListener("click", function () {
-  menu.classList.toggle("hidden");
-});
-
 // //Scroll Shopp
 
 // const cardScroll = document.getElementById("card-scroll");
