@@ -2,6 +2,10 @@
 
 @section('head')
 <title>Home - SKO</title>
+<!-- <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"> -->
+<link rel="stylesheet" href="{{ asset('dist/css/owl.carousel.min.css') }}">
+<style>
+</style>
 @endsection
 
 @section('content')
@@ -83,34 +87,22 @@
 
     <!-- Center Column -->
     <div class="w-full lg:w-2/4 items-center justify-center space-y-6">
-      <div class="relative ">
-        <div class="flex justify-center"><img src="{{ asset($product['image']) }}" alt="Proto Lite Purple"
-            class=" w-[80%]">
-        </div>
-        <div class="flex justify-center mt-4 space-x-2">
-          <img src="{{ asset('dist/img/Cmp2.png') }}" alt="Proto Lite Purple"
-            class="w-16 h-16 object-cover rounded-lg shadow-md">
-          <img src="{{ asset('dist/img/Cmp2.png') }}" alt="Proto Lite Purple"
-            class="w-16 h-16 object-cover rounded-lg shadow-md">
-        </div>
-        <button class="absolute left-10 top-1/2 transform -translate-y-1/2" onclick="scrollLeft('productImages')"
-          aria-label="Scroll Left">
-          <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg">
-            <line x1="15" y1="19" x2="9" y2="12" stroke-width="2" stroke-linecap="round" />
-            <line x1="9" y1="12" x2="15" y2="5" stroke-width="2" stroke-linecap="round" />
-          </svg>
-        </button>
-        <button class="absolute right-10 top-1/2 transform -translate-y-1/2" onclick="scrollRight('productImages')"
-          aria-label="Scroll Right">
-          <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg">
-            <line x1="9" y1="19" x2="15" y2="12" stroke-width="2" stroke-linecap="round" />
-            <line x1="15" y1="12" x2="9" y2="5" stroke-width="2" stroke-linecap="round" />
-          </svg>
-        </button>
-
+      <div class="relative pt-28">
+      <!-- <div class="swiper-wrapper"> -->
+      <div class="owl-carousel owl-theme" id="productImages">
+      <!-- <div class="swiper-slide flex justify-center"> -->
+      <div class="item flex justify-center" data-hash="image1">
+        <img src="{{ asset($product['image']) }}" alt="Proto Lite Purple" class="w-full max-w-xs xl:max-w-sm">
       </div>
+      <div class="item flex justify-center" data-hash="image2">
+        <img src="{{ asset($product['image']) }}" alt="Proto Lite Purple" class="w-full max-w-xs xl:max-w-sm">
+      </div>
+    </div>
+    <div class="flex justify-center mt-4 space-x-2 ">
+      <img src="{{ asset($product['image']) }}" alt="Proto Lite Purple" class=" nav-button w-16 h-16 object-contain rounded-lg shadow-md hover:border border-black" data-hash="image1">
+      <img src="{{ asset($product['image']) }}" alt="Proto Lite Purple" class="nav-button w-16 h-16 object-contain rounded-lg shadow-md hover:border border-black" data-hash="image2">
+    </div>
+    </div>
     </div>
 
     <!-- Right Column -->
@@ -177,4 +169,46 @@
 <footer class="px-8 py-4 text-center text-black">
   ©SKO 2023. All rights reserved.
 </footer>
+@endsection
+
+@section('script')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="{{ asset('dist/js/owl.carousel.min.js') }}"></script>
+<script>
+$(document).ready(function() {
+  var owl = $('#productImages').owlCarousel({
+    items: 1,
+    loop: true,
+    margin: 10,
+    nav: true,
+    dots: false,
+    URLhashListener: true,
+    startPosition: 'URLHash',
+    navText: [
+      '<svg class="w-8 h-8 text-white" fill="none" stroke="grey" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><line x1="15" y1="19" x2="9" y2="12" stroke-width="2" stroke-linecap="round" /><line x1="9" y1="12" x2="15" y2="5" stroke-width="2" stroke-linecap="round" /></svg>',
+      '<svg class="w-8 h-8 text-white" fill="none" stroke="grey" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><line x1="9" y1="19" x2="15" y2="12" stroke-width="2" stroke-linecap="round" /><line x1="15" y1="12" x2="9" y2="5" stroke-width="2" stroke-linecap="round" /></svg>'
+    ]
+  });
+
+   // Mengatur navigasi dengan gambar thumbnail
+  $('.nav-button').on('click', function() {
+    var hash = $(this).data('hash');
+    var index = $('[data-hash="'+ hash +'"]').parent().index();
+    owl.trigger('to.owl.carousel', [index, 300]);
+    window.location.hash = hash;
+    $('.nav-button').removeClass('active');
+    $(this).addClass('active');
+  });
+
+ // Scroll ke bagian yang diinginkan berdasarkan hash URL pada halaman load
+ $(window).on('load', function() {
+    if(window.location.hash) {
+      var hash = window.location.hash.substring(1);
+      var index = $('[data-hash="'+ hash +'"]').parent().index();
+      owl.trigger('to.owl.carousel', [index, 300]);
+      $('.nav-button[data-hash="'+ hash +'"]').addClass('active');
+    }
+  });
+});
+</script>
 @endsection
