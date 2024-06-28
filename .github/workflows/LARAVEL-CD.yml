@@ -1,0 +1,25 @@
+name: LARAVEL_CD
+
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy using ssh
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PRIVATE_KEY }}
+        port: 22
+        script: |
+          cd sko.devtribe.my.id
+          git pull origin main
+          git status
+          npm install --only=prod
