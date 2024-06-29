@@ -29,7 +29,8 @@
             <!-- Item 1 -->
             @if ($carts->count() > 0)
             @foreach ($carts as $cart)
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 border-b py-4 items-center cart-item">
+            <div data-cart-id="{{$cart->cart_id}}"
+                class="grid grid-cols-1 md:grid-cols-12 gap-4 border-b py-4 items-center cart-item">
                 <div class="md:col-span-5 flex items-center">
                     <input type="checkbox" class="mr-2">
                     <div class="w-16 h-16 md:w-32 md:h-32 flex items-center shadow-xl  rounded-xl mr-4"><img
@@ -49,8 +50,9 @@
                 <div class="md:col-span-2 flex items-center">
                     <button class="bg-gray-300 text-black px-2 py-1 rounded minus-btn" data-type="minus"
                         data-field="quant[2]">-</button>
-                    <input class="text-center mx-2 w-10 form-control input-number" type="text"
-                        value="{{$cart['quantity']}}" min="1" max="50">
+                    <input class="text-center mx-2 w-10 form-control input-qty quantity bg-transparent" disabled
+                        readonly data-quantity="{{$cart->quantity}}" type="text" value="{{$cart['quantity']}}" min="1"
+                        max="50">
                     <button class="bg-[#FFF3B2] text-black px-2 py-1 rounded plus-btn">+</button>
                 </div>
                 <div class="md:col-span-1">
@@ -72,7 +74,8 @@
                     </form>
                 </div>
                 <div class="md:col-span-2">
-                    <p class="text-[#7C0000] price" id="price" data-price="{{$cart->cart_price}}">IDR
+                    <p class="text-[#7C0000] price" id="total-price-{{$cart->cart_id}}" data-price="{{$cart->price}}">
+                        IDR
                         {{number_format($cart->cart_price, 0, ',', '.')}}</p>
                 </div>
             </div>
@@ -88,8 +91,9 @@
             @endif
         </div>
         @if ($carts->count() > 0)
-        <div class="p-2 flex justify-end">
-            <button class="bg-[#FFF3B2] self-end text-black px-4 py-1 rounded w-full md:w-auto">Checkout</button>
+        <div class="px-20 flex justify-end">
+            <button
+                class="bg-[#FFF3B2] shadow-xl shadow-gray-300 self-end text-black px-4 py-3 rounded w-full md:w-auto">Checkout</button>
         </div>
         @endif
     </div>
@@ -117,8 +121,8 @@
         let request_method = $(this).attr("method"); //get form GET/POST method
         let form_data = $(this).serialize(); //Encode form elements for submission
         Swal.fire({
-            title: 'Hapus Data?',
-            text: "Data yang dihapus tidak dapat dikembalikan!",
+            title: 'Hapus Barang?',
+            text: "Yakin Gak Jadi Beli Barangnya!",
             icon: 'warning',
             showDenyButton: true,
             confirmButtonColor: '#223e8c',
@@ -159,70 +163,99 @@
 </script>
 <script>
     function formatNumber(number) {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    }
+return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
 
-    $('.input-number').on('keyup', function(e) {
-        e.preventDefault();
-        let total = 0;
-        let delayTimer;
-        var $this = $(this);
-        var $input = $this.closest('div').find('input');
-        var price = $('.price').data('price');
-        var value = parseInt($input.val());
-        
-        if (value >= 1) {
-        value = value;
-        } else {
-        value = 0;
-        }
-        
-        $input.val(value);
-        
-        // Menambah delay sebelum memperbarui total harga
-                    clearTimeout(delayTimer);
-                    delayTimer = setTimeout(function() {
+// Function to save input value to localStorage
+function saveInputValue(productId, value) {
+localStorage.setItem('product_' + productId, value);
+}
 
-        total += value * price;
-        total1 = formatNumber(total);
-        $('#price').text('IDR ' + total1);
-        }, 600); // Delay 500 milidetik (0.5 detik)
-        });
+// Function to get input value from localStorage
+function getInputValue(productId) {
+return localStorage.getItem('product_' + productId) || '1'; // Default value is '1'
+}
 
-    $('.minus-btn').on('click', function(e) {
-    e.preventDefault();
-    let total = 0;
-    var $this = $(this);
-    var $input = $this.closest('div').find('input');
-    var price = $('.price').data('price');
-    var value = parseInt($input.val());
+// Function untuk memeriksa dan mengatur nilai input dari localStorage
+function setInitialValues() {
+$('.input-qty').each(function() {
+let productId = $(this).closest('.cart-item').data('cart-id');
+let quantity = $(this).closest('.quantity').data('quantity');
+saveInputValue(productId, quantity)
+let storedValue = localStorage.getItem('product_' + productId);
 
-        if (value > 1) {
-            value = value - 1;
-        } else {
-            value = 1;
-        }
+if (storedValue !== null) {
+$(this).val(storedValue);
+}
+});
+}
 
-    $input.val(value);
+$(document).ready(function() {
+let delayTimer;
 
-    total += value * price;
-    total1 = formatNumber(total);
-    $('#price').text('IDR ' + total1);
-    });
+setInitialValues();
+
+$('.input-qty').on('input', function(e) {
+e.preventDefault();
+clearTimeout(delayTimer);
+
+let $this = $(this);
+let cartId = $this.closest('.cart-item').data('cart-id');
+let $input = $this;
+let price = $this.closest('.cart-item').find('.price').data('price');
+let value = parseInt($input.val());
+
+if (value >= 1) {
+value = value;
+} else {
+value = 0;
+}
+
+$input.val(value);
+
+delayTimer = setTimeout(function() {
+let total = value * price;
+let totalFormatted = formatNumber(total);
+$('#total-price-' + cartId).text('IDR ' + totalFormatted);
+}, 600); // Delay 600 milidetik (0.6 detik)
+});
+
+$('.minus-btn').on('click', function(e) {
+e.preventDefault();
+
+let $this = $(this);
+let cartId = $this.closest('.cart-item').data('cart-id');
+let $input = $this.closest('.cart-item').find('.input-qty');
+let price = $this.closest('.cart-item').find('.price').data('price');
+let value = parseInt($input.val());
+
+
+if (value > 1) {
+value = value - 1;
+} else {
+value = 1;
+}
+
+$input.val(value);
+
+let total = value * price;
+let totalFormatted = formatNumber(total);
+console.log(cartId)
+$('#total-price-' + cartId).text('IDR ' + totalFormatted);
+});
 
 $('.plus-btn').on('click', function(e) {
-    e.preventDefault();
-    let total = 0;
-    var $this = $(this);
-    var $input = $this.closest('div').find('input');
-    var value = parseInt($input.val());
-    var price = $('.price').data('price');
+e.preventDefault();
 
-    if (value < 100) { value=value + 1; } else { value=100; } $input.val(value); 
-    
-    total += value * price;
-    total = formatNumber(total);
-    $('#price').text('IDR ' + total);
+let $this = $(this);
+let cartId = $this.closest('.cart-item').data('cart-id');
+let $input = $this.closest('.cart-item').find('.input-qty');
+let price = $this.closest('.cart-item').find('.price').data('price');
+let value = parseInt($input.val());
+
+if (value < 100) { value=value + 1; } else { value=100; } $input.val(value); let total=value * price; let
+    totalFormatted=formatNumber(total); $('#total-price-' + cartId).text('IDR ' + totalFormatted);
     });
+});
 </script>
 @endsection

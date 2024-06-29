@@ -87,22 +87,26 @@
 
     <!-- Center Column -->
     <div class="w-full lg:w-2/4 items-center justify-center space-y-6">
-      <div class="relative pt-28">
-      <!-- <div class="swiper-wrapper"> -->
-      <div class="owl-carousel owl-theme" id="productImages">
-      <!-- <div class="swiper-slide flex justify-center"> -->
-      <div class="item flex justify-center" data-hash="image1">
-        <img src="{{ asset($product['image']) }}" alt="Proto Lite Purple" class="w-full max-w-xs xl:max-w-sm">
+      <div class="relative pt-40">
+        <!-- <div class="swiper-wrapper"> -->
+        <div class="owl-carousel owl-theme" id="productImages">
+          <!-- <div class="swiper-slide flex justify-center"> -->
+          <div class="item flex justify-center" data-hash="image1">
+            <img src="{{ asset($product['image']) }}" alt="Proto Lite Purple" class="w-full max-w-xs xl:max-w-sm">
+          </div>
+          <div class="item flex justify-center" data-hash="image2">
+            <img src="{{ asset($product['image']) }}" alt="Proto Lite Purple" class="w-full max-w-xs xl:max-w-sm">
+          </div>
+        </div>
+        <div class="flex justify-center mt-4 space-x-2 ">
+          <img src="{{ asset($product['image']) }}" alt="Proto Lite Purple"
+            class=" nav-button w-16 h-16 object-contain rounded-lg shadow-md hover:border border-black"
+            data-hash="image1">
+          <img src="{{ asset($product['image']) }}" alt="Proto Lite Purple"
+            class="nav-button w-16 h-16 object-contain rounded-lg shadow-md hover:border border-black"
+            data-hash="image2">
+        </div>
       </div>
-      <div class="item flex justify-center" data-hash="image2">
-        <img src="{{ asset($product['image']) }}" alt="Proto Lite Purple" class="w-full max-w-xs xl:max-w-sm">
-      </div>
-    </div>
-    <div class="flex justify-center mt-4 space-x-2 ">
-      <img src="{{ asset($product['image']) }}" alt="Proto Lite Purple" class=" nav-button w-16 h-16 object-contain rounded-lg shadow-md hover:border border-black" data-hash="image1">
-      <img src="{{ asset($product['image']) }}" alt="Proto Lite Purple" class="nav-button w-16 h-16 object-contain rounded-lg shadow-md hover:border border-black" data-hash="image2">
-    </div>
-    </div>
     </div>
 
     <!-- Right Column -->
@@ -175,7 +179,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="{{ asset('dist/js/owl.carousel.min.js') }}"></script>
 <script>
-$(document).ready(function() {
+  $(document).ready(function() {
   var owl = $('#productImages').owlCarousel({
     items: 1,
     loop: true,
