@@ -65,7 +65,7 @@
     <!-- Start Content Section -->
     <section>
         <div class="text-center  pt-[100px] lg:pt-[130px]">
-            <p id="jumbotron">SEPATU LOKAL</p>
+            <p id="jumbotron">SEPATU LOAK</p>
         </div>
 
         <div class="container max-w-[1200px] mt-[-150px] lg:mt-[-560px]">
