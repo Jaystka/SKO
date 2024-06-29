@@ -899,6 +899,7 @@ video {
 .cursor-pointer {
   cursor: pointer;
 }
+
 .resize {
   resize: both;
 }
