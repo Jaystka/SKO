@@ -19,5 +19,6 @@ jobs:
           SOURCE: "/"
           REMOTE_HOST: ${{ secrets.DEPLOY_HOST }}
           REMOTE_USER: ${{ secrets.DEPLOY_USER }}
+          REMOTE_PORT: 21
           TARGET: ${{ secrets.DEPLOY_PATH }}
           EXCLUDE: ".git, .github"
