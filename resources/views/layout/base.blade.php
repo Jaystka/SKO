@@ -13,8 +13,10 @@
 
     @yield('head')
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- BEGIN: CSS Assets-->
-    @vite('resources/css/app.css', 'resources/js/app.js')
+    <link rel="stylesheet" href="{{ mix('dist/css/app.css') }}">
+    <script src="{{ mix('dist/js/app.js') }}" defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.min.css">
     <title>Document</title>
 </head>

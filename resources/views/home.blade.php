@@ -7,7 +7,7 @@
 @section('content')
 <!-- Start Content Section -->
 <section>
-    <div class="text-center   pt-[100px] lg:pt-[130px]">
+    <div class="text-center  pt-[100px] lg:pt-[130px]">
         <p id="jumbotron">SEPATU LOKAL</p>
     </div>
 

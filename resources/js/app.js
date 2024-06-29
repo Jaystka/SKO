@@ -6,24 +6,6 @@ import helpers from './helper';
 window.axios = axios;
 window.helper = helpers;
 
-// Navbar Fixed
-window.onscroll = function(){
-    const header = document.querySelector('nav');
-    const fixedNav = header.offsetTop;
-
-    if(window.pageYOffset > fixedNav){
-        header.classList.add('navbar-fixed');
-    }else{
-        header.classList.remove('navbar-fixed');
-    }
-}
-
-//Menu Button
-const btn = document.querySelector("button.mobile-menu-button");
-const menu = document.getElementById("nav-menu");
-btn.addEventListener("click", () => {
-	menu.classList.toggle("hidden");
-});
 
 // //Scroll Shopp
 
