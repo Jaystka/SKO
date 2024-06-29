@@ -16,5 +16,5 @@ jobs:
       with:
         server: ftp.devtribe.my.id
         username: sko@devtribe.my.id
-        password: ${{ secrets.PASSWORD }}
+        password: ${{ secrets.ftp_password }}
         port: 21
