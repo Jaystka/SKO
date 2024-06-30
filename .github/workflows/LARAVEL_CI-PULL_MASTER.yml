@@ -34,10 +34,6 @@ jobs:
       run: php artisan test
 
   #Pull Request Ke Main
-  create_pr_repo_sync:
-    name: Pull Request
-    runs-on: ubuntu-latest
-    steps:
     - uses: repo-sync/pull-request@v2
       name: Create Pull Request
       with:
