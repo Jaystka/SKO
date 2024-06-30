@@ -1,4 +1,4 @@
-name: CI_AND_PULL_REQUEST
+name: LARAVEL_CI-PULL_MASTER
 # CI AND Automatically create / update pull request
 
 on:
