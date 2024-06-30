@@ -1,7 +1,7 @@
 @extends('../layout/main')
 
 @section('head')
-<title>Home - SKO</title>
+<title>Cart - SKO</title>
 <link rel="stylesheet" href="dist/css/owl.carousel.min.css">
 @endsection
 

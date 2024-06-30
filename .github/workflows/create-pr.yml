@@ -1,0 +1,19 @@
+name: Automatically create / update pull request
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  create_pr_repo_sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: repo-sync/pull-request@v2
+        name: Create pull request
+        with:
+          destination_branch: main
+          pr_title: "feat: PLACEHOLDER TITLE"
+          pr_template: ".github/PULL_REQUEST_TEMPLATE.md"
+          github_token: ${{ secrets.G_TOKEN }}
