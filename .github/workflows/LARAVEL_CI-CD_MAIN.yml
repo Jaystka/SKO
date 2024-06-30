@@ -1,4 +1,4 @@
-name: Laravel
+name: LARAVEL_CI/CD_MAIN
 
 on:
   push:
