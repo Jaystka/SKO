@@ -31,7 +31,7 @@ jobs:
       env:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
-      run: php artisan tes
+      run: php artisan test
 
   #Pull Request Ke Main
     - uses: repo-sync/pull-request@v2
