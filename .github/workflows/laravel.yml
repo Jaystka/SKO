@@ -38,6 +38,17 @@ jobs:
 
     - name: Set up Node.js
       uses: actions/setup-node@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2.^' # Sesuaikan dengan versi PHP proyek Anda
+        extensions: mbstring, bcmath, xml, curl, dom, json, pdo, pdo_mysql, tokenizer
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
       with:
         node-version: '22.2' # Sesuaikan dengan versi Node.js proyek Anda
 
@@ -69,7 +80,27 @@ jobs:
         DB_PASSWORD: root
 
     - name: Run Laravel tests
+        cp .env.example .env
+        php artisan key:generate
+
+    - name: Run Laravel migrations
+      run: php artisan migrate --force
       env:
+        DB_CONNECTION: mysql
+        DB_HOST: 127.0.0.1
+        DB_PORT: 3306
+        DB_DATABASE: test_db
+        DB_USERNAME: root
+        DB_PASSWORD: root
+
+    - name: Run Laravel tests
+      env:
+        DB_CONNECTION: mysql
+        DB_HOST: 127.0.0.1
+        DB_PORT: 3306
+        DB_DATABASE: test_db
+        DB_USERNAME: root
+        DB_PASSWORD: root
         DB_CONNECTION: mysql
         DB_HOST: 127.0.0.1
         DB_PORT: 3306

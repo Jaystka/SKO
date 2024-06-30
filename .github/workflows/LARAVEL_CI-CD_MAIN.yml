@@ -1,15 +1,14 @@
-name: CI AND PULL REQUEST
-# CI AND Automatically create / update pull request
+name: LARAVEL_CI/CD_MAIN
 
 on:
   push:
-    branches:
-      - master
+    branches: [ "main" ]
 
 jobs:
-  laravel_tests:
-    name: Continuous Integration
+  laravel-tests:
+
     runs-on: ubuntu-latest
+
     steps:
     - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
       with:
@@ -31,17 +30,15 @@ jobs:
       env:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
-      run: php artisan tes
-
-  #Pull Request Ke Main
-  create_pr_repo_sync:
-    name: Pull Request
-    runs-on: ubuntu-latest
-    steps:
-    - uses: repo-sync/pull-request@v2
-      name: Create Pull Request
+      run: php artisan test
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
-        destination_branch: main
-        pr_title: "feat: PLACEHOLDER TITLE"
-        pr_template: ".github/PULL_REQUEST_TEMPLATE.md"
-        github_token: ${{ secrets.G_TOKEN }}
+        server: ftp.devtribe.my.id
+        username: sko@sko.devtribe.my.id
+        password: ${{ secrets.ftp_password }}
+        port: 21
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
