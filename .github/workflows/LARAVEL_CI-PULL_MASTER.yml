@@ -8,7 +8,6 @@ on:
 
 jobs:
   laravel_tests:
-    name: Continuous Integration
     runs-on: ubuntu-latest
     steps:
     - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
@@ -34,10 +33,6 @@ jobs:
       run: php artisan tes
 
   #Pull Request Ke Main
-  create_pr_repo_sync:
-    name: Pull Request
-    runs-on: ubuntu-latest
-    steps:
     - uses: repo-sync/pull-request@v2
       name: Create Pull Request
       with:
