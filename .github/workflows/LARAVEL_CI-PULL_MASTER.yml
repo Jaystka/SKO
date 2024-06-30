@@ -1,4 +1,4 @@
-name: CI AND PULL REQUEST
+name: CI_AND_PULL_REQUEST
 # CI AND Automatically create / update pull request
 
 on:
@@ -8,7 +8,9 @@ on:
 
 jobs:
   laravel_tests:
+  
     runs-on: ubuntu-latest
+    
     steps:
     - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
       with:
