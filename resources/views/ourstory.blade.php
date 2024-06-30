@@ -13,7 +13,7 @@
   @section('content')
 
   <section class="bg-cover bg-center -z-50 w-screen h-screen flex justify-center items-center"
-    style="background-image: url('dist/img/bg2.png');">
+    style="background-image: url('dist/img/bg2.jpg');">
     <h1 class="text-[50px] mb-4 text-white fonthin">OUR COMPANY STORY</h1>
   </section>
 
