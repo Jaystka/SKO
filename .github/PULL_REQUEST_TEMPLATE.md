@@ -4,4 +4,4 @@
 
 ## Testing
 
-Done Bang😁
+Done Bang
