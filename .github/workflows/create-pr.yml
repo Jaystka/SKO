@@ -11,9 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Create pull request
-        id: open-pr
-        uses: repo-sync/pull-request@v2
+      - uses: repo-sync/pull-request@v2
+        name: Create pull request
         with:
           destination_branch: main
           pr_title: "feat: PLACEHOLDER TITLE"
