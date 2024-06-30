@@ -686,14 +686,11 @@ video {
 .mt-\[-500px\] {
   margin-top: -500px;
 }
-.mt-\[50px\] {
-  margin-top: 50px;
+.mt-\[1000px\] {
+  margin-top: 1000px;
 }
 .mt-\[580px\] {
   margin-top: 580px;
-}
-.mt-\[650px\] {
-  margin-top: 650px;
 }
 .mt-auto {
   margin-top: auto;
@@ -741,6 +738,10 @@ video {
   width: 70%;
   height: 70%;
 }
+.size-auto {
+  width: auto;
+  height: auto;
+}
 .h-10 {
   height: 2.5rem;
 }
@@ -779,9 +780,6 @@ video {
 }
 .h-screen {
   height: 100vh;
-}
-.max-h-\[900px\] {
-  max-height: 900px;
 }
 .min-h-screen {
   min-height: 100vh;
@@ -1323,17 +1321,14 @@ video {
 .pt-32 {
   padding-top: 8rem;
 }
-.pt-4 {
-  padding-top: 1rem;
-}
 .pt-40 {
   padding-top: 10rem;
 }
 .pt-7 {
   padding-top: 1.75rem;
 }
-.pt-\[100px\] {
-  padding-top: 100px;
+.pt-\[50px\] {
+  padding-top: 50px;
 }
 .text-left {
   text-align: left;
@@ -1381,6 +1376,9 @@ video {
 }
 .text-\[125px\] {
   font-size: 125px;
+}
+.text-\[13vw\] {
+  font-size: 13vw;
 }
 .text-\[17px\] {
   font-size: 17px;
@@ -1689,15 +1687,14 @@ body {
 }
 
 #jumbotron {
-    font-size: 80px;
-    color: rgb(0 0 0 / var(--tw-text-opacity));
-    --tw-text-opacity: 0.8;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
+  --tw-text-opacity: 0.8;
 }
 
 @media (min-width: 1280px) {
-    #jumbotron {
-        font-size: 200px;
-    }
+  #jumbotron {
+    font-size: 200px;
+  }
 }
 
 #jumbotron {
@@ -2174,11 +2171,6 @@ body {
     padding-right: 2rem;
   }
 
-  .lg\:py-0 {
-    padding-top: 0px;
-    padding-bottom: 0px;
-  }
-
   .lg\:py-2 {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
@@ -2198,10 +2190,6 @@ body {
 
   .lg\:pt-0 {
     padding-top: 0px;
-  }
-
-  .lg\:pt-\[130px\] {
-    padding-top: 130px;
   }
 
   .lg\:text-base {
@@ -2242,6 +2230,10 @@ body {
     padding-left: 3rem;
   }
 
+  .xl\:pt-0 {
+    padding-top: 0px;
+  }
+
   .xl\:text-base {
     font-size: 1rem;
     line-height: 1.5rem;
@@ -2250,6 +2242,16 @@ body {
   .xl\:text-lg {
     font-size: 1.125rem;
     line-height: 1.75rem;
+  }
+}
+@media (min-width: 1536px) {
+
+  .\32xl\:mt-\[650px\] {
+    margin-top: 650px;
+  }
+
+  .\32xl\:pt-\[100px\] {
+    padding-top: 100px;
   }
 }
 @media (prefers-color-scheme: dark) {
