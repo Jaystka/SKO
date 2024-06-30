@@ -18,7 +18,7 @@
 
             <!-- Start Logo -->
             <div class="px-4">
-                <a id="logo" class="py-6 text-xl hidden lg:static lg:block" href="">SKO<sup
+                <a id="logo" class="py-6 text-xl hidden lg:static lg:block" href="/">SKO<sup
                         style="font-family: Poppins; font-size: 14px;">®</sup></a>
             </div>
 
