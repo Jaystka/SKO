@@ -1323,9 +1323,6 @@ video {
 .pt-32 {
   padding-top: 8rem;
 }
-.pt-4 {
-  padding-top: 1rem;
-}
 .pt-40 {
   padding-top: 10rem;
 }
@@ -2172,11 +2169,6 @@ body {
   .lg\:px-8 {
     padding-left: 2rem;
     padding-right: 2rem;
-  }
-
-  .lg\:py-0 {
-    padding-top: 0px;
-    padding-bottom: 0px;
   }
 
   .lg\:py-2 {
