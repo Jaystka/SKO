@@ -695,6 +695,12 @@ video {
 .mt-auto {
   margin-top: auto;
 }
+.ml-2 {
+  margin-left: 0.5rem;
+}
+.ml-6 {
+  margin-left: 1.5rem;
+}
 .block {
   display: block;
 }
@@ -703,6 +709,9 @@ video {
 }
 .flex {
   display: flex;
+}
+.inline-flex {
+  display: inline-flex;
 }
 .table {
   display: table;
@@ -781,6 +790,9 @@ video {
 .h-screen {
   height: 100vh;
 }
+.h-60 {
+  height: 15rem;
+}
 .min-h-screen {
   min-height: 100vh;
 }
@@ -844,6 +856,9 @@ video {
 }
 .w-screen {
   width: 100vw;
+}
+.w-60 {
+  width: 15rem;
 }
 .max-w-2xl {
   max-width: 42rem;
@@ -1086,6 +1101,10 @@ video {
   --tw-border-opacity: 1;
   border-color: rgb(255 255 255 / var(--tw-border-opacity));
 }
+.border-gray-200 {
+  --tw-border-opacity: 1;
+  border-color: rgb(229 231 235 / var(--tw-border-opacity));
+}
 .border-y-gray-400 {
   --tw-border-opacity: 1;
   border-top-color: rgb(156 163 175 / var(--tw-border-opacity));
@@ -1144,6 +1163,10 @@ video {
 .bg-yellow-300 {
   --tw-bg-opacity: 1;
   background-color: rgb(253 224 71 / var(--tw-bg-opacity));
+}
+.bg-red-600 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(220 38 38 / var(--tw-bg-opacity));
 }
 .bg-gradient-to-b {
   background-image: linear-gradient(to bottom, var(--tw-gradient-stops));
@@ -1329,6 +1352,9 @@ video {
 }
 .pt-\[50px\] {
   padding-top: 50px;
+}
+.pr-10 {
+  padding-right: 2.5rem;
 }
 .text-left {
   text-align: left;
@@ -1855,6 +1881,10 @@ body {
   --tw-bg-opacity: 1;
   background-color: rgb(148 163 184 / var(--tw-bg-opacity));
 }
+.hover\:bg-yellow-400:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(250 204 21 / var(--tw-bg-opacity));
+}
 .hover\:text-\[\#FFF3B5\]:hover {
   --tw-text-opacity: 1;
   color: rgb(255 243 181 / var(--tw-text-opacity));
@@ -2210,6 +2240,14 @@ body {
 }
 @media (min-width: 1280px) {
 
+  .xl\:mb-12 {
+    margin-bottom: 3rem;
+  }
+
+  .xl\:mr-20 {
+    margin-right: 5rem;
+  }
+
   .xl\:block {
     display: block;
   }
@@ -2224,6 +2262,20 @@ body {
 
   .xl\:max-w-sm {
     max-width: 24rem;
+  }
+
+  .xl\:border {
+    border-width: 1px;
+  }
+
+  .xl\:border-black {
+    --tw-border-opacity: 1;
+    border-color: rgb(0 0 0 / var(--tw-border-opacity));
+  }
+
+  .xl\:px-24 {
+    padding-left: 6rem;
+    padding-right: 6rem;
   }
 
   .xl\:pl-12 {
