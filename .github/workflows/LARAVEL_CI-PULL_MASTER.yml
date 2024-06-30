@@ -1,4 +1,4 @@
-name: CI_AND_PULL_REQUEST
+name: LARAVEL_CI-PULL_MASTER
 # CI AND Automatically create / update pull request
 
 on:
@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+  # CI
     - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
       with:
         php-version: '8.2'
@@ -31,7 +32,7 @@ jobs:
       env:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
-      run: php artisan tes
+      run: php artisan test
 
   #Pull Request Ke Main
     - uses: repo-sync/pull-request@v2
