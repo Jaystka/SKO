@@ -76,6 +76,7 @@
 
 @section('script')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     (function() {
@@ -96,7 +97,17 @@
                 email: email,
                 password: password
             }).then(res => {
+                Swal.fire({icon: "success",
+                title: "Berhasil Login!",
+                text: "Selamat Datang, Selamat Belanja!",
+                showConfirmButton: false,
+                timer: 700,
+                didOpen: () => {
+                },
+                willClose: () => {
                 location.href = '/home'
+                }
+            });
             }).catch(err => {
                 console
                 $('#btn-login').html('Login')

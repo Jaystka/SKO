@@ -11,6 +11,7 @@
         <p class="text-[13vw]" id="jumbotron">SEPATU LOKAL</p>
     </div>
 
+
     <div class="container max-w-[1200px] mt-[-150px] lg:mt-[-560px]">
         <p id="quote" class="hidden absolute mt-[580px] text-[17px] lg:block ">Berkarya dengan gaya
             <br> SKO selalu

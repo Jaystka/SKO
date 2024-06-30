@@ -1,20 +1,20 @@
-name: SKO
+name: LARAVEL_CI-PULLREQ_MASTER
+# CI AND Automatically create / update pull request
 
 on:
   push:
-    branches: [ "Jay" ]
-  pull_request:
-    branches: [ "Jay" ]
+    branches: ["master"]
 
 jobs:
-  laravel-tests:
-
+  laravel_tests:
+  
     runs-on: ubuntu-latest
-
+    
     steps:
+  # CI
     - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
       with:
-        php-version: '8.0'
+        php-version: '8.2'
     - uses: actions/checkout@v4
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
@@ -33,3 +33,12 @@ jobs:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
       run: php artisan test
+
+  #Pull Request Ke Main
+    - uses: repo-sync/pull-request@v2
+      name: Create Pull Request
+      with:
+        destination_branch: main
+        pr_title: "feat: PLACEHOLDER TITLE"
+        pr_template: ".github/PULL_REQUEST_TEMPLATE.md"
+        github_token: ${{ secrets.G_TOKEN }}
