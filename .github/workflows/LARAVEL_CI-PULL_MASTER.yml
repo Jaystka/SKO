@@ -3,8 +3,7 @@ name: CI_AND_PULL_REQUEST
 
 on:
   push:
-    branches:
-      - master
+    branches: ["master"]
 
 jobs:
   laravel_tests:
