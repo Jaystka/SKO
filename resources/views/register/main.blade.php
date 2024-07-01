@@ -80,7 +80,7 @@
             }).then(res => {
                 location.href = 'login'
             }).catch(err => {
-                if(err.response.data.errors.email[0] == 'The email has already been taken.'){
+                if(err.response.data.errors.email == 'The email has already been taken.'){
                 $('#btn-signup').html('Sign Up')
                 const Toast = Swal.mixin({
                 toast: true,
