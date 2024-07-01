@@ -44,7 +44,7 @@
             <!-- Start Search -->
             <div class="w-5/6 md:w-1/4 xl:w-1/5">
                 <form class="flex mx-3" action="">
-                    <input class="focus:outline-none w-full mr-5 rounded-lg px-2 text-black" type="text" />
+                    <input class="focus:outline-none w-full mr-5 rounded-lg px-2 text-black border" type="text" />
                     <button class="p-[6px] hover:bg-black hover:text-white rounded-full">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">
@@ -138,6 +138,24 @@
 
     @yield('content')
 
+    <div class="loader">
+        <img class="loader-icon" src="{{ asset('dist/img/loader.gif') }}" alt="">
+    </div>
+    <script>
+        //Loader
+                window.addEventListener("load", () => {
+                    const loader = document.querySelector(".loader");
+        
+                    loader.classList.add("loader--hidden");
+        
+                    loader.addEventListener("transitionend", () => {
+                        if (loader.childNodes.length = 0) {
+                            document.body.removeChild(loader);
+                        }
+                    });
+        
+                });
+    </script>
     <script>
         function toggleDropdown(dropdownId) {
                                     var dropdown = document.getElementById(dropdownId);
