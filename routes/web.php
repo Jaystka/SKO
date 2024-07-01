@@ -32,3 +32,9 @@ Route::get('product', function () {
 Route::get('payment', function () {
     return view('payment');
 });
+Route::get('loginadmin', function () {
+    return view('admin/loginadmin');
+});
+Route::get('dashboard', function () {
+    return view('admin/dashboard');
+});
