@@ -42,3 +42,4 @@ jobs:
           **/.git*
           **/.git*/**
           **/node_modules/**
+          .env
