@@ -8,6 +8,7 @@ class ProductCategoryController extends Controller
 {
     function ProductCategoryView()
     {
+        
         return view('shop/productcategory');
     }
 }

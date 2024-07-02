@@ -28,6 +28,16 @@ class Material extends Model
     ];
     public $incrementing = false;
 }
+class Brand extends Model
+{
+    use HasFactory;
+    protected $primaryKey = 'brand_id';
+    protected $fillable = [
+        'brand_id',
+        'brand'
+    ];
+    public $incrementing = false;
+}
 
 class Product extends Model
 {
@@ -35,7 +45,7 @@ class Product extends Model
     protected $primaryKey = 'product_id';
     protected $fillable = [
         'product_id',
-        'product',
+        'brand_id',
         'category',
         'price',
         'image',
