@@ -7,7 +7,7 @@
 @section('content')
 <div class="flex flex-col md:flex-row min-h-screen">
     <!-- Left Section -->
-    <div class="flex-1 bg-cover bg-center relative" style="background-image: url('dist/img/registeruser.png');">
+    <div class="flex-1 bg-cover bg-center relative" style="background-image: url('dist/img/registeruser.jpg');">
         <div class="absolute inset-0 bg-[#FFF3B2] opacity-25"></div>
         <div class="relative z-10 flex items-center justify-center h-full p-8">
             <div class="text-center text-white">
