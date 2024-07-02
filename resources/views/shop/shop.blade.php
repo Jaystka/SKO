@@ -16,13 +16,15 @@
             </a>
         </div>
         <div class="owl-carousel flex justify-between px-8 pt-10 lg:p-0">
+            @foreach ($category1 as $category)
             <div class="text-center">
-                <a href="product">
-                    <img src="dist/img/Cmp2.png" alt="Proto Lite Purple" class="p-2 lg:p-16">
-                    <h3 class="mt-4">Proto Lite Purple</h3>
-                    <p class="text-red-600">IDR 578.000</p>
+                <a href="product/{{$category->slug}}">
+                    <img src="{{$category->image}}" alt="Proto Lite Purple" class="p-2 lg:p-16">
+                    <h3 class="mt-4">{{$category->series}}sfdfadasd</h3>
+                    <p class="text-red-600">IDR {{number_format($category->price, 0, ',', '.')}}</p>
                 </a>
             </div>
+            @endforeach
             <div class="text-center">
                 <a href="product">
                     <img src="dist/img/Cmp2.png" alt="Proto Lite Purple" class="p-2 lg:p-16">

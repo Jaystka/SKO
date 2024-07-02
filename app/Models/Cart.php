@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Cart extends Model
 {
+    public $timestamps = false;
     use HasFactory;
     protected $primaryKey = 'cart_id';
     protected $fillable = [
@@ -19,8 +20,13 @@ class Cart extends Model
     ];
     public $incrementing = false;
 
-    public function user()
+    public function customer()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Customer::class);
+    }
+
+    public function payment()
+    {
+        return $this->hasMany(Payment::class, 'cart_id');
     }
 }

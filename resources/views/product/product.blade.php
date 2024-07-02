@@ -131,38 +131,42 @@
         </div>
         <p class="text-red-600 text-xl font-MadeTomy-Medium">IDR {{ number_format($product->price, 0, ',', '.')}}</p>
 
-        <div class="grid grid-cols-5 gap-2 my-4">
-          <label class="cursor-pointer">
-            <input {{ $isDisabled($product, '36' ) }} id="option1" name="size" class="peer sr-only" type="radio"
-              value="1">
-            <div
-              class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
-              <p>36</p>
-            </div>
-          </label>
-          <label class="cursor-pointer">
-            <input {{ $isDisabled($product, '37' ) }} id="option1" name="size" class="peer sr-only" type="radio"
-              value="1">
-            <div
-              class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
-              <p>37</p>
-            </div>
-          </label>
-          <button class="p-2 border rounded">38</button>
-          <button class="p-2 border rounded">39</button>
-          <button class="p-2 border rounded">40</button>
-          <button class="p-2 border rounded">41</button>
-          <button class="p-2 border rounded">42</button>
-          <button class="p-2 border rounded">43</button>
-          <button class="p-2 border rounded">44</button>
-          <button class="p-2 border rounded">45</button>
-        </div>
+        <form class="addCart" id="addCart" action="{{ route('cart.store') }}" method="POST">
+          @csrf
+          <input type="hidden" name="customer_id" value="{{ auth()->user()->id }}">
+          <div class="grid grid-cols-5 gap-2 my-4">
+            <label class="cursor-pointer">
+              <input {{ $isDisabled($product, '36' ) }} id="option1" name="size" class="peer sr-only" type="radio"
+                value="36">
+              <div
+                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
+                <p>36</p>
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input {{ $isDisabled($product, '37' ) }} id="option1" name="size" class="peer sr-only" type="radio"
+                value="37">
+              <div
+                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
+                <p>37</p>
+              </div>
+            </label>
+            <button class="p-2 border rounded">38</button>
+            <button class="p-2 border rounded">39</button>
+            <button class="p-2 border rounded">40</button>
+            <button class="p-2 border rounded">41</button>
+            <button class="p-2 border rounded">42</button>
+            <button class="p-2 border rounded">43</button>
+            <button class="p-2 border rounded">44</button>
+            <button class="p-2 border rounded">45</button>
+          </div>
+        </form>
 
         <div class="py-5">
           <p class="font-MadeTomy-Medium">About</p>
           <p class="text-sm text-justify">{{$product->description}}</p>
         </div>
-        <div class="flex justify-end"><button
+        <div class="flex justify-end"><button type="submit" form="addCart"
             class="bg-yellow-300 text-black py-4 px-16 rounded-md shadow-md">Buy</button>
         </div>
       </div>

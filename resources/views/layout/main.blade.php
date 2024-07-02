@@ -60,7 +60,7 @@
             <!-- Start Profile Icon -->
             <div class="flex items-center text-left">
                 <!-- Start Cart -->
-                <a class="hidden lg:block lg:pr-10" href="cart">
+                <a class="hidden lg:block lg:pr-10" href="{{ route('cart.index') }}">
                     <div
                         class="rounded-full p-[6px] text-sm text-gray-800 hover:bg-black hover:text-white focus:outline-none focus:bg-black">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -73,7 +73,8 @@
                     <!-- End Cart -->
                     <button onclick="toggleDropdown('profileDropdown')"
                         class="profile-button flex items-center focus:outline-none">
-                        <img class="w-8 h-8 rounded-full" src="{{auth()->user()->profile_picture}}" alt="Profile">
+                        <img class="w-8 h-8 rounded-full" src="{{ asset(auth()->user()->profile_picture) }}"
+                            alt="Profile">
                     </button>
                     <!-- Dropdown menu -->
                     <div id="profileDropdown"
