@@ -48,6 +48,24 @@ class AuthController extends Controller
         $user->password = Hash::make($request->password);
         $user->save();
 
+        // $check = Customer::count();
+        // if ($check == 0) {
+        //     $id = 'C0001';
+        // } else {
+        //     $getId = Customer::all()->last();
+        //     $number = (int)substr($getId->id_produk, -3);
+        //     $new_id = str_pad($number + 1, 4, "0", STR_PAD_LEFT);
+        //     $id = 'C' . $new_id;
+        // };
+
+        // // Simpan data pengguna
+        // $customer = new Customer();
+        // $customer->customer_id = $id;
+        // $customer->username = $request->name;
+        // $customer->email = $request->email;
+        // $customer->password = Hash::make($request->password);
+        // $customer->save();
+
         return back()->with('success', 'Register successfully');
     }
 
