@@ -133,7 +133,7 @@
 
         <form class="addCart" id="addCart" action="{{ route('cart.store') }}" method="POST">
           @csrf
-          <input type="hidden" name="customer_id" value="{{ auth()->user()->id }}">
+          <input type="hidden" name="customer_id">
           <div class="grid grid-cols-5 gap-2 my-4">
             <label class="cursor-pointer">
               <input {{ $isDisabled($product, '36' ) }} id="option1" name="size" class="peer sr-only" type="radio"
