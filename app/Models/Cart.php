@@ -25,8 +25,8 @@ class Cart extends Model
         return $this->belongsTo(Customer::class);
     }
 
-    public function payment()
-    {
-        return $this->hasMany(Payment::class, 'cart_id');
-    }
+    // public function payment()
+    // {
+    //     return $this->hasMany(Payment::class, 'cart_id');
+    // }
 }

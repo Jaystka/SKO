@@ -81,7 +81,7 @@
                         class="dropdown-content hidden right-0 left-auto absolute mt-5 w-80 max-w-40 rounded-md shadow-lg bg-white">
                         <div class="py-3 px-5 m-2 bg-gray-100 rounded-t-lg">
                             <p class="text-sm text-gray-500">Signed in as</p>
-                            <p class="text-sm font-medium text-gray-800 uppercase">{{auth()->user()->name}}</p>
+                            <p class="text-sm font-medium text-gray-800 uppercase">{{auth()->user()->username}}</p>
                         </div>
                         <div class="mt-2 py-3 first:pt-3 last:pb-4">
                             <a class="py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-black hover:text-white focus:outline-none focus:bg-black mb-1"

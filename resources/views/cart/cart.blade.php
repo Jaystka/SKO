@@ -11,63 +11,64 @@
         <div class="p-20">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-4 border-b py-4">
                 <div class="md:col-span-5">
-                    <p class="text-gray-500">Description</p>
+                    <p class="text-gray-600 pl-48">Description</p>
                 </div>
                 <div class="md:col-span-2">
-                    <p class="text-gray-500">Size</p>
+                    <p class="text-gray-600">Size</p>
                 </div>
                 <div class="md:col-span-2">
-                    <p class="text-gray-500">Quantity</p>
+                    <p class="text-gray-600">Quantity</p>
                 </div>
                 <div class="md:col-span-1">
-                    <p class="text-gray-500">Remove</p>
+                    <p class="text-gray-600">Remove</p>
                 </div>
                 <div class="md:col-span-2">
-                    <p class="text-gray-500">Price</p>
+                    <p class="text-gray-600">Price</p>
                 </div>
             </div>
             <!-- Item 1 -->
             @if ($carts->count() > 0)
-            <form action="">
-                @foreach ($carts as $cart)
-                <div data-cart-id="{{$cart->cart_id}}"
-                    class="grid grid-cols-1 md:grid-cols-12 gap-4 border-b py-4 items-center cart-item">
-                    <div class="md:col-span-5 flex items-center">
-                        <div class="checkbox-wrapper-18 pr-6">
-                            <div class="round">
-                                <input type="checkbox" checked="checked" id="checkbox-{{$cart->cart_id}}"
-                                    value="{{$cart->cart_id}}" />
-                                <label for="checkbox-{{$cart->cart_id}}" value="{{$cart->cart_id}}"></label>
+            <div id="div_cart">
+                <form action="">
+                    @foreach ($carts as $cart)
+                    <div data-cart-id="{{$cart->cart_id}}"
+                        class="grid grid-cols-1 md:grid-cols-12 gap-4 border-b py-4 items-center cart-item">
+                        <div class="md:col-span-5 flex items-center">
+                            <div class="checkbox-wrapper-18 pr-6">
+                                <div class="round">
+                                    <input type="checkbox" checked="checked" id="checkbox-{{$cart->cart_id}}"
+                                        value="{{$cart->cart_id}}" />
+                                    <label for="checkbox-{{$cart->cart_id}}" value="{{$cart->cart_id}}"></label>
+                                </div>
+                            </div>
+                            <div class="w-16 h-16 md:w-32 md:h-32 flex items-center shadow-xl  rounded-xl mr-4"><img
+                                    src="{{$cart['image']}}" alt="Proto Lite Purple" class=" p-2"></div>
+                            <div>
+                                <p class="font-semibold">{{$cart->series}}</p>
+                                <p class="text-sm text-gray-500">Sepatu {{$cart->brand}}</p>
                             </div>
                         </div>
-                        <div class="w-16 h-16 md:w-32 md:h-32 flex items-center shadow-xl  rounded-xl mr-4"><img
-                                src="{{$cart['image']}}" alt="Proto Lite Purple" class=" p-2"></div>
-                        <div>
-                            <p class="font-semibold">{{$cart['brand']}}</p>
-                            <p class="text-sm text-gray-500">Sepatu {{$cart['product']}}</p>
+                        <div class="md:col-span-2">
+                            <div>
+                                <p
+                                    class="text-gray-700 w-10 h-10 flex items-center justify-center shadow-md font-MadeTomy-Regular">
+                                    {{$cart->size}}</p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="md:col-span-2">
-                        <div>
-                            <p
-                                class="text-gray-700 w-10 h-10 flex items-center justify-center shadow-md font-MadeTomy-Regular">
-                                {{$cart['size']}}</p>
+                        <div class="md:col-span-2 flex items-center">
+                            <div class="shadow-md">
+                                <button type="button" class="bg-gray-300 text-black px-2 py-1 rounded minus-btn"
+                                    data-type="minus" data-field="quant[2]">-</button>
+                                <input class="text-center mx-2 w-10 form-control input-qty quantity bg-transparent"
+                                    disabled readonly data-quantity="{{$cart->quantity}}" type="text"
+                                    value="{{$cart['quantity']}}" min="1" max="50">
+                                <button type="button"
+                                    class="bg-[#FFF3B2] text-black px-2 py-1 rounded plus-btn">+</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="md:col-span-2 flex items-center">
-                        <button class="bg-gray-300 text-black px-2 py-1 rounded minus-btn" data-type="minus"
-                            data-field="quant[2]">-</button>
-                        <input class="text-center mx-2 w-10 form-control input-qty quantity bg-transparent" disabled
-                            readonly data-quantity="{{$cart->quantity}}" type="text" value="{{$cart['quantity']}}"
-                            min="1" max="50">
-                        <button class="bg-[#FFF3B2] text-black px-2 py-1 rounded plus-btn">+</button>
-                    </div>
-                    <div class="md:col-span-1">
-                        <form action="{{ route('cart.destroy', $cart->cart_id) }}" method="POST" type="button"
-                            class="formDelete">
-                            @csrf
-                            @method('DELETE')
-                            <button class="text-gray-600 hover:text-gray-800">
+                        <div class="md:col-span-1">
+                            <button class="text-gray-600 hover:text-gray-800" onclick="clicked('{{$cart->cart_id}}')"
+                                type="button">
                                 <div class="flex justify-center items-center class w-10 h-10 shadow-lg rounded-md">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                         class="size-6">
@@ -77,17 +78,17 @@
                                     </svg>
                                 </div>
                             </button>
-                        </form>
+                        </div>
+                        <div class="md:col-span-2">
+                            <p class="text-[#7C0000] price" id="total-price-{{$cart->cart_id}}"
+                                data-price="{{$cart->price}}">
+                                IDR
+                                {{number_format($cart->cart_price, 0, ',', '.')}}</p>
+                        </div>
                     </div>
-                    <div class="md:col-span-2">
-                        <p class="text-[#7C0000] price" id="total-price-{{$cart->cart_id}}"
-                            data-price="{{$cart->price}}">
-                            IDR
-                            {{number_format($cart->cart_price, 0, ',', '.')}}</p>
-                    </div>
-                </div>
-                @endforeach
-            </form>
+                    @endforeach
+                </form>
+            </div>
             @else
             <div class="text-center text-gray-500 font-MadeTomy-thin text-2xl pt-32" colspan="5">
                 Yahh... Keranjangnya Kosong, Yuk lanjutin belanjanya!!
@@ -123,14 +124,14 @@
 
     });
 
-    $(".formDelete").submit(function (event) {
+    function clicked(id) {
         event.preventDefault(); //prevent default action
-        let post_url = $(this).attr("action"); //get form action url
-        let request_method = $(this).attr("method"); //get form GET/POST method
+        let post_url = 'cart/'+id; //get form action url
+        let request_method = 'DELETE'; //get form GET/POST method
         let form_data = $(this).serialize(); //Encode form elements for submission
         Swal.fire({
-            title: 'Hapus Barang?',
-            text: "Yakin Gak Jadi Beli Barangnya!",
+            title: 'Hapus?',
+            text: "Yakin Gak Jadi Beli Sepatunyanya!",
             icon: 'warning',
             showDenyButton: true,
             confirmButtonColor: '#223e8c',
@@ -141,8 +142,9 @@
             if (result.isConfirmed) {
                 $.ajax({
                     url: post_url,
-                    type: 'POST',
-                    data: form_data,
+                    type: 'DELETE',
+                    data: {
+                    cart_id: id },
                     success: function (data) {
                         if ($.isEmptyObject(data.error)) {
                             Swal.fire({
@@ -151,119 +153,166 @@
                                 timer: 1500
                             })
 
-                            location.reload();
-                        } else {
-                            Swal.fire({
-                                title: 'Gagal Dihapus!',
-                                text: 'Terjadi kesalahan sistem!',
-                                icon: 'warning',
-                                confirmButtonText: 'OK',
-                                confirmButtonColor: 'orange'
-                            }
-                            );
+                            $("#div_cart").load(window.location.href + " #div_cart" );
+                            } else {
+                                Swal.fire({
+                                    title: 'Gagal Dihapus!',
+                                    text: 'Terjadi kesalahan sistem!',
+                                    icon: 'warning',
+                                    confirmButtonText: 'OK',
+                                    confirmButtonColor: 'orange'
+                                }
+                                );
                         }
 
                     }
                 });
             }
         })
-    });
+    };
 </script>
 <script>
     function formatNumber(number) {
-return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-}
+		return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+	}
 
-// Function to save input value to localStorage
-function saveInputValue(productId, value) {
-localStorage.setItem('product_' + productId, value);
-}
+	// Function to save input value to localStorage
+	function saveInputValue(productId, value) {
+		localStorage.setItem('product_' + productId, value);
+	}
 
-// Function to get input value from localStorage
-function getInputValue(productId) {
-return localStorage.getItem('product_' + productId) || '1'; // Default value is '1'
-}
+	// Function to get input value from localStorage
+	function getInputValue(productId) {
+		return localStorage.getItem('product_' + productId) || '1'; // Default value is '1'
+	}
 
-// Function untuk memeriksa dan mengatur nilai input dari localStorage
-function setInitialValues() {
-$('.input-qty').each(function() {
-let productId = $(this).closest('.cart-item').data('cart-id');
-let quantity = $(this).closest('.quantity').data('quantity');
-saveInputValue(productId, quantity)
-let storedValue = localStorage.getItem('product_' + productId);
+	// Function untuk memeriksa dan mengatur nilai input dari localStorage
+	function setInitialValues() {
+		$('.input-qty').each(function() {
+			let productId = $(this).closest('.cart-item').data('cart-id');
+			let quantity = $(this).closest('.quantity').data('quantity');
+			saveInputValue(productId, quantity);
+            let storedValue = localStorage.getItem('product_' + productId);
 
-if (storedValue !== null) {
-$(this).val(storedValue);
-}
-});
-}
+			if (storedValue !== null) {
+				$(this).val(storedValue);
+			}
+		});
+	}
 
-$(document).ready(function() {
-let delayTimer;
+	$(document).ready(function() {
+		let delayTimer;
+        let debounceTimer;
 
-setInitialValues();
+		setInitialValues();
 
-$('.input-qty').on('input', function(e) {
-e.preventDefault();
-clearTimeout(delayTimer);
+        const debounce = (func, delay) => {
+            return function(...args) {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => func.apply(this, args), delay);
+            };
+            };
 
-let $this = $(this);
-let cartId = $this.closest('.cart-item').data('cart-id');
-let $input = $this;
-let price = $this.closest('.cart-item').find('.price').data('price');
-let value = parseInt($input.val());
+		$('.input-qty').on('input',
+		function(e) {
+			e.preventDefault();
+			clearTimeout(delayTimer);
 
-if (value >= 1) {
-value = value;
-} else {
-value = 0;
-}
+			let $this = $(this);
+			let cartId = $this.closest('.cart-item').data('cart-id');
+			let $input = $this;
+			let price = $this.closest('.cart-item').find('.price').data('price');
+			let value = parseInt($input.val());
 
-$input.val(value);
+			if (value >= 1) {
+				value = value;
+			} else {
+				value = 0;
+			}
 
-delayTimer = setTimeout(function() {
-let total = value * price;
-let totalFormatted = formatNumber(total);
-$('#total-price-' + cartId).text('IDR ' + totalFormatted);
-}, 600); // Delay 600 milidetik (0.6 detik)
-});
+			$input.val(value);
 
-$('.minus-btn').on('click', function(e) {
-e.preventDefault();
+			delayTimer = setTimeout(function() {
+				let total = value * price;
+				let totalFormatted = formatNumber(total);
+				$('#total-price-' + cartId).text('IDR ' + totalFormatted);
+			},
+			600); // Delay 600 milidetik (0.6 detik)
+		});
 
-let $this = $(this);
-let cartId = $this.closest('.cart-item').data('cart-id');
-let $input = $this.closest('.cart-item').find('.input-qty');
-let price = $this.closest('.cart-item').find('.price').data('price');
-let value = parseInt($input.val());
+		$('.minus-btn').on('click',
+		function(e) {
+			e.preventDefault();
 
+			let $this = $(this);
+			let cartId = $this.closest('.cart-item').data('cart-id');
+			let $input = $this.closest('.cart-item').find('.input-qty');
+			let price = $this.closest('.cart-item').find('.price').data('price');
+			let value = parseInt($input.val());
 
-if (value > 1) {
-value = value - 1;
-} else {
-value = 1;
-}
+			if (value > 1) {
+				value = value - 1;
+			} else {
+				value = 1;
+			}
 
-$input.val(value);
+			$input.val(value);
 
-let total = value * price;
-let totalFormatted = formatNumber(total);
-console.log(cartId)
-$('#total-price-' + cartId).text('IDR ' + totalFormatted);
-});
+			let total = value * price;
+			let totalFormatted = formatNumber(total);
+			$('#total-price-' + cartId).text('IDR ' + totalFormatted);
+            
+            let post_url = 'cart/update/'+cartId;
+            const delayTimerr = debounce(() => {
+            $.ajax({
+            method: 'PUT',
+            url: post_url,
+            data: {
+            quantity: value,
+            total: total
+            }
+            });
+            },
+            700); // Delay 600 milidetik (0.6 detik)
 
-$('.plus-btn').on('click', function(e) {
-e.preventDefault();
+            delayTimerr();
+		});
 
-let $this = $(this);
-let cartId = $this.closest('.cart-item').data('cart-id');
-let $input = $this.closest('.cart-item').find('.input-qty');
-let price = $this.closest('.cart-item').find('.price').data('price');
-let value = parseInt($input.val());
+		$('.plus-btn').on('click',
+		function(e) {
+			e.preventDefault();
 
-if (value < 100) { value=value + 1; } else { value=100; } $input.val(value); let total=value * price; let
-    totalFormatted=formatNumber(total); $('#total-price-' + cartId).text('IDR ' + totalFormatted);
-    });
-});
+			let $this = $(this);
+			let cartId = $this.closest('.cart-item').data('cart-id');
+			let $input = $this.closest('.cart-item').find('.input-qty');
+			let price = $this.closest('.cart-item').find('.price').data('price');
+			let value = parseInt($input.val());
+
+			if (value < 100) {
+				value = value + 1;
+			} else {
+				value = 100;
+			}
+			$input.val(value);
+			let total = value * price;
+			let totalFormatted = formatNumber(total);
+			$('#total-price-' + cartId).text('IDR ' + totalFormatted);
+
+            let post_url = 'cart/update/'+cartId;
+            const delayTimerr = debounce(() => {
+            $.ajax({
+            method: 'PUT',
+            url: post_url,
+            data: {
+            quantity: value,
+            total: total
+            }
+            });
+            },
+            700); // Delay 600 milidetik (0.6 detik)
+
+            delayTimerr();
+		});
+	});
 </script>
 @endsection

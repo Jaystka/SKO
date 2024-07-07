@@ -1,19 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
-use App\Http\Requests\LoginRequest;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use RealRashid\SweetAlert\Facades\Alert;
+use App\Models\Customer;
 use Illuminate\Http\Request;
-use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\URL;
 
-
-
-class AuthController extends Controller
+class CustomerAuthController extends Controller
 {
     /**
      * Show specified view.
@@ -40,13 +37,23 @@ class AuthController extends Controller
             'password' => 'required|string|min:8',
         ]);
 
+        $check = Customer::count();
+        if ($check == 0) {
+            $id = 'C0001';
+        } else {
+            $getId = Customer::all()->last();
+            $number = (int)substr($getId->customer_id, -4);
+            $new_id = str_pad($number + 1, 4, "0", STR_PAD_LEFT);
+            $id = 'C' . $new_id;
+        };
+
         // Simpan data pengguna
-        $user = new User();
-        $user->id = $request->id;
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->save();
+        $customer = new Customer();
+        $customer->customer_id = $id;
+        $customer->username = $request->name;
+        $customer->email = $request->email;
+        $customer->password = Hash::make($request->password);
+        $customer->save();
 
         return back()->with('success', 'Register successfully');
     }
@@ -83,9 +90,11 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             if ($request->ajax()) {
+                $intendedUrl = session('url.intended', url('home')); // Dapatkan URL yang dimaksud dari sesi atau default ke /home
                 return response()->json([
                     'success' => true,
-                    'message' => 'Login berhasil'
+                    'message' => 'Login berhasil',
+                    'url' => $intendedUrl
                 ]);
             } else {
                 return redirect('/home')->with('success', 'Login berhasil');
@@ -108,9 +117,16 @@ class AuthController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
+
+        // Hapus semua data session
+        $request->session()->invalidate();
+
+        // Hasilkan ulang token CSRF
+        $request->session()->regenerateToken();
+
         return redirect('login');
     }
 }

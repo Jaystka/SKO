@@ -21,6 +21,10 @@
         <h2 class="text-2xl mb-4 font-medium bodycopy">Profile</h2>
         <div class="flex border-b-2 border-y-gray-400">
           <p class="text-lg w-1/3 font-bold bodycopy">Username</p>
+          <p class="text-lg w-2/3">{{auth()->user()->username}}</p>
+        </div>
+        <div class="flex border-b-2 border-y-gray-400">
+          <p class="text-lg w-1/3 font-bold bodycopy">Name</p>
           <p class="text-lg w-2/3">{{auth()->user()->name}}</p>
         </div>
         <div class="flex border-b-2 border-y-gray-400">

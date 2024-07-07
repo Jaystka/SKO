@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 
@@ -18,12 +19,13 @@ class ProfileController extends Controller
         return view('profile/editprofileuser');
     }
 
-    public function update(Request $request, string $id_user)
+    public function update(Request $request, string $customer_id)
     {
 
-        $user = User::findOrFail($id_user);
+        $user = Customer::findOrFail($customer_id);
 
-        $user->name = $request->username;
+        $user->username = $request->username;
+        $user->name = $request->name;
         $user->phone = $request->phone;
         $user->address = $request->address;
 
