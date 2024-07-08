@@ -38,4 +38,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/product', [ProductController::class, 'productView'])->name('product');
     Route::get('/logout', [CustomerAuthController::class, 'logout'])->name('logout');
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+    // Route::resource('checkout', CheckoutController::class);
+    Route::post('/checkout', [CheckoutController::class, 'checkoutProduct']);
 });

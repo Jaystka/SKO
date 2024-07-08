@@ -16,7 +16,8 @@ class Cart extends Model
         'quantity',
         'cart_price',
         'product_id',
-        'size'
+        'size',
+        'status'
     ];
     public $incrementing = false;
 

@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Status;
 use App\Models\Customer;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class CheckoutController extends Controller
 {
@@ -13,6 +16,26 @@ class CheckoutController extends Controller
     {
 
         return view('cart/checkout');
+    }
+
+    public function checkoutProduct(Request $request)
+    {
+        $request->validate([
+            'options' => 'array',
+            'options.*.cart_id' => 'required|string|exists:carts,cart_id', // Ganti your_table_name dengan nama tabel Anda
+            'options.*.status' => 'required|boolean',
+            // 'options.*.status' => ['required', Rule::in(Status::getValues())],
+        ]);
+
+        $options = $request->input('options', []);
+
+        foreach ($options as $option) {
+            DB::table('carts')
+                ->where('cart_id', $option['cart_id'])
+                ->update(['status' => $option['status']]);
+        }
+
+        return response()->json(['success' => 'Options updated successfully']);
     }
 
     public function process(Request $request)

@@ -19,4 +19,9 @@ class Post extends Model
     {
         return DB::statement('call cart_insert(?, ?, ?, ?, ?)', [$id, $customer_id, $quantity, $product_id, $size]);
     }
+
+    public static function spInsertTransaction($cart_id)
+    {
+        return DB::statement('call transaction_insert(?)', [$cart_id]);
+    }
 }
