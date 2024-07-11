@@ -4,32 +4,32 @@
 
 @font-face {
     font-family: "MadeTomy-Regular";
-    src: url("font/MADE TOMMY Regular_PERSONAL USE.otf") format("opentype");
+    src: url("font/MADE Tommy Soft Regular PERSONAL USE.otf") format("opentype");
 }
 
 @font-face {
     font-family: "MadeTomy-Light";
-    src: url("font/MADE TOMMY Light_PERSONAL USE.otf") format("opentype");
+    src: url("font/MADE Tommy Soft Light PERSONAL USE.otf") format("opentype");
 }
 
 @font-face {
     font-family: "MadeTomy-Bold";
-    src: url("font/MADE TOMMY Bold_PERSONAL USE.otf") format("opentype");
+    src: url("font/MADE Tommy Soft Bold PERSONAL USE.otf") format("opentype");
 }
 
 @font-face {
     font-family: "MadeTomy-ExtraBold";
-    src: url("font/MADE TOMMY ExtraBold_PERSONAL USE.otf") format("opentype");
+    src: url("font/MADE Tommy Soft ExtraBold PERSONAL USE.otf") format("opentype");
 }
 
 @font-face {
     font-family: "MadeTomy-Medium";
-    src: url("font/MADE TOMMY Medium_PERSONAL USE.otf") format("opentype");
+    src: url("font/MADE Tommy Soft Medium PERSONAL USE.otf") format("opentype");
 }
 
 @font-face {
     font-family: "MadeTomy-Thin";
-    src: url("font/MADE TOMMY Thin_PERSONAL USE.otf") format("opentype");
+    src: url("font/MADE Tommy Soft Thin PERSONAL USE.otf") format("opentype");
 }
 
 @font-face /*perintah untuk memanggil font eksternal*/ {

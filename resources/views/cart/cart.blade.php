@@ -8,7 +8,7 @@
 @section('content')
 <div class="container mx-auto p-4">
     <div class="">
-        <div class="p-20">
+        <div class="px-20 pt-20 pb-7">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-4 border-b py-4">
                 <div class="md:col-span-5">
                     <p class="text-gray-600 pl-48">Description</p>
@@ -110,7 +110,6 @@
         @endif
     </div>
 </div>
-<div id="output"></div>
 @endsection
 
 @section('script')
@@ -127,7 +126,22 @@
         }
 
     });
-
+    
+    function loadContent() {
+        axios.get('cart/items')
+        .then(response => {
+        document.getElementById('div_cart').innerHTML = response.data;
+        initializeDropdown(); // Re-initialize event listeners
+        })
+        .catch(error => {
+        console.error('Error loading content:', error);
+        });
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            loadContent();
+            });
+            
     function clicked(id) {
         event.preventDefault(); //prevent default action
         let post_url = 'cart/'+id; //get form action url
@@ -157,7 +171,9 @@
                                 timer: 1500
                             })
 
-                            $("#div_cart").load(window.location.href + " #div_cart" );
+                            loadContent();
+                            // $("#div_cart").load(window.location.href + " #div_cart" );
+                            //location.reload(true);
                             } else {
                                 Swal.fire({
                                     title: 'Gagal Dihapus!',
@@ -204,6 +220,7 @@
 		});
 	}
 
+    function initializeDropdown (){
 	$(document).ready(function() {
 		let delayTimer;
         let debounceTimer;
@@ -211,7 +228,7 @@
 		setInitialValues();
 
         const debounce = (func, delay) => {
-            return function(...args) {
+            return function(args) {
             clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => func.apply(this, args), delay);
             };
@@ -241,7 +258,7 @@
 				let totalFormatted = formatNumber(total);
 				$('#total-price-' + cartId).text('IDR ' + totalFormatted);
 			},
-			600); // Delay 600 milidetik (0.6 detik)
+			500); // Delay 600 milidetik (0.6 detik)
 		});
 
 		$('.minus-btn').on('click',
@@ -253,6 +270,7 @@
 			let $input = $this.closest('.cart-item').find('.input-qty');
 			let price = $this.closest('.cart-item').find('.price').data('price');
 			let value = parseInt($input.val());
+            console.log(cartId);
 
 			if (value > 1) {
 				value = value - 1;
@@ -318,6 +336,7 @@
             delayTimerr();
 		});
 	});
+    };
 </script>
 {{-- Update pemilihan barang secara realtime --}}
 <script>

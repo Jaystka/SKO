@@ -156,7 +156,14 @@
                 <p>37</p>
               </div>
             </label>
-            <button class="p-2 border rounded">38</button>
+            <label class="cursor-pointer">
+              <input {{ $isDisabled($product, '38' ) }} id="option2" name="size" class="peer sr-only" type="radio"
+                value="38" required>
+              <div
+                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
+                <p>38</p>
+              </div>
+            </label>
             <button class="p-2 border rounded">39</button>
             <button class="p-2 border rounded">40</button>
             <button class="p-2 border rounded">41</button>

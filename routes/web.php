@@ -30,6 +30,7 @@ Route::get('/product/{slug}', [ProductController::class, 'show'])
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', [HomeController::class, 'index']);
+    Route::get('/cart/items', [CartController::class, 'itemsView']);
     Route::delete('/logout', [CustomerAuthController::class, 'logout'])->name('logout');
     Route::get('/profile', [ProfileController::class, 'profileView'])->name('profileView');
     Route::resource('/editprofile', ProfileController::class);
@@ -40,4 +41,5 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
     // Route::resource('checkout', CheckoutController::class);
     Route::post('/checkout', [CheckoutController::class, 'checkoutProduct']);
+    Route::get('/cart/items', [CartController::class, 'itemsView']);
 });

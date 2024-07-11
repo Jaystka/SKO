@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\Status;
+use App\Models\Cart;
 use App\Models\Customer;
 use App\Models\Payment;
 use Illuminate\Http\Request;
@@ -14,8 +15,16 @@ class CheckoutController extends Controller
 {
     public function index()
     {
+        $customer_id = Auth::id();
 
-        return view('cart/checkout');
+        $carts = Cart::where('customer_id', $customer_id)
+            ->whereAll(['status'], '=', '1')
+            ->join('products', 'carts.product_id', '=', 'products.product_id')
+            ->join('brand', 'brand.brand_id', '=', 'products.brand_id')
+            ->select('carts.*', 'products.*', 'brand.*')
+            ->orderBy('carts.time', 'desc')
+            ->get();
+        return view('cart/checkout', compact('carts'));
     }
 
     public function checkoutProduct(Request $request)

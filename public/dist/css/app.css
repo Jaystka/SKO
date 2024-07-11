@@ -547,6 +547,9 @@ video {
   white-space: nowrap;
   border-width: 0;
 }
+.collapse {
+  visibility: collapse;
+}
 .absolute {
   position: absolute;
 }
@@ -653,6 +656,9 @@ video {
 .ml-auto {
   margin-left: auto;
 }
+.mr-2 {
+  margin-right: 0.5rem;
+}
 .mr-3 {
   margin-right: 0.75rem;
 }
@@ -668,8 +674,8 @@ video {
 .mt-10 {
   margin-top: 2.5rem;
 }
-.mt-16 {
-  margin-top: 4rem;
+.mt-12 {
+  margin-top: 3rem;
 }
 .mt-2 {
   margin-top: 0.5rem;
@@ -776,6 +782,9 @@ video {
 }
 .h-6 {
   height: 1.5rem;
+}
+.h-60 {
+  height: 15rem;
 }
 .h-7 {
   height: 1.75rem;
@@ -1035,6 +1044,9 @@ video {
 .overflow-hidden {
   overflow: hidden;
 }
+.overflow-y-scroll {
+  overflow-y: scroll;
+}
 .rounded {
   border-radius: 0.25rem;
 }
@@ -1224,9 +1236,6 @@ video {
 .p-2 {
   padding: 0.5rem;
 }
-.p-20 {
-  padding: 5rem;
-}
 .p-4 {
   padding: 1rem;
 }
@@ -1326,6 +1335,9 @@ video {
 .py-8 {
   padding-top: 2rem;
   padding-bottom: 2rem;
+}
+.pb-7 {
+  padding-bottom: 1.75rem;
 }
 .pl-2 {
   padding-left: 0.5rem;
@@ -1635,32 +1647,32 @@ video {
 
 @font-face {
     font-family: "MadeTomy-Regular";
-    src: url("/fonts/MADE TOMMY Regular_PERSONAL USE.otf?101be848d2d18e7296bc4de3ccac1c9a") format("opentype");
+    src: url("/fonts/MADE Tommy Soft Regular PERSONAL USE.otf?764394d7395bf2c9e8fb5bd43bdf0006") format("opentype");
 }
 
 @font-face {
     font-family: "MadeTomy-Light";
-    src: url("/fonts/MADE TOMMY Light_PERSONAL USE.otf?baa9639fea2a3259ba0b155cecfe521a") format("opentype");
+    src: url("/fonts/MADE Tommy Soft Light PERSONAL USE.otf?3e79712cdb080ff1ce829b87daeb99c2") format("opentype");
 }
 
 @font-face {
     font-family: "MadeTomy-Bold";
-    src: url("/fonts/MADE TOMMY Bold_PERSONAL USE.otf?463024f431b0a3769ed9b8508142c54e") format("opentype");
+    src: url("/fonts/MADE Tommy Soft Bold PERSONAL USE.otf?dade5a5825589c64cd34e3354c42c3ed") format("opentype");
 }
 
 @font-face {
     font-family: "MadeTomy-ExtraBold";
-    src: url("/fonts/MADE TOMMY ExtraBold_PERSONAL USE.otf?76e6daa1c9100e32f75ee01922234bf4") format("opentype");
+    src: url("/fonts/MADE Tommy Soft ExtraBold PERSONAL USE.otf?13f506e9feb56684fb4010e3a8faf857") format("opentype");
 }
 
 @font-face {
     font-family: "MadeTomy-Medium";
-    src: url("/fonts/MADE TOMMY Medium_PERSONAL USE.otf?a1a50e698ce7cd493ce1a044a0a1a5cc") format("opentype");
+    src: url("/fonts/MADE Tommy Soft Medium PERSONAL USE.otf?30feb72ef5ac75accb9f1a393addfd9e") format("opentype");
 }
 
 @font-face {
     font-family: "MadeTomy-Thin";
-    src: url("/fonts/MADE TOMMY Thin_PERSONAL USE.otf?ed78c9e1d711bba4e32c0114233a86d8") format("opentype");
+    src: url("/fonts/MADE Tommy Soft Thin PERSONAL USE.otf?0fa08a483ee11b36128ccf61eea6f4f2") format("opentype");
 }
 
 @font-face /*perintah untuk memanggil font eksternal*/ {
@@ -2289,6 +2301,10 @@ body {
 
   .lg\:h-16 {
     height: 4rem;
+  }
+
+  .lg\:w-1\/3 {
+    width: 33.333333%;
   }
 
   .lg\:w-1\/4 {

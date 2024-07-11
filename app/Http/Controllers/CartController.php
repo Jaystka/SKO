@@ -21,6 +21,7 @@ class CartController extends Controller
             ->join('products', 'carts.product_id', '=', 'products.product_id')
             ->join('brand', 'brand.brand_id', '=', 'products.brand_id')
             ->select('carts.*', 'products.*', 'brand.*')
+            ->orderBy('carts.time', 'desc')
             ->get();
         return view('cart.cart', compact('carts'));
     }
@@ -74,5 +75,18 @@ class CartController extends Controller
             'cart_price' => DB::raw('quantity * (SELECT price FROM products WHERE product_id = carts.product_id)')
         ]);
         return response()->json(['success' => 'Cart updated successfully.']);
+    }
+
+    function itemsView()
+    {
+        $customer_id = Auth::id(); // Mengambil ID pengguna yang sedang terautentikasi
+
+        $carts = Cart::where('customer_id', $customer_id)
+            ->join('products', 'carts.product_id', '=', 'products.product_id')
+            ->join('brand', 'brand.brand_id', '=', 'products.brand_id')
+            ->select('carts.*', 'products.*', 'brand.*')
+            ->orderBy('carts.time', 'desc')
+            ->get();
+        return view('cart.items', compact('carts'));
     }
 }
