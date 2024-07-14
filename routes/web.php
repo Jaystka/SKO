@@ -12,6 +12,9 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProductCategoryController;
+use App\Http\Controllers\LoginadminController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProductsController;
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/register', [CustomerAuthController::class, 'registerView'])->name('register');
@@ -27,6 +30,9 @@ Route::get('/ourstory', [OurstoryController::class, 'ourstoryView'])->name('ours
 Route::get('/blog', [BlogController::class, 'blogView'])->name('blog');
 Route::get('/product/{slug}', [ProductController::class, 'show'])
     ->where('slug', '[A-Za-z0-9-]+');
+Route::get('/loginadmin', [LoginadminController::class, 'loginadminView'])->name('loginadmin');
+Route::get('/dashboard', [DashboardController::class, 'dashboardView'])->name('dashboard');
+Route::get('/products', [ProductsController::class, 'productsView'])->name('products');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', [HomeController::class, 'index']);

@@ -19,7 +19,8 @@
 
 @font-face {
     font-family: "MadeTomy-ExtraBold";
-    src: url("font/MADE Tommy Soft ExtraBold PERSONAL USE.otf") format("opentype");
+    src: url("font/MADE Tommy Soft ExtraBold PERSONAL USE.otf")
+        format("opentype");
 }
 
 @font-face {
@@ -208,44 +209,43 @@ body {
 
 /* Loader Page */
 .loader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  z-index: 1;
-  align-items: center;
-  justify-content: center;
-  background: #F8F7F3;
-  transition: opacity 0.75s, visibility 0.75s;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    z-index: 1;
+    align-items: center;
+    justify-content: center;
+    background: #f8f7f3;
+    transition: opacity 0.75s, visibility 0.75s;
 }
 
 .loader--hidden {
-  animation:  2.5s cubic-bezier(.25, 1, .30, 1) wipe-out-top-right both;
-  opacity: 100%;
-  visibility: hidden;
+    animation: 2.5s cubic-bezier(0.25, 1, 0.3, 1) wipe-out-top-right both;
+    opacity: 100%;
+    visibility: hidden;
 }
 
 .loader-icon::after {
-  width: 250px;
-
+    width: 250px;
 }
 
 @keyframes wipe-out-top-right {
-  from {
-    clip-path: polygon(50% -50%, 150% 50%, 50% 150%, -50% 50%);
-  }
-  to {
-    clip-path: polygon(50% -50%, 150% 50%, 150% 50%, 50% -50%);
-  }
+    from {
+        clip-path: polygon(50% -50%, 150% 50%, 50% 150%, -50% 50%);
+    }
+    to {
+        clip-path: polygon(50% -50%, 150% 50%, 150% 50%, 50% -50%);
+    }
 }
 
-  .checkbox-wrapper-18 .round {
+.checkbox-wrapper-18 .round {
     position: relative;
-  }
+}
 
-  .checkbox-wrapper-18 .round label {
+.checkbox-wrapper-18 .round label {
     background-color: #fff;
     border: 2px solid #000;
     border-radius: 30%;
@@ -253,9 +253,9 @@ body {
     height: 24px;
     width: 24px;
     display: block;
-  }
+}
 
-  .checkbox-wrapper-18 .round label:after {
+.checkbox-wrapper-18 .round label:after {
     border: 2px solid #000;
     border-top: none;
     border-right: none;
@@ -267,19 +267,24 @@ body {
     top: 7px;
     transform: rotate(-45deg);
     width: 12px;
-  }
+}
 
-  .checkbox-wrapper-18 .round input[type="checkbox"] {
+.checkbox-wrapper-18 .round input[type="checkbox"] {
     visibility: hidden;
     display: none;
     opacity: 0;
-  }
+}
 
-  .checkbox-wrapper-18 .round input[type="checkbox"]:checked + label {
-    background-color: #F8F7F3;
+.checkbox-wrapper-18 .round input[type="checkbox"]:checked + label {
+    background-color: #f8f7f3;
     border-color: #000;
-  }
+}
 
-  .checkbox-wrapper-18 .round input[type="checkbox"]:checked + label:after {
+.checkbox-wrapper-18 .round input[type="checkbox"]:checked + label:after {
     opacity: 1;
-  }
+}
+
+/* Custom styles for the SVG path */
+.icon:hover .icon_span path {
+    fill: #fff; /* Red fill color on hover */
+}
