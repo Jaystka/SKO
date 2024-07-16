@@ -288,3 +288,7 @@ body {
 .icon:hover .icon_span path {
     fill: #fff; /* Red fill color on hover */
 }
+
+.hidden-file-input {
+    display: none;
+}

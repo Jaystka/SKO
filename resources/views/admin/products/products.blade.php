@@ -13,7 +13,7 @@
                 <div class="mb-10 pb-2">
                 <h1 class="text-xl font-MadeTomy-Medium">Products</h1>
                 </div>
-                <button class="bg-[#04238E] text-white px-10 py-3 rounded-md text-sm"><span class="text-2xl">+ </span><span class="inline-block align-baseline">Add Product</span></button>
+                <a href="addproducts" class="bg-[#04238E] text-white px-10 py-3 rounded-md text-sm"><span class="text-2xl">+ </span><span class="inline-block align-baseline">Add Product</span></a>
             </div>
           <div class="bg-[#F8F7F3] px-6 pb-6 pt-2 rounded-xl shadow-xl">
               <div class="overflow-x-auto">
@@ -58,6 +58,4 @@
           </div>
       </div>
         </main>
-    </div>
-</div>
 @endsection

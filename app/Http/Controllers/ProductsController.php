@@ -15,7 +15,13 @@ class ProductsController extends Controller
             ->select('products.*', 'brand.brand', 'material.material', 'material.material_desc')
             ->get();
         
-        return view('admin.dashboard.products', compact('products'));
+        return view('admin.products.products', compact('products'));
     }
+
+    public function addproductsView()
+    {
+        return view('admin.products.addproducts');
+    }
+
 }
 
