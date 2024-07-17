@@ -9,10 +9,17 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 
 class CartController extends Controller
 {
+    public function generateUniqueId()
+    {
+        return date('YmdHis') . Str::random(6); // Kombinasi tanggal dan random string
+    }
+
     public function index()
     {
         $customer_id = Auth::id(); // Mengambil ID pengguna yang sedang terautentikasi
@@ -21,7 +28,7 @@ class CartController extends Controller
             ->join('products', 'carts.product_id', '=', 'products.product_id')
             ->join('brand', 'brand.brand_id', '=', 'products.brand_id')
             ->select('carts.*', 'products.*', 'brand.*')
-            ->orderBy('carts.time', 'desc')
+            ->orderBy('carts.created_at', 'desc')
             ->get();
         return view('cart.cart', compact('carts'));
     }
@@ -47,20 +54,13 @@ class CartController extends Controller
             'size' => 'required|string|max:255',
         ]);
 
-        $check = Cart::count();
-        if ($check == 0) {
-            $id = 'CA001';
-        } else {
-            $getId = Cart::all()->last();
-            $number = (int)substr($getId->cart_id, -3);
-            $new_id = str_pad($number + 1, 3, "0", STR_PAD_LEFT);
-            $id = 'CA' . $new_id;
-        };
+        $cartId = $this->generateUniqueId();
+
         $customer_id = $request->customer_id;
         $quantity = $request->quantity;
         $product_id = $request->product_id;
         $size = $request->size;
-        Post::spInsertCart($id, $customer_id, $quantity, $product_id, $size);
+        Post::spInsertCart($cartId, $customer_id, $quantity, $product_id, $size);
 
         // Alert::success('Berhasil ditambahkan')->background('#F2F2F0')->showConfirmButton('Ok', '#0b8a0b')->autoClose(3000);
         return redirect()->route('cart.index');
@@ -82,10 +82,11 @@ class CartController extends Controller
         $customer_id = Auth::id(); // Mengambil ID pengguna yang sedang terautentikasi
 
         $carts = Cart::where('customer_id', $customer_id)
+            ->whereRaw("status NOT IN ('2')")
             ->join('products', 'carts.product_id', '=', 'products.product_id')
             ->join('brand', 'brand.brand_id', '=', 'products.brand_id')
             ->select('carts.*', 'products.*', 'brand.*')
-            ->orderBy('carts.time', 'desc')
+            ->orderBy('carts.created_at', 'desc')
             ->get();
         return view('cart.items', compact('carts'));
     }

@@ -14,6 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->group('redirect', [
             \App\Http\Middleware\RedirectIfNotAuthenticated::class,
         ]);
+        $middleware->group('checkoutRedirect', [
+            \App\Http\Middleware\RedirectCheckout::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

@@ -12,11 +12,14 @@ class Payment extends Model
     protected $fillable = [
         'payment_id',
         'customer_id',
-        'transaction_detail_id',
+        'product_id',
+        'transaction_id',
+        'cart_id',
         'total_price',
         'qty',
         'status',
-        'time'
+        'created_at',
+        'updated_at'
     ];
     public $incrementing = false;
 

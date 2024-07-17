@@ -1,0 +1,106 @@
+INSERT TO CART PROCEDURE 
+DELIMITER //
+CREATE PROCEDURE cart_insert(cart_idc VARCHAR(255), customer_idc VARCHAR(255), quantityc int, product_idc VARCHAR(255), sizec VARCHAR(255))	
+BEGIN
+	DECLARE priceproduct int(11);
+	DECLARE pricecart int(11);
+	DECLARE status int(11);
+	DECLARE quantityUpdate int(11);
+	SELECT COUNT(product_id) INTO status FROM carts WHERE product_id = product_idc COLLATE utf8mb4_unicode_ci  AND customer_id = customer_idc COLLATE utf8mb4_unicode_ci  AND size = sizec COLLATE utf8mb4_unicode_ci; 
+	SELECT price INTO priceproduct  from products where product_id = product_idc COLLATE utf8mb4_unicode_ci;
+	IF status = 0 THEN
+	SET @pricecart = priceproduct*quantityc;
+   	INSERT INTO `carts`(`cart_id`, `customer_id`, `quantity`, `cart_price`, `product_id`, `size`, `status`,`time`) VALUES (cart_idc, customer_idc, quantityc, @pricecart, product_idc, sizec, '1', NOW());
+	ELSEIF status > 0 THEN
+	SELECT quantity INTO quantityUpdate FROM carts WHERE product_id = product_idc COLLATE utf8mb4_unicode_ci  AND customer_id = customer_idc COLLATE utf8mb4_unicode_ci  AND size = sizec COLLATE utf8mb4_unicode_ci;
+	SET quantityUpdate = quantityUpdate + 1;
+	SET pricecart = priceproduct*quantityUpdate;
+   	UPDATE `carts` SET `quantity`= quantityUpdate,`cart_price`= pricecart  WHERE product_id = product_idc COLLATE utf8mb4_unicode_ci  AND customer_id = customer_idc COLLATE utf8mb4_unicode_ci  AND size = sizec COLLATE utf8mb4_unicode_ci;
+	END IF;
+END
+	END IF;
+END //
+DELIMITER ;
+
+
+delimiter //
+CREATE TRIGGER upd_itemCart AFTER UPDATE ON carts
+FOR EACH ROW
+BEGIN
+  DECLARE prices
+  DECLARE product
+  DECLARE total
+  SET product = OLD.product_id;
+  SELECT price INTO prices FROM product WHERE product_id = product;
+  SET total = prices*NEW.quantity;
+  UPDATE FROM carts set `total_price`=total WHERE cart_id = NEW.cart_id;
+END //
+delimiter ;
+
+
+DELIMITER //
+CREATE PROCEDURE transaction_insert(IN cart_idt VARCHAR(255))
+BEGIN
+    DECLARE product_idt VARCHAR(255);
+    DECLARE customer_idt VARCHAR(255);
+    DECLARE qtyt INT;
+    DECLARE pricet INT;
+    DECLARE sizet VARCHAR(255);
+    DECLARE status INT;
+
+    SELECT COUNT(cart_id), customer_id, quantity, cart_price, product_id, size 
+    INTO status, customer_idt, qtyt, pricet, product_idt, sizet
+    FROM carts 
+    WHERE cart_id = cart_idt;
+
+    IF status > 0 THEN
+    INSERT INTO transaction_details (product_id, customer_id, qty, price, size) 
+    VALUES (product_idt, customer_idt, qtyt, pricet, sizet);
+    END IF;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE payment_insert(IN cart_idt VARCHAR(255))
+BEGIN
+    DECLARE product_idt VARCHAR(255);
+    DECLARE customer_idt VARCHAR(255);
+    DECLARE qtyt INT;
+    DECLARE pricet INT;
+    DECLARE sizet VARCHAR(255);
+    DECLARE status INT;
+
+    SELECT COUNT(cart_id), customer_id, quantity, cart_price, product_id, size 
+    INTO status, customer_idt, qtyt, pricet, product_idt, sizet
+    FROM carts 
+    WHERE cart_id = cart_idt;
+
+    IF status > 0 THEN
+    INSERT INTO transaction_details (product_id, customer_id, qty, price, size) 
+    VALUES (product_idt, customer_idt, qtyt, pricet, sizet);
+    END IF;
+END //
+
+DELIMITER ;
+
+
+BEGIN
+	DECLARE priceproduct int(11);
+	DECLARE pricecart int(11);
+	DECLARE statuss int(11);
+	DECLARE quantityUpdate int(11);
+	SELECT COUNT(product_id) INTO statuss FROM carts WHERE product_id = product_idc COLLATE utf8mb4_unicode_ci  AND customer_id = customer_idc COLLATE utf8mb4_unicode_ci  AND size = sizec COLLATE utf8mb4_unicode_ci AND `status` IN ('0', '1');
+    SELECT price INTO priceproduct  from products where product_id = product_idc COLLATE utf8mb4_unicode_ci;
+	IF statuss = 0 THEN
+	SET @pricecart = priceproduct*quantityc;
+   	INSERT INTO `carts`(`cart_id`, `customer_id`, `quantity`, `cart_price`, `product_id`, `size`, `status`,`updated_at`,`created_at`) VALUES (cart_idc, customer_idc, quantityc, @pricecart, product_idc, sizec, '1', NOW(), NOW());
+
+
+ELSEIF statuss > 0 THEN
+	SELECT quantity INTO quantityUpdate FROM carts WHERE product_id = product_idc COLLATE utf8mb4_unicode_ci  AND customer_id = customer_idc COLLATE utf8mb4_unicode_ci  AND size = sizec COLLATE utf8mb4_unicode_ci;
+	SET quantityUpdate = quantityUpdate + 1;
+	SET pricecart = priceproduct*quantityUpdate;
+   	UPDATE `carts` SET `quantity`= quantityUpdate,`cart_price`= pricecart, `updated_at`= NOW() WHERE product_id = product_idc COLLATE utf8mb4_unicode_ci  AND customer_id = customer_idc COLLATE utf8mb4_unicode_ci  AND size = sizec COLLATE utf8mb4_unicode_ci  AND `status` NOT IN ('2');
+	END IF;
+END

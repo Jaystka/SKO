@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 
 class ProductCategoryController extends Controller
 {
-    function ProductCategoryView()
+    function ProductCategoriesView()
     {
-        
-        return view('shop/productcategory');
+
+        return view('shop/productcategories');
     }
 }

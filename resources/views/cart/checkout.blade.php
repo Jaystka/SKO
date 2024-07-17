@@ -18,53 +18,110 @@
     .expanded {
         transition: max-height 0.3s ease-in;
     }
+
+    .textarea {
+        resize: none;
+    }
 </style>
 @endsection
 
 @section('content')
 
-<main class="container mx-auto p-8 md:p-28">
+<dialog id="modal" class="relative p-6 w-1/4 bg-white rounded-3xl shadow-lg">
+    {{-- <button id="closeModalButtonTop" class="close-button">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-700 hover:text-gray-900" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+    </button> --}}
+    <div>
+        <img id="iconImg" src="/img/Payment-Warning.svg" alt="">
+    </div>
+    <h2 id="modalTitle" class="mb-2 text-lg font-semibold text-center">Belum Bayar</h2>
+    <p id="modalText" class="mb-6 text-gray-700 text-center">
+        Pembayaran belum selesai, anda dapat melanjutkan pembayaran di halaman Notifikasi
+    </p>
+    <div id="modalWarning" class="flex justify-end space-x-2">
+        <button id="closeModalButton1" class="px-4 py-2 text-white bg-gray-500 rounded-lg">
+            Keluar
+        </button>
+        <button id="secondaryActionButton" class="px-4 py-2 text-black shadow-md bg-[#FFC727] rounded-lg">
+            Ke Halaman Notifikasi
+        </button>
+    </div>
+    <div id="modalView" class="flex justify-center space-x-2">
+        <button id="closeModalButton2" class="w-1/2 px-4 py-2 text-white rounded-lg hidden">
+            Ok
+        </button>
+    </div>
+</dialog>
+
+<main class="container mx-auto p-8 md:pt-28 md:px-28">
+    {{-- <button id="openModalButton" class="px-4 py-2 text-white bg-indigo-500 rounded ">
+        Open Modal
+    </button> --}}
     <div class="md:flex md:space-x-8">
         <div class="md:w-2/3 space-y-4">
             <div class="bg-red-700 text-white p-4 text-center font-semibold">
-                Complete the fields below!
+                Lengkapi kolom di bawah ini!
             </div>
             <div>
-                <h2 class="text-lg font-bold">Billing & Shipping</h2>
-                <form class="space-y-4">
+                <div class="flex">
+                    <h2 class="text-lg font-bold pr-4">Informasi Pengiriman</h2>
+                    <button id="btnEdit" class="rounded-md p-1 shadow-md bg-[#FFF3B2]" data-popover-target="popover"
+                        type="button"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 256 256">
+                            <path fill="currentColor"
+                                d="m227.32 73.37l-44.69-44.68a16 16 0 0 0-22.63 0L36.69 152A15.86 15.86 0 0 0 32 163.31V208a16 16 0 0 0 16 16h168a8 8 0 0 0 0-16H115.32l112-112a16 16 0 0 0 0-22.63M79.32 188l90.34-90.34l16.69 16.68L96 204.69Zm79-101.66L68 176.69L51.31 160l90.35-90.34ZM48 179.31L76.69 208H48Z" />
+                        </svg></button>
+                </div>
+
+                @foreach ($customer as $item)
+                <form id="formInfo" method="POST" action="{{route('payment')}}" class="space-y-4">
+                    @csrf
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Name <span
+                        <label class="block text-sm font-medium text-gray-700">Nama <span
                                 class="text-red-500">*</span></label>
-                        <input type="text"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
-                            required>
+                        <input type="text" value="{{$item->name}}" name="name" class="dataInput mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-red-500
+                                focus:border-red-500 sm:text-sm" required disabled>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Phone <span
+                        <label class="block text-sm font-medium text-gray-700">No HP <span
                                 class="text-red-500">*</span></label>
-                        <input type="text"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
-                            required>
+                        <input type="text" value="{{$item->phone}}" name="phone"
+                            class="dataInput mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                            required disabled>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Address <span
+                        <label class="block text-sm font-medium text-gray-700">Alamat<span
                                 class="text-red-500">*</span></label>
+                        <div class="w-[20%]">
+                            <select id="countries"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option selected>Provinsi</option>
+                                <option value="US">United States</option>
+                                <option value="CA">Canada</option>
+                                <option value="FR">France</option>
+                                <option value="DE">Germany</option>
+                            </select>
+                        </div>
+                        <textarea name="address"
+                            class="textarea dataInput mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                            rows="4" required disabled>{{$item->address}}</textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Informasi Tambahan</label>
                         <textarea
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
-                            rows="6" required></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700">Additional Information</label>
-                        <textarea
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
-                            rows="2"></textarea>
+                            class="textarea mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
+                            rows="3"></textarea>
                     </div>
                 </form>
+                @endforeach
             </div>
         </div>
         <div class="md:w-2/3 space-y-4 mt-8 md:mt-0">
             <div class="bg-[#F4F2E8] border-[#979797] border-2 p-8 h-full">
-                <h2 class="text-lg font-bold text-red-700 mb-4">Your Order</h2>
+                <h2 class="text-lg font-bold text-red-700 mb-4">Daftar Pesanan</h2>
                 <div id="productOrder" class="overflow-y-scroll">
                     @php
                     $i = 1;
@@ -135,13 +192,13 @@
                         <div>IDR {{ number_format($carts->sum('cart_price'), 0, ',', '.')}}</div>
                     </div>
                     <div class="flex justify-between">
-                        <div>Tax</div>
-                        <div>IDR 10.000</div>
+                        <div>Pajak</div>
+                        <div>IDR {{ number_format($carts->sum('tax'), 0, ',', '.')}}</div>
                     </div>
                 </div>
                 <div class="flex justify-between text-xl font-bold">
                     <div>Total</div>
-                    <div>IDR 588.000</div>
+                    <div>IDR {{ number_format(($carts->sum('cart_price')+$carts->sum('tax')), 0, ',', '.')}}</div>
                 </div>
                 {{-- <div class="flex space-x-16">
                     <label class="flex items-center">
@@ -153,41 +210,190 @@
                         <span class="ml-2">Digital Money</span>
                     </label>
                 </div> --}}
-                <button
-                    class="w-full bg-[#FFF3B2] text-gray-800 hover:bg-black hover:text-white font-bold py-3 rounded-md mt-12">Place
-                    Order</button>
+                <button form="formInfo" id="pay-button"
+                    class="w-full bg-[#FFF3B2] shadow-md text-gray-800 hover:bg-black hover:text-white font-bold py-3 rounded-md mt-12">Buat
+                    Pesanan</button>
             </div>
         </div>
     </div>
 </main>
-<footer class="text-center py-4 text-gray-500 text-sm">
+<pre><div id="result-json">JSON result will appear here after payment:<br></div></pre>
+<footer class="text-center text-gray-500 text-sm">
     ©SKO 2023. All rights reserved.
 </footer>
 @endsection
 
 @section('script')
+
 <!-- Include Alpine.js for collapse functionality -->
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.all.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.min.css">
+@if($item->name == null || $item->address == null || $item->phone == null)
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-                const toggleButtons = document.querySelectorAll('[id^=productItem]');
-                const toggleAllButton = document.getElementById('toggleAllProducts');
-                const productOrder = document.getElementById('productOrder');
-    
-                if(toggleButtons.length > 1){
-                toggleAllButton.addEventListener('click', () => {
-                if(toggleButtons.length > 1){
-                    productOrder.classList.toggle('h-60');
-                    i=1;
-                    while (i < toggleButtons.length) {              
-                        const orderItem = document.getElementById(`productItem${i}`);
-                        orderItem.classList.toggle('collapsed');
-                        orderItem.classList.toggle('expanded');
-                        i++;
-                }
-                }
-                });
-                }
+        Swal.fire({text: "Anda dapat melengkapi data diri di laman profile!",
+        showDenyButton: true,
+        confirmButtonColor: "#b91c1c",
+        denyButtonColor: '#979797',
+        confirmButtonText: 'Lengkapi',
+        denyButtonText: 'Batal',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location = 'profile';
+        }});
             });
 </script>
+@endif
+<script>
+    const toggleButtons = document.querySelectorAll('[id^=productItem]');
+    const toggleAllButton = document.getElementById('toggleAllProducts');
+    const productOrder = document.getElementById('productOrder');
+
+    if(toggleButtons.length > 1){
+    toggleAllButton.addEventListener('click', () => {
+    if(toggleButtons.length > 1){
+    productOrder.classList.toggle('h-60');
+    i=1;
+    while (i < toggleButtons.length) { const orderItem=document.getElementById(`productItem${i}`);
+        orderItem.classList.toggle('collapsed'); orderItem.classList.toggle('expanded'); i++; } } }); }
+</script>
+<!-- TODO: Remove ".sandbox" from script src URL for production environment. Also input your client key in "data-client-key" -->
+<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{$midtransClientKey}}"></script>
+<script type="text/javascript">
+    $.ajaxSetup({
+    
+    headers: {
+    
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    
+    }
+    
+    });
+$("#formInfo").submit(function (event) {
+    event.preventDefault(); //prevent default action
+    let form_data = $(this).serialize(); //Encode form elements for submission
+    let post_url = $(this).attr("action"); //get form action url
+    $.ajax({
+    url: post_url,
+    method: 'POST',
+    data: form_data,
+    success: function (data) {
+        // SnapToken acquired from previous step
+        snap.pay(data.token, {
+          // Optional
+        onSuccess: function(result){
+        modal.showModal();
+        modalIcon.src = "/img/Payment-Success.svg"
+        modalTitle.innerText = "Terbayar!"
+        modalText.innerText = "Yey.. Pembayaran berhasil, pengiriman akan segera diproses"
+        modalWarning.classList.add("hidden");
+        closeModalButton2.classList.remove("hidden");
+        closeModalButton2.classList.add("bg-blueBtn");
+            /* You may add your own js here, this is just example */ document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
+        },
+          // Optional
+        onPending: function(result){
+            modal.showModal();
+            modalIcon.src = "/img/Payment-Pending.svg"
+            modalTitle.innerText = "Tertunda!"
+            modalText.innerText = "Transaksi tertunda, mohon tunggu beberapa saat hingga pembayaran berhasil"
+            document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
+          },
+          // Optional
+          onError: function(result){
+        modal.showModal();
+        modalIcon.src = "/img/Payment-Error.svg"
+        modalTitle.innerText = "Gagal!"
+        modalText.innerText = "Yah.. Pembayaran gagal, kami akan segera menanganinya"
+        modalWarning.classList.add("hidden");
+        closeModalButton2.classList.remove("hidden");
+        closeModalButton2.classList.add("bg-redBtn");
+            document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
+          },
+          onClose: function(){
+            modal.showModal();
+            modal.classList.add("showing");
+            console.log('customer closed the popup without finishing the payment');}
+        });
+    }
+    });
+});
+
+function checkPaymentStatus(order_id) {
+$.ajax({
+url: '/check-payment-status', // Endpoint to check payment status on your server
+type: 'POST',
+data: { order_id: order_id },
+success: function(response) {
+if(response.status === 'success') {
+// Update UI for successful payment
+} else if(response.status === 'pending') {
+// Update UI for pending payment
+} else if(response.status === 'failed') {
+// Update UI for failed payment
+}
+},
+error: function(xhr) {
+console.error('Error checking payment status:', xhr);
+}
+});
+}
+
+</script>
+<script>
+    const modal = document.getElementById("modal");
+    const modalIcon = document.getElementById("iconImg");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalText = document.getElementById("modalText");
+    const modalWarning = document.getElementById("modalWarning");
+    const modalView = document.getElementById("modalView");
+    modal.addEventListener('cancel', (event) => {
+        event.preventDefault();
+        }); 
+    const closeModalButton1 = document.getElementById("closeModalButton1");
+    const closeModalButton2 = document.getElementById("closeModalButton2");
+
+    const secondaryActionButton = document.getElementById(
+      "secondaryActionButton"
+    );
+
+    // const openModalButton = document.getElementById("openModalButton");
+    // openModalButton.addEventListener("click", () => {
+    //   modal.classList.remove("closing");
+    //   modal.showModal();
+    //   modal.classList.add("showing");
+    // });
+
+    //closeModalButtonTop.addEventListener("click", closeModal);
+    closeModalButton1.addEventListener("click", closeModal);
+    secondaryActionButton.addEventListener("click", () => {
+      console.log("Secondary action executed");
+      
+
+    });
+
+    function closeModal() {
+      modal.classList.remove("showing");
+      modal.classList.add("closing");
+      modal.addEventListener(
+        "animationend",
+        () => {
+          modal.close();
+          modal.classList.remove("closing");
+          window.location.href = "{{route('shop')}}";
+        },
+        { once: true }
+      );
+    }
+const dataInput = document.getElementsByClassName('dataInput');
+const btnEdit = document.getElementById('btnEdit');
+    btnEdit.addEventListener("click", () => {
+        Array.from(dataInput).forEach((dataInput) => {
+            dataInput.removeAttribute("disabled");
+            });
+        });
+</script>
+
 @endsection

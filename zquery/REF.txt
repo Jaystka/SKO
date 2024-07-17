@@ -1,0 +1,32 @@
+        // $customer_id = Auth::id();
+        // $cartItems = Cart::where('customer_id', $customer_id)
+        //     ->whereAll(['status'], '=', '1')
+        //     ->orderBy('carts.time', 'desc')
+        //     ->get();
+
+        // DB::transaction(function () use ($cartItems, $customer_id) {
+        //     foreach ($cartItems as $cartItem) {
+        //         $lastPayment = Payment::latest('payment_id')->first();
+
+        //         if ($lastPayment === null) {
+        //             $id = 'PY001';
+        //         } else {
+        //             $number = (int)substr($lastPayment->payment_id, 2);
+        //             $new_id = str_pad($number + 1, 3, "0", STR_PAD_LEFT);
+        //             $id = 'PY' . $new_id;
+        //         }
+        //         Payment::create([
+        //             'payment_id' => $id,
+        //             'customer_id' => $customer_id,
+        //             'product_id' => $cartItem->product_id,
+        //             'total_price' => $cartItem->cart_price,  // Asumsi Anda memiliki kolom 'price' di tabel 'carts'
+        //             'qty' => $cartItem->quantity,
+        //             'status' => 'pending',
+        //         ]);
+        //     }
+
+        //     // Opsional: Hapus data dari tabel Cart setelah berhasil dimasukkan ke Payment
+        //     Cart::where('customer_id', $customer_id)
+        //         ->where('status', 1)
+        //         ->delete();
+        // });

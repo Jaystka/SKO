@@ -22,7 +22,7 @@ Route::group(['middleware' => 'guest'], function () {
 
 Route::get('/', [HomeController::class, 'index'])->name('/');
 Route::get('/shop', [ShopController::class, 'shopView'])->name('shop');
-Route::get('/productcategory', [ProductCategoryController::class, 'ProductCategoryView'])->name('productcategory');
+Route::get('/productcategories', [ProductCategoryController::class, 'ProductCategoriesView'])->name('productcategories');
 Route::get('/ourstory', [OurstoryController::class, 'ourstoryView'])->name('ourstory');
 Route::get('/blog', [BlogController::class, 'blogView'])->name('blog');
 Route::get('/product/{slug}', [ProductController::class, 'show'])
@@ -38,8 +38,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('/cart/update/{cart_id}', [CartController::class, 'update']);
     Route::get('/product', [ProductController::class, 'productView'])->name('product');
     Route::get('/logout', [CustomerAuthController::class, 'logout'])->name('logout');
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
-    // Route::resource('checkout', CheckoutController::class);
+    Route::get('/checkout', [CheckoutController::class, 'index'])->middleware('checkoutRedirect')->name('checkout');
     Route::post('/checkout', [CheckoutController::class, 'checkoutProduct']);
+    Route::post('/payment', [CheckoutController::class, 'process'])->name('payment');
+    Route::post('/check-payment-status', [CheckoutController::class, 'checkStatus'])->name('check.payment.status');
+    Route::post('/pay', [CheckoutController::class, 'process'])->name('pay');
     Route::get('/cart/items', [CartController::class, 'itemsView']);
 });
