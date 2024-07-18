@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Categories extends Model
 {
     use HasFactory;
     protected $primaryKey = 'category_id';
@@ -17,7 +17,7 @@ class Category extends Model
     public $incrementing = false;
 }
 
-class Material extends Model
+class Materials extends Model
 {
     use HasFactory;
     protected $primaryKey = 'material_id';
@@ -28,7 +28,7 @@ class Material extends Model
     ];
     public $incrementing = false;
 }
-class Brand extends Model
+class Brands extends Model
 {
     use HasFactory;
     protected $primaryKey = 'brand_id';
@@ -46,13 +46,16 @@ class Product extends Model
     protected $fillable = [
         'product_id',
         'brand_id',
-        'category',
+        'series',
         'price',
+        'category_id',
+        'description',
+        'material_id',
         'image',
-        'product_desc',
         'slug'
     ];
     public $incrementing = false;
+    protected $keyType = 'string';
 
     /**
      * Return the sluggable configuration array for this model.

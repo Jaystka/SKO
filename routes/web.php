@@ -14,8 +14,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\LoginadminController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ProductsController;
-use App\Http\Controllers\AddproductsController;
+use App\Http\Controllers\ProductAdminController;
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/register', [CustomerAuthController::class, 'registerView'])->name('register');
@@ -33,8 +32,9 @@ Route::get('/product/{slug}', [ProductController::class, 'show'])
     ->where('slug', '[A-Za-z0-9-]+');
 Route::get('/loginadmin', [LoginadminController::class, 'loginadminView'])->name('loginadmin');
 Route::get('/dashboard', [DashboardController::class, 'dashboardView'])->name('dashboard');
-Route::get('/products', [ProductsController::class, 'productsView'])->name('products');
-Route::get('/addproducts', [ProductsController::class, 'addproductsView'])->name('addproducts');
+Route::get('/products', [ProductAdminController::class, 'productsView'])->name('products');
+Route::get('/addproducts', [ProductAdminController::class, 'addproductsView'])->name('addproducts');
+Route::post('/products1', [ProductAdminController::class, 'addProduct']);
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', [HomeController::class, 'index']);

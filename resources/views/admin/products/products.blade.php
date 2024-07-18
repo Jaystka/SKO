@@ -36,7 +36,7 @@
                         </div>
                         <div class="col-span-3 flex items-center justify-left">Sepatu {{$product->brand}} - {{$product->series}}</div>
                         <div class="col-span-2 text-red-600 font-semibold flex items-center justify-center">IDR {{ number_format($product->price, 0, ',', '.')}}</div>
-                        <div class="col-span-2 text-center flex items-center justify-center">All Size</div>
+                        <div class="col-span-2 text-center flex items-center justify-center">{{$product->available_sizes}}</div>
                         <div class="col-span-2 flex space-x-2 items-center justify-center">
                             <button class="bg-yellow-500 text-white p-2 rounded">
                             <svg class="h-6 w-6" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
