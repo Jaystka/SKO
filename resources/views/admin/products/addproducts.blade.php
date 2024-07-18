@@ -45,8 +45,7 @@
             </div>
             <div class="mb-4 flex items-center">
                 <label for="materials" class="block text-[#3C4043] font-MadeTomy-Regular w-32">Materials:</label>
-                <select id="materials" name="material_id" class="p-3 border border-gray-300 rounded-lg flex-1 text-[#999999] text-sm bg-[#F8F7F3]" required>
-                    <option value="">Select Materials</option>
+                <select id="materials" name="material_id" class="w-3/12 p-3 border border-gray-300 rounded-lg text-[#999999] text-sm bg-[#F8F7F3]" required>
                     @foreach ($materials as $material)
                         <option value="{{ $material->material_id }}">{{ $material->material }}</option>
                     @endforeach
@@ -55,7 +54,6 @@
             <div class="mb-4 flex items-center">
                 <label for="category_id" class="block text-[#3C4043] font-MadeTomy-Regular w-32">Category:</label>
                 <select id="category_id" name="category_id" class="w-3/12 p-3 border border-gray-300 rounded-lg text-[#999999] text-sm bg-[#F8F7F3]" required>
-                    <option value="">Select Category</option>
                     @foreach ($categories as $category)
                         <option value="{{ $category->category_id }}">{{ $category->category }}</option>
                     @endforeach

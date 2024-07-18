@@ -51,20 +51,9 @@ class ProductAdminController extends Controller
 
     public function addProduct(Request $request)
     {
-        // Validasi data
-        // $validatedData = $request->validate([
-        //     'brand_id' => 'required|string',
-        //     'series' => 'required|string',
-        //     'price' => 'required|integer',
-        //     'category_id' => 'required|string',
-        //     'description' => 'required|string',
-        //     'material_id' => 'required|string',
-        //     'size' => 'required|string',
-        //     'photo' => 'required|image'
-        // ]);
 
         // Generate unique product_id
-        $latestProduct = Product::orderBy('created_at', 'desc')->first();
+        $latestProduct = Product::orderBy(DB::raw('CAST(SUBSTRING(product_id, 2) AS UNSIGNED)'), 'desc')->first();
         if ($latestProduct) {
             $lastProductId = intval(substr($latestProduct->product_id, 1));
             $newProductId = 'P' . str_pad($lastProductId + 1, 4, '0', STR_PAD_LEFT);
@@ -74,18 +63,6 @@ class ProductAdminController extends Controller
 
         // Create slug from series
         $slug = Str::slug($request['series'], '-');
-
-        // Simpan produk
-        // $product = new Product();
-        // $product->product_id = $newProductId;
-        // $product->brand_id = $validatedData['brand_id'];
-        // $product->series = $validatedData['series'];
-        // $product->price = $validatedData['price'];
-        // $product->category_id = $validatedData['category_id'];
-        // $product->description = $validatedData['description'];
-        // $product->material_id = $validatedData['material_id'];
-        // $product->size = $validatedData['size'];
-        // $product->slug = $slug;
 
         $product = new Product();
         $product->product_id = $newProductId;
@@ -97,11 +74,18 @@ class ProductAdminController extends Controller
         $product->material_id = $request['material_id'];
         $product->slug = $slug;
 
-        if ($request->hasFile('images')) {
-            $file = $request->file('images');
+        // if ($request->hasFile('images')) {
+        //     $file = $request->file('images');
+        //     $filename = time() . '.' . $file->getClientOriginalExtension();
+        //     $file->move(public_path('images'), $filename);
+        //     $product->image = $filename;
+        // }
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
             $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('images'), $filename);
-            $product->image = $filename;
+            $filePath = 'dist/img/' . $filename;
+            $file->move(public_path('dist/img'), $filename);
+            $product->image = $filePath;
         }
 
         $product->save();
