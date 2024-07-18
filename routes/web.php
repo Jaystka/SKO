@@ -35,6 +35,8 @@ Route::get('/dashboard', [DashboardController::class, 'dashboardView'])->name('d
 Route::get('/products', [ProductAdminController::class, 'productsView'])->name('products');
 Route::get('/addproducts', [ProductAdminController::class, 'addproductsView'])->name('addproducts');
 Route::post('/products1', [ProductAdminController::class, 'addProduct']);
+Route::delete('/products/{product}', [ProductAdminController::class, 'deleteProduct'])->name('products.delete');
+
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', [HomeController::class, 'index']);

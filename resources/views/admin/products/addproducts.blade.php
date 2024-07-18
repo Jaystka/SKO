@@ -46,6 +46,7 @@
             <div class="mb-4 flex items-center">
                 <label for="materials" class="block text-[#3C4043] font-MadeTomy-Regular w-32">Materials:</label>
                 <select id="materials" name="material_id" class="w-3/12 p-3 border border-gray-300 rounded-lg text-[#999999] text-sm bg-[#F8F7F3]" required>
+                <option value="">Select Material</option>
                     @foreach ($materials as $material)
                         <option value="{{ $material->material_id }}">{{ $material->material }}</option>
                     @endforeach
@@ -54,10 +55,24 @@
             <div class="mb-4 flex items-center">
                 <label for="category_id" class="block text-[#3C4043] font-MadeTomy-Regular w-32">Category:</label>
                 <select id="category_id" name="category_id" class="w-3/12 p-3 border border-gray-300 rounded-lg text-[#999999] text-sm bg-[#F8F7F3]" required>
+                <option value="">Select category</option>
                     @foreach ($categories as $category)
                         <option value="{{ $category->category_id }}">{{ $category->category }}</option>
                     @endforeach
                 </select>
+            </div>
+            <div class="mb-4 flex">
+                <label for="category_id" class="block text-[#3C4043] font-MadeTomy-Regular w-32 pt-8">Select Size:</label>
+                    <div class="w-64 p-4 bg-[#F8F7F3] rounded shadow-lg">
+                <div class="space-y-2">
+                @foreach ([36, 37, 38, 39, 40] as $size)
+                <div class="flex items-center justify-between border border-gray-300 py-2 px-2 rounded-lg">
+                    <span class="block w-12 text-center">{{ $size }}</span>
+                    <input type="number" name="sizes[{{ $size }}]" class="block w-4/12 ml-auto px-3 py-2 bg-[#F8F7F3] border border-gray-300 rounded-md shadow-inner focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+                @endforeach
+                </div>
+            </div>
             </div>
             <div class="flex justify-end space-x-4">
                 <a type="button" href="{{ route('products') }}" class="bg-[#B90000] text-white py-3 px-6 rounded-lg hover:bg-red-600 text-sm">Cancel</a>

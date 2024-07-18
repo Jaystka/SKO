@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Stock extends Model
+class Stocks extends Model
 {
     use HasFactory;
     protected $primaryKey = 'stock_id';
@@ -17,7 +17,8 @@ class Stock extends Model
     ];
     public $incrementing = false;
 
-    protected $table = 'stock';
+    public $timestamps = false;
+    protected $table = 'stocks';
     public function product()
     {
         return $this->belongsTo(Product::class);

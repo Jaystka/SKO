@@ -10,33 +10,26 @@ use Illuminate\Support\Str;
 use App\Models\Brands;
 use App\Models\Materials;
 use App\Models\Categories;
+use App\Models\Stocks;
 
 class ProductAdminController extends Controller
 {
     public function productsView()
     {
-
-        // $products = Product::join('brand', 'products.brand_id', '=', 'brand.brand_id')
-        //     ->join('material', 'products.material_id', '=', 'material.material_id')
-        //     ->select('products.*', 'brand.brand', 'material.material', 'material.material_desc')
-        //     ->get();
-        
-        // return view('admin.products.products', compact('products'));
-
         $products = DB::table('products')
             ->join('brands', 'products.brand_id', '=', 'brands.brand_id')
-            ->join('stock', 'products.product_id', '=', 'stock.product_id')
+            ->join('stocks', 'products.product_id', '=', 'stocks.product_id')
             ->select(
+                'products.product_id',
                 'products.image',
                 'brands.brand',
                 'products.series',
                 'products.price',
-                DB::raw('GROUP_CONCAT(stock.size) AS available_sizes')
+                DB::raw('GROUP_CONCAT(stocks.size) AS available_sizes')
             )
-            ->groupBy('products.image', 'brands.brand', 'products.series', 'products.price')
+            ->groupBy('products.product_id','products.image', 'brands.brand', 'products.series', 'products.price')
             ->get();
 
-        // Mengembalikan data ke view atau JSON response
         return view('admin.products.products', compact('products'));
     }
 
@@ -51,8 +44,6 @@ class ProductAdminController extends Controller
 
     public function addProduct(Request $request)
     {
-
-        // Generate unique product_id
         $latestProduct = Product::orderBy(DB::raw('CAST(SUBSTRING(product_id, 2) AS UNSIGNED)'), 'desc')->first();
         if ($latestProduct) {
             $lastProductId = intval(substr($latestProduct->product_id, 1));
@@ -61,7 +52,6 @@ class ProductAdminController extends Controller
             $newProductId = 'P0001';
         }
 
-        // Create slug from series
         $slug = Str::slug($request['series'], '-');
 
         $product = new Product();
@@ -74,12 +64,6 @@ class ProductAdminController extends Controller
         $product->material_id = $request['material_id'];
         $product->slug = $slug;
 
-        // if ($request->hasFile('images')) {
-        //     $file = $request->file('images');
-        //     $filename = time() . '.' . $file->getClientOriginalExtension();
-        //     $file->move(public_path('images'), $filename);
-        //     $product->image = $filename;
-        // }
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $filename = time() . '.' . $file->getClientOriginalExtension();
@@ -90,8 +74,37 @@ class ProductAdminController extends Controller
 
         $product->save();
 
+        foreach ($request->input('sizes', []) as $size => $totalStock) {
+            if (!empty($totalStock)) {
+                $latestStock = Stocks::orderBy(DB::raw('CAST(SUBSTRING(stock_id, 2) AS UNSIGNED)'), 'desc')->first();
+                if ($latestStock) {
+                    $lastStockId = intval(substr($latestStock->stock_id, 1));
+                    $newStockId = 'S' . str_pad($lastStockId + 1, 4, '0', STR_PAD_LEFT);
+                } else {
+                    $newStockId = 'S0001';
+                }
+
+                $stock = new Stocks();
+                $stock->stock_id = $newStockId;
+                $stock->product_id = $newProductId;
+                $stock->size = $size;
+                $stock->total_stock = $totalStock;
+                $stock->save();
+            }
+        }
+
         return redirect()->route('products')->with('success', 'Product added successfully.');
     }
 
-}
+    public function deleteProduct($product_id)
+    {
+        // Hapus stok terkait produk
+        Stocks::where('product_id', $product_id)->delete();
 
+        // Hapus produk
+        Product::where('product_id', $product_id)->delete();
+
+        return redirect()->route('products')->with('success', 'Product deleted successfully.');
+    }
+
+}
