@@ -36,6 +36,9 @@ Route::get('/products', [ProductAdminController::class, 'productsView'])->name('
 Route::get('/addproducts', [ProductAdminController::class, 'addproductsView'])->name('addproducts');
 Route::post('/products1', [ProductAdminController::class, 'addProduct']);
 Route::delete('/products/{product}', [ProductAdminController::class, 'deleteProduct'])->name('products.delete');
+Route::get('/products/edit/{product_id}', [ProductAdminController::class, 'editProductView'])->name('products.edit');
+Route::put('/products/update/{product_id}', [ProductAdminController::class, 'updateProduct'])->name('products.update');
+
 
 
 Route::group(['middleware' => 'auth'], function () {
