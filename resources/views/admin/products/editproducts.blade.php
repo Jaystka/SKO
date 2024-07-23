@@ -10,7 +10,7 @@
         <h1 class="text-xl font-MadeTomy-Medium text-[#3C4043]">Edit Product</h1>
     </div>
     <div class="max-w-full mx-auto bg-[#F8F7F3] px-8 py-4 rounded-xl shadow-lg">
-        <form id="editProduct" action="{{ route('products.update', $product->product_id) }}" method="POST" enctype="multipart/form-data">
+        <form id="editProduct" action="{{ route('products.update', $product->slug) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="mb-4 flex items-center">

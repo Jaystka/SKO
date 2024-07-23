@@ -32,14 +32,14 @@
                   <div class="col-span-1 flex items-center justify-center">{{ $index + 1 }}.</div>
                   <div class="col-span-1 -ml-6 md:-ml-4">
                       <div class="w-20 h-20 xl:w-24 xl:h-24 flex items-center shadow-xl rounded-xl">
-                      <img src="{{ $product->image }}" alt="Product Image" class="p-2">
+                      <img src="{{ asset($product->image) }}" alt="Product Image" class="p-2">
                       </div>
                   </div>
                   <div class="col-span-3 flex items-center justify-left">Sepatu {{$product->brand}} - {{$product->series}}</div>
                   <div class="col-span-2 text-red-600 font-semibold flex items-center justify-center">IDR {{ number_format($product->price, 0, ',', '.')}}</div>
                   <div class="col-span-2 text-center flex items-center justify-center">{{$product->available_sizes}}</div>
                   <div class="col-span-2 flex space-x-2 items-center justify-center">
-                    <a href="{{ route('products.edit', $product->product_id) }}" class="bg-yellow-500 text-white p-2 rounded">
+                    <a href="{{ route('products.edit', $product->slug) }}" class="bg-yellow-500 text-white p-2 rounded">
                         <svg class="h-6 w-6" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M34.5167 11.7333C35.1667 11.0833 35.1667 10 34.5167 9.38335L30.6167 5.48335C30 4.83335 28.9167 4.83335 28.2667 5.48335L25.2 8.53335L31.45 14.7833M5 28.75V35H11.25L29.6833 16.55L23.4333 10.3L5 28.75Z" fill="white"/>
                         </svg>
