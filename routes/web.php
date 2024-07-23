@@ -38,3 +38,6 @@ Route::get('loginadmin', function () {
 Route::get('dashboard', function () {
     return view('admin/dashboard');
 });
+Route::get('notifikasi', function () {
+    return view('notifikasi');
+});
