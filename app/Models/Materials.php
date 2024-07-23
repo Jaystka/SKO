@@ -15,4 +15,7 @@ class Materials extends Model
         'material_desc'
     ];
     public $incrementing = false;
+    protected $keyType = 'string';
+
+    public $timestamps = false;
 }

@@ -16,4 +16,7 @@ class Categories extends Model
         'category_desc'
     ];
     public $incrementing = false;
+    protected $keyType = 'string';
+
+    public $timestamps = false;
 }
