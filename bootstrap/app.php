@@ -17,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->group('checkoutRedirect', [
             \App\Http\Middleware\RedirectCheckout::class,
         ]);
+        
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

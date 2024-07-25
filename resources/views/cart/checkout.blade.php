@@ -1,6 +1,7 @@
 @extends('../layout/main')
 
 @section('head')
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 <title>Checkout - SKO</title>
 <style>
     /* Customize styles as needed */
@@ -28,12 +29,6 @@
 @section('content')
 
 <dialog id="modal" class="relative p-6 w-1/4 bg-white rounded-3xl shadow-lg">
-    {{-- <button id="closeModalButtonTop" class="close-button">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-700 hover:text-gray-900" fill="none"
-            viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-    </button> --}}
     <div>
         <img id="iconImg" src="/img/Payment-Warning.svg" alt="">
     </div>
@@ -83,31 +78,54 @@
                         <label class="block text-sm font-medium text-gray-700">Nama <span
                                 class="text-red-500">*</span></label>
                         <input type="text" value="{{$item->name}}" name="name" class="dataInput mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-red-500
-                                focus:border-red-500 sm:text-sm" required disabled>
+                                focus:border-red-500 sm:text-sm" required>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">No HP <span
                                 class="text-red-500">*</span></label>
                         <input type="text" value="{{$item->phone}}" name="phone"
                             class="dataInput mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
-                            required disabled>
+                            required>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Alamat<span
                                 class="text-red-500">*</span></label>
-                        <div class="w-[20%]">
-                            <select id="countries"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                <option selected>Provinsi</option>
-                                <option value="US">United States</option>
-                                <option value="CA">Canada</option>
-                                <option value="FR">France</option>
-                                <option value="DE">Germany</option>
-                            </select>
+                        <div class="flex space-x-2" id="app">
+                            <div class="w-[20%]">
+                                <select id="province"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option value="">Provinsi</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <select id="regency"
+                                    class=" hidden bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    disabled>
+                                    <option value="">Kabupaten/Kota</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <select id="district"
+                                    class="hidden bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    disabled>
+                                    <option value="">Kecamatan</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <select id="village"
+                                    class="hidden bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    disabled>
+                                    <option value="">Desa/Kelurahan</option>
+                                </select>
+                            </div>
+
                         </div>
                         <textarea name="address"
                             class="textarea dataInput mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
-                            rows="4" required disabled>{{$item->address}}</textarea>
+                            rows="4" required>{{$item->address}}</textarea>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Informasi Tambahan</label>
@@ -115,8 +133,7 @@
                             class="textarea mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
                             rows="3"></textarea>
                     </div>
-                </form>
-                @endforeach
+                    @endforeach
             </div>
         </div>
         <div class="md:w-2/3 space-y-4 mt-8 md:mt-0">
@@ -200,16 +217,17 @@
                     <div>Total</div>
                     <div>IDR {{ number_format(($carts->sum('cart_price')+$carts->sum('tax')), 0, ',', '.')}}</div>
                 </div>
-                {{-- <div class="flex space-x-16">
-                    <label class="flex items-center">
-                        <input type="radio" name="payment" class="form-radio text-red-600" checked>
-                        <span class="ml-2">Transfer Bank</span>
-                    </label>
-                    <label class="flex items-center">
-                        <input type="radio" name="payment" class="form-radio text-red-600">
-                        <span class="ml-2">Digital Money</span>
-                    </label>
-                </div> --}}
+
+                <div class="w-1/4 pt-4">
+                    <select id="expedition" name="expedition"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <option selected>Pilih Kurir</option>
+                        @foreach ($expeditions as $expedition)
+                        <option value="{{$expedition->expedition}}">{{$expedition->expedition}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                </form>
                 <button form="formInfo" id="pay-button"
                     class="w-full bg-[#FFF3B2] shadow-md text-gray-800 hover:bg-black hover:text-white font-bold py-3 rounded-md mt-12">Buat
                     Pesanan</button>
@@ -217,7 +235,6 @@
         </div>
     </div>
 </main>
-<pre><div id="result-json">JSON result will appear here after payment:<br></div></pre>
 <footer class="text-center text-gray-500 text-sm">
     ©SKO 2023. All rights reserved.
 </footer>
@@ -262,84 +279,94 @@
 <!-- TODO: Remove ".sandbox" from script src URL for production environment. Also input your client key in "data-client-key" -->
 <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{$midtransClientKey}}"></script>
 <script type="text/javascript">
-    $.ajaxSetup({
-    
-    headers: {
-    
-    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    
+    // Function to show payment modal
+    function showPaymentModal(iconSrc, titleText, messageText, buttonClass) {
+    console.log('ya ini juga');
+    modal.showModal();
+    modal.classList.add("showing");
+    modalIcon.src = iconSrc;
+    modalTitle.innerText = titleText;
+    modalText.innerText = messageText;
+    closeModalButton2.classList.remove("bg-blueBtn", "bg-redBtn"); // Remove previous classes
+    if (buttonClass) {
+    closeModalButton2.classList.add(buttonClass);
     }
-    
-    });
-$("#formInfo").submit(function (event) {
-    event.preventDefault(); //prevent default action
-    let form_data = $(this).serialize(); //Encode form elements for submission
-    let post_url = $(this).attr("action"); //get form action url
-    $.ajax({
-    url: post_url,
-    method: 'POST',
-    data: form_data,
-    success: function (data) {
-        // SnapToken acquired from previous step
-        snap.pay(data.token, {
-          // Optional
-        onSuccess: function(result){
-        modal.showModal();
-        modalIcon.src = "/img/Payment-Success.svg"
-        modalTitle.innerText = "Terbayar!"
-        modalText.innerText = "Yey.. Pembayaran berhasil, pengiriman akan segera diproses"
-        modalWarning.classList.add("hidden");
-        closeModalButton2.classList.remove("hidden");
-        closeModalButton2.classList.add("bg-blueBtn");
-            /* You may add your own js here, this is just example */ document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
-        },
-          // Optional
-        onPending: function(result){
-            modal.showModal();
-            modalIcon.src = "/img/Payment-Pending.svg"
-            modalTitle.innerText = "Tertunda!"
-            modalText.innerText = "Transaksi tertunda, mohon tunggu beberapa saat hingga pembayaran berhasil"
-            document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
-          },
-          // Optional
-          onError: function(result){
-        modal.showModal();
-        modalIcon.src = "/img/Payment-Error.svg"
-        modalTitle.innerText = "Gagal!"
-        modalText.innerText = "Yah.. Pembayaran gagal, kami akan segera menanganinya"
-        modalWarning.classList.add("hidden");
-        closeModalButton2.classList.remove("hidden");
-        closeModalButton2.classList.add("bg-redBtn");
-            document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
-          },
-          onClose: function(){
-            modal.showModal();
-            modal.classList.add("showing");
-            console.log('customer closed the popup without finishing the payment');}
-        });
     }
-    });
-});
 
-function checkPaymentStatus(order_id) {
-$.ajax({
-url: '/check-payment-status', // Endpoint to check payment status on your server
-type: 'POST',
-data: { order_id: order_id },
-success: function(response) {
-if(response.status === 'success') {
-// Update UI for successful payment
-} else if(response.status === 'pending') {
-// Update UI for pending payment
-} else if(response.status === 'failed') {
-// Update UI for failed payment
-}
-},
-error: function(xhr) {
-console.error('Error checking payment status:', xhr);
-}
-});
-}
+    $.ajaxSetup({
+
+		headers: {
+
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+
+		}
+	});
+	$("#formInfo").submit(function(event) {
+		event.preventDefault(); //prevent default action
+		let form_data = $(this).serialize(); //Encode form elements for submission
+		let post_url = $(this).attr("action"); //get form action url
+		$.ajax({
+			url: post_url,
+			method: 'POST',
+			data: form_data,
+			success: function(data) {
+				// SnapToken acquired from previous step
+				snap.pay(data.token, {
+					// Optional
+					onSuccess: function(result) {
+                        modalWarning.classList.add("hidden");
+                        closeModalButton2.classList.remove("hidden");
+                        showPaymentModal("/img/Payment-Success.svg", "Terbayar!", "Yey.. Pembayaran berhasil, pengiriman akan segera diproses",
+                        "bg-blueBtn");
+						checkPaymentStatus(result.order_id);
+						
+					},
+					// Optional
+					onPending: function(result) {
+						showPaymentModal("/img/Payment-Warning.svg", "Belum Bayar!", "Pembayaran belum selesai, anda dapat melanjutkan pembayaran di halaman Notifikasi", "");
+						checkPaymentStatus(result.order_id);
+                    
+					},
+					// Optional
+					onError: function(result) {
+                        modalWarning.classList.add("hidden");
+                        closeModalButton2.classList.remove("hidden");
+						showPaymentModal("/img/Payment-Error.svg", "Gagal!", "Yah.. Pembayaran gagal, kami akan segera menanganinya", "bg-redBtn");
+			
+					},
+					onClose: function() {
+						modal.showModal();
+                        modal.classList.add("showing");
+						console.log('customer closed the popup without finishing the payment');
+					}
+				});
+			}
+		});
+	});
+
+	function checkPaymentStatus(order_id) {
+		$.ajax({
+			url: '/check-payment-status',
+			// Endpoint to check payment status on your server
+			type: 'POST',
+			data: {
+				order_id: order_id
+			},
+			success: function(response) {
+				if (response.status === 'success') {
+					// Update UI for successful payment
+				} else if (response.status === 'pending') {
+                    // showPaymentModal("/img/Payment-Warning.svg", "Belum Bayar!", "Transaksi tertunda, mohon tunggu beberapa saat hingga pembayaran berhasil", "");
+					console.log('ini modal');
+				} else if (response.status === 'failed') {
+					// Update UI for failed payment
+				}
+			},
+			error: function(xhr) {
+				console.error('Error checking payment status:', xhr);
+			}
+		});
+	}
 
 </script>
 <script>
@@ -359,15 +386,8 @@ console.error('Error checking payment status:', xhr);
       "secondaryActionButton"
     );
 
-    // const openModalButton = document.getElementById("openModalButton");
-    // openModalButton.addEventListener("click", () => {
-    //   modal.classList.remove("closing");
-    //   modal.showModal();
-    //   modal.classList.add("showing");
-    // });
-
-    //closeModalButtonTop.addEventListener("click", closeModal);
     closeModalButton1.addEventListener("click", closeModal);
+    closeModalButton2.addEventListener("click", closeModal);
     secondaryActionButton.addEventListener("click", () => {
       console.log("Secondary action executed");
       
@@ -387,13 +407,147 @@ console.error('Error checking payment status:', xhr);
         { once: true }
       );
     }
-const dataInput = document.getElementsByClassName('dataInput');
-const btnEdit = document.getElementById('btnEdit');
-    btnEdit.addEventListener("click", () => {
-        Array.from(dataInput).forEach((dataInput) => {
-            dataInput.removeAttribute("disabled");
-            });
-        });
+// const dataInput = document.getElementsByClassName('dataInput');
+// const btnEdit = document.getElementById('btnEdit');
+//     btnEdit.addEventListener("click", () => {
+//         Array.from(dataInput).forEach((dataInput) => {
+//             dataInput.removeAttribute("disabled");
+//             });
+//         });
 </script>
 
+<script>
+    $(document).ready(function() {
+            const baseApiUrl = `${window.location.origin}/api/proxy`;
+            
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            const $province = $('#province');
+            const $regency = $('#regency');
+            const $district = $('#district');
+            const $village = $('#village');
+
+            function cleanJsonString(data) {
+                const jsonStart = data.indexOf('[');
+                return data.substring(jsonStart);
+            }
+
+            function handleError(entity, error) {
+                console.error(`Error fetching ${entity}:`, error);
+            }
+
+            function fetchProvinces() {
+                $.ajax({
+                    url: `${baseApiUrl}/provinces`,
+                    method: 'GET',
+                    success: function(data) {
+                        const cleanedData = cleanJsonString(data);
+                        const jsonData = JSON.parse(cleanedData);
+
+                        let options = '<option value="">Provinsi</option>';
+                        jsonData.forEach(province => {
+                            options += `<option value="${province.id}">${province.name}</option>`;
+                        });
+                        $province.html(options).prop('disabled', false).removeClass('hidden');
+                    },
+                    error: function(xhr, status, error) {
+                        handleError('provinces', error);
+                    }
+                });
+            }
+
+            function fetchRegencies(provinceId) {
+                $.ajax({
+                    url: `${baseApiUrl}/regencies/${provinceId}`,
+                    method: 'GET',
+                    success: function(data) {
+                        const cleanedData = cleanJsonString(data);
+                        const jsonData = JSON.parse(cleanedData);
+
+                        let options = '<option value="">Kabupaten/Kota</option>';
+                        jsonData.forEach(regency => {
+                            options += `<option value="${regency.id}">${regency.name}</option>`;
+                        });
+                        $regency.html(options).prop('disabled', false).removeClass('hidden');
+                    },
+                    error: function(xhr, status, error) {
+                        handleError('regencies', error);
+                    }
+                });
+            }
+
+            function fetchDistricts(regencyId) {
+                $.ajax({
+                    url: `${baseApiUrl}/districts/${regencyId}`,
+                    method: 'GET',
+                    success: function(data) {
+                        const cleanedData = cleanJsonString(data);
+                        const jsonData = JSON.parse(cleanedData);
+
+                        let options = '<option value="">Kecamatan</option>';
+                        jsonData.forEach(district => {
+                            options += `<option value="${district.id}">${district.name}</option>`;
+                        });
+                        $district.html(options).prop('disabled', false).removeClass('hidden');
+                    },
+                    error: function(xhr, status, error) {
+                        handleError('districts', error);
+                    }
+                });
+            }
+
+            function fetchVillages(districtId) {
+                $.ajax({
+                    url: `${baseApiUrl}/villages/${districtId}`,
+                    method: 'GET',
+                    success: function(data) {
+                        const cleanedData = cleanJsonString(data);
+                        const jsonData = JSON.parse(cleanedData);
+
+                        let options = '<option value="">Desa/Kelurahan</option>';
+                        jsonData.forEach(village => {
+                            options += `<option value="${village.id}">${village.name}</option>`;
+                        });
+                        $village.html(options).prop('disabled', false).removeClass('hidden');
+                    },
+                    error: function(xhr, status, error) {
+                        handleError('villages', error);
+                    }
+                });
+            }
+
+            $province.change(function() {
+                const provinceId = $(this).val();
+                if (provinceId) {
+                    fetchRegencies(provinceId);
+                    $regency.html('<option value="">Kabupaten/Kota</option>').prop('disabled', true).addClass('hidden');
+                    $district.html('<option value="">Kecamatan</option>').prop('disabled', true).addClass('hidden');
+                    $village.html('<option value="">Desa/Kelurahan</option>').prop('disabled', true).addClass('hidden');
+                }
+            });
+
+            $regency.change(function() {
+                const regencyId = $(this).val();
+                if (regencyId) {
+                    fetchDistricts(regencyId);
+                    $district.html('<option value="">Kecamatan</option>').prop('disabled', true).addClass('hidden');
+                    $village.html('<option value="">Desa/Kelurahan</option>').prop('disabled', true).addClass('hidden');
+                }
+            });
+
+            $district.change(function() {
+                const districtId = $(this).val();
+                if (districtId) {
+                    fetchVillages(districtId);
+                    $village.html('<option value="">Desa/Kelurahan</option>').prop('disabled', true).addClass('hidden');
+                }
+            });
+
+            fetchProvinces();
+        });
+</script>
 @endsection

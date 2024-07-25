@@ -43,8 +43,9 @@
 
             <!-- Start Search -->
             <div class="w-5/6 md:w-1/4 xl:w-1/5">
-                <form class="flex mx-3" action="">
-                    <input class="focus:outline-none w-full mr-5 rounded-lg px-2 text-black border" type="text" />
+                <form class="flex mx-3" method="GET" action="/categories">
+                    <input class="focus:outline-none w-full mr-5 rounded-lg px-2 text-black border" name="search"
+                        type="search" />
                     <button class="p-[6px] hover:bg-black hover:text-white rounded-full">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">

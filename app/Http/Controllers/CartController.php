@@ -26,8 +26,8 @@ class CartController extends Controller
 
         $carts = Cart::where('customer_id', $customer_id)
             ->join('products', 'carts.product_id', '=', 'products.product_id')
-            ->join('brand', 'brand.brand_id', '=', 'products.brand_id')
-            ->select('carts.*', 'products.*', 'brand.*')
+            ->join('brands', 'brands.brand_id', '=', 'products.brand_id')
+            ->select('carts.*', 'products.*', 'brands.*')
             ->orderBy('carts.created_at', 'desc')
             ->get();
         return view('cart.cart', compact('carts'));
@@ -84,8 +84,8 @@ class CartController extends Controller
         $carts = Cart::where('customer_id', $customer_id)
             ->whereRaw("status NOT IN ('2')")
             ->join('products', 'carts.product_id', '=', 'products.product_id')
-            ->join('brand', 'brand.brand_id', '=', 'products.brand_id')
-            ->select('carts.*', 'products.*', 'brand.*')
+            ->join('brands', 'brands.brand_id', '=', 'products.brand_id')
+            ->select('carts.*', 'products.*', 'brands.*')
             ->orderBy('carts.created_at', 'desc')
             ->get();
         return view('cart.items', compact('carts'));

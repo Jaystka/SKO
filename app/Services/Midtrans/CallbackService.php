@@ -2,21 +2,21 @@
 
 namespace App\Services\Midtrans;
 
-use App\Models\Order;
+use App\Models\Transaction;
 use App\Services\Midtrans\Midtrans;
 use Midtrans\Notification;
 
 class CallbackService extends Midtrans
 {
     protected $notification;
-    protected $order;
+    protected $Transaction;
     protected $serverKey;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->serverKey = config('midtrans.server_key');
+        $this->serverKey = config('midtrans.serverKey');
         // $this->_handleNotification();
     }
 
@@ -49,18 +49,18 @@ class CallbackService extends Midtrans
         return $this->notification;
     }
 
-    public function getOrder()
+    public function getTransaction()
     {
-        return $this->order;
+        return $this->Transaction;
     }
 
     protected function _createLocalSignatureKey()
     {
-        $orderId = $this->order->number;
+        $TransactionId = $this->Transaction->number;
         $statusCode = $this->notification->status_code;
-        $grossAmount = $this->order->total_price;
+        $grossAmount = $this->Transaction->total_price;
         $serverKey = $this->serverKey;
-        $input = $orderId . $statusCode . $grossAmount . $serverKey;
+        $input = $TransactionId . $statusCode . $grossAmount . $serverKey;
         $signature = openssl_digest($input, 'sha512');
 
         return $signature;
@@ -70,10 +70,10 @@ class CallbackService extends Midtrans
     // {
     //     $notification = new Notification();
 
-    //     $orderNumber = $notification->order_id;
-    //     $order = Order::where('number', $orderNumber)->first();
+    //     $TransactionNumber = $notification->Transaction_id;
+    //     $Transaction = Transaction::where('number', $TransactionNumber)->first();
 
     //     $this->notification = $notification;
-    //     $this->order = $order;
+    //     $this->Transaction = $Transaction;
     // }
 }

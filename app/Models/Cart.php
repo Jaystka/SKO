@@ -37,3 +37,14 @@ class Cart extends Model
         });
     }
 }
+
+class Expedition extends Model
+{
+    use HasFactory;
+
+    protected $primaryKey = 'expedition';
+    protected $fillable = [
+        'expedition'];
+
+    public $incrementing = false;
+}

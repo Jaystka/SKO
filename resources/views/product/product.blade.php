@@ -164,13 +164,62 @@
                 <p>38</p>
               </div>
             </label>
-            <button class="p-2 border rounded">39</button>
-            <button class="p-2 border rounded">40</button>
-            <button class="p-2 border rounded">41</button>
-            <button class="p-2 border rounded">42</button>
-            <button class="p-2 border rounded">43</button>
-            <button class="p-2 border rounded">44</button>
-            <button class="p-2 border rounded">45</button>
+            <label class="cursor-pointer">
+              <input {{ $isDisabled($product, '39' ) }} id="option4" name="size" class="peer sr-only" type="radio"
+                value="39" required>
+              <div
+                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
+                <p>39</p>
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input {{ $isDisabled($product, '40' ) }} id="option5" name="size" class="peer sr-only" type="radio"
+                value="40" required>
+              <div
+                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
+                <p>40</p>
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input {{ $isDisabled($product, '41' ) }} id="option6" name="size" class="peer sr-only" type="radio"
+                value="41" required>
+              <div
+                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
+                <p>41</p>
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input {{ $isDisabled($product, '42' ) }} id="option7" name="size" class="peer sr-only" type="radio"
+                value="42" required>
+              <div
+                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
+                <p>42</p>
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input {{ $isDisabled($product, '43' ) }} id="option8" name="size" class="peer sr-only" type="radio"
+                value="43" required>
+              <div
+                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
+                <p>43</p>
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input {{ $isDisabled($product, '44' ) }} id="option8" name="size" class="peer sr-only" type="radio"
+                value="44" required>
+              <div
+                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
+                <p>44</p>
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input {{ $isDisabled($product, '45' ) }} id="option8" name="size" class="peer sr-only" type="radio"
+                value="45" required>
+              <div
+                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
+                <p>45</p>
+              </div>
+            </label>
           </div>
         </form>
 

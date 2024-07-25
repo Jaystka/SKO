@@ -644,9 +644,6 @@ video {
 .mb-8 {
   margin-bottom: 2rem;
 }
-.ml-2 {
-  margin-left: 0.5rem;
-}
 .ml-3 {
   margin-left: 0.75rem;
 }
@@ -1005,11 +1002,6 @@ video {
 }
 .gap-y-11 {
   row-gap: 2.75rem;
-}
-.space-x-16 > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-x-reverse: 0;
-  margin-right: calc(4rem * var(--tw-space-x-reverse));
-  margin-left: calc(4rem * calc(1 - var(--tw-space-x-reverse)));
 }
 .space-x-2 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
@@ -1403,6 +1395,9 @@ video {
 }
 .pt-32 {
   padding-top: 8rem;
+}
+.pt-4 {
+  padding-top: 1rem;
 }
 .pt-40 {
   padding-top: 10rem;
@@ -2120,11 +2115,6 @@ html:has(dialog[open]) {
     .hover\:text-gray-800:hover {
   --tw-text-opacity: 1;
   color: rgb(31 41 55 / var(--tw-text-opacity));
-}
-
-    .hover\:text-gray-900:hover {
-  --tw-text-opacity: 1;
-  color: rgb(17 24 39 / var(--tw-text-opacity));
 }
 
     .hover\:text-indigo-500:hover {

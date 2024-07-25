@@ -12,6 +12,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProductCategoryController;
+use App\Http\Controllers\ProxyController;
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/register', [CustomerAuthController::class, 'registerView'])->name('register');
@@ -22,11 +23,17 @@ Route::group(['middleware' => 'guest'], function () {
 
 Route::get('/', [HomeController::class, 'index'])->name('/');
 Route::get('/shop', [ShopController::class, 'shopView'])->name('shop');
-Route::get('/productcategories', [ProductCategoryController::class, 'ProductCategoriesView'])->name('productcategories');
+Route::get('/categories', [ProductCategoryController::class, 'ProductCategoriesView'])->name('categories');
 Route::get('/ourstory', [OurstoryController::class, 'ourstoryView'])->name('ourstory');
 Route::get('/blog', [BlogController::class, 'blogView'])->name('blog');
 Route::get('/product/{slug}', [ProductController::class, 'show'])
     ->where('slug', '[A-Za-z0-9-]+');
+
+Route::get('/api/proxy/provinces', [ProxyController::class, 'getProvinces']);
+Route::get('/api/proxy/regencies/{provinceId}', [ProxyController::class, 'getRegencies']);
+Route::get('/api/proxy/districts/{regencyId}', [ProxyController::class, 'getDistricts']);
+Route::get('/api/proxy/districts/{regencyId}', [ProxyController::class, 'getDistricts']);
+Route::get('/api/proxy/villages/{districtId}', [ProxyController::class, 'getVillages']);
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', [HomeController::class, 'index']);

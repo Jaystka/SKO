@@ -15,7 +15,7 @@ class Transaction extends Model
         'product_id',
         'total_payment',
         'status',
-        'expedition ',
+        'expedition',
         'address',
         'time',
         'updated_at',

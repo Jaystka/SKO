@@ -236,6 +236,7 @@
 
             delayTimer();
 		});
+        @if($carts->count() > 0)
         document.getElementById('submitBtn').addEventListener('click', function(event) {
             event.preventDefault(); // Prevent default action
             
@@ -245,6 +246,7 @@
             window.location.href = url;
             }, 150);
             });
+            @endif
 	});
     };
 </script>
