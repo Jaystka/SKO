@@ -17,6 +17,7 @@ use App\Http\Controllers\ProductAdminController;
 use App\Http\Controllers\CategoryAdminController;
 use App\Http\Controllers\MaterialAdminController; 
 use App\Http\Controllers\Auth\AdminAuthController;
+use App\Http\Controllers\TransactionAdminController;
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/register', [CustomerAuthController::class, 'registerView'])->name('register');
@@ -65,8 +66,12 @@ Route::prefix('admin')->group(function () {
         Route::get('materials/edit/{id}', [MaterialAdminController::class, 'editMaterials'])->name('editmaterials');
         Route::put('materials/{id}', [MaterialAdminController::class, 'updateMaterials'])->name('updatematerials');
         Route::delete('materials/{id}', [MaterialAdminController::class, 'deleteMaterials'])->name('deletematerials');
+        //Sells
+        Route::get('transactions', [TransactionAdminController::class, 'transactionsadminView'])->name('transactions.admin');
     });
 });
+
+
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/home', [HomeController::class, 'index']);

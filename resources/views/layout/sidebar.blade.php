@@ -46,10 +46,19 @@
                         <span class="ml-2">Customers</span>
                     </a>
                 </li>
-                <li class="py-4 px-6 {{ request()->is('sell') ? 'bg-[#575757] text-white' : 'hover:bg-[#575757] text-gray-700' }}">
+                <!-- <li class="py-4 px-6 {{ request()->is('sell') ? 'bg-[#575757] text-white' : 'hover:bg-[#575757] text-gray-700' }}">
                     <a href="#" class="icon px-5 flex items-center {{ request()->is('sell') ? 'text-white' : 'text-gray-700 hover:text-white' }}">
                         <span class="icon_span"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" clip-rule="evenodd" d="M20 10C20 15.523 15.523 20 10 20C4.477 20 0 15.523 0 10C0 4.477 4.477 0 10 0C15.523 0 20 4.477 20 10ZM10 3.25C10.1989 3.25 10.3897 3.32902 10.5303 3.46967C10.671 3.61032 10.75 3.80109 10.75 4V4.317C12.38 4.609 13.75 5.834 13.75 7.5C13.75 7.69891 13.671 7.88968 13.5303 8.03033C13.3897 8.17098 13.1989 8.25 13 8.25C12.8011 8.25 12.6103 8.17098 12.4697 8.03033C12.329 7.88968 12.25 7.69891 12.25 7.5C12.25 6.822 11.686 6.103 10.75 5.847V9.317C12.38 9.609 13.75 10.834 13.75 12.5C13.75 14.166 12.38 15.391 10.75 15.683V16C10.75 16.1989 10.671 16.3897 10.5303 16.5303C10.3897 16.671 10.1989 16.75 10 16.75C9.80109 16.75 9.61032 16.671 9.46967 16.5303C9.32902 16.3897 9.25 16.1989 9.25 16V15.683C7.62 15.391 6.25 14.166 6.25 12.5C6.25 12.3011 6.32902 12.1103 6.46967 11.9697C6.61032 11.829 6.80109 11.75 7 11.75C7.19891 11.75 7.38968 11.829 7.53033 11.9697C7.67098 12.1103 7.75 12.3011 7.75 12.5C7.75 13.178 8.314 13.897 9.25 14.152V10.683C7.62 10.391 6.25 9.166 6.25 7.5C6.25 5.834 7.62 4.609 9.25 4.317V4C9.25 3.80109 9.32902 3.61032 9.46967 3.46967C9.61032 3.32902 9.80109 3.25 10 3.25Z" class="{{ request()->is('sell') ? 'fill-white' : 'fill-[#575757] hover:fill-white' }}"/>
+                            </svg>
+                            </span>
+                        <span class="ml-2">Sells</span>
+                    </a>
+                </li> -->
+                <li class="py-4 px-6 {{ request()->routeIs('transactions.admin') ? 'bg-[#575757] text-white' : 'hover:bg-[#575757] text-gray-700' }}">
+                    <a href="{{ route('transactions.admin') }}" class="icon px-5 flex items-center {{ request()->routeIs('transactions.admin') ? 'text-white' : 'text-gray-700 hover:text-white' }}">
+                    <span class="icon_span"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M20 10C20 15.523 15.523 20 10 20C4.477 20 0 15.523 0 10C0 4.477 4.477 0 10 0C15.523 0 20 4.477 20 10ZM10 3.25C10.1989 3.25 10.3897 3.32902 10.5303 3.46967C10.671 3.61032 10.75 3.80109 10.75 4V4.317C12.38 4.609 13.75 5.834 13.75 7.5C13.75 7.69891 13.671 7.88968 13.5303 8.03033C13.3897 8.17098 13.1989 8.25 13 8.25C12.8011 8.25 12.6103 8.17098 12.4697 8.03033C12.329 7.88968 12.25 7.69891 12.25 7.5C12.25 6.822 11.686 6.103 10.75 5.847V9.317C12.38 9.609 13.75 10.834 13.75 12.5C13.75 14.166 12.38 15.391 10.75 15.683V16C10.75 16.1989 10.671 16.3897 10.5303 16.5303C10.3897 16.671 10.1989 16.75 10 16.75C9.80109 16.75 9.61032 16.671 9.46967 16.5303C9.32902 16.3897 9.25 16.1989 9.25 16V15.683C7.62 15.391 6.25 14.166 6.25 12.5C6.25 12.3011 6.32902 12.1103 6.46967 11.9697C6.61032 11.829 6.80109 11.75 7 11.75C7.19891 11.75 7.38968 11.829 7.53033 11.9697C7.67098 12.1103 7.75 12.3011 7.75 12.5C7.75 13.178 8.314 13.897 9.25 14.152V10.683C7.62 10.391 6.25 9.166 6.25 7.5C6.25 5.834 7.62 4.609 9.25 4.317V4C9.25 3.80109 9.32902 3.61032 9.46967 3.46967C9.61032 3.32902 9.80109 3.25 10 3.25Z" class="{{ request()->routeIs('transactions.admin') ? 'fill-white' : 'fill-[#575757] hover:fill-white' }}""/>
                             </svg>
                             </span>
                         <span class="ml-2">Sells</span>
@@ -65,16 +74,6 @@
                         <span class="ml-2">Materials</span>
                     </a>
                 </li>
-                <!-- <li class="py-4 px-6 {{ request()->is('materials') ? 'bg-[#575757] text-white' : 'hover:bg-[#575757] text-gray-700' }}">
-                    <a href="#" class="icon px-5 flex items-center {{ request()->is('material') ? 'text-white' : 'text-gray-700 hover:text-white' }}">
-                        <span class="icon_span"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M1 5L8 1L19 5M1 5V10L12 14L19 10V5M1 5L12 9L19 5" stroke="#575757" stroke-width="2" stroke-linejoin="round"/>
-                            <path d="M1 10V15L12 19L19 15V10" stroke="#575757" stroke-width="2" stroke-linejoin="round" class="{{ request()->is('material') ? 'fill-white' : 'fill-[#575757] hover:fill-white' }}"/>
-                            </svg>
-                            </span>
-                        <span class="ml-2">Materials</span>
-                    </a>
-                </li> -->
             </ul>
         </nav>
         <div class="p-4">
