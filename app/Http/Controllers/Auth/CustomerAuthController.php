@@ -129,4 +129,10 @@ class CustomerAuthController extends Controller
 
         return redirect('login');
     }
+
+    public function showCustomers()
+    {
+        $customers = Customer::all(); // Ambil semua data customer
+        return view('admin/customer', compact('customers'));
+    }
 }

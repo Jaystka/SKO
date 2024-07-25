@@ -5,17 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ShopDisplays extends Model
+class Categories extends Model
 {
     use HasFactory;
-    protected $primaryKey = 'display_id';
+    protected $primaryKey = 'category_id';
     protected $fillable = [
-        'display_id',
-        'brand_id',
-        'number'
+        'category_id',
+        'category',
+        'category_desc'
     ];
-
-    protected $table = 'shopdisplays';
-
     public $incrementing = false;
+
+    protected $table = 'categories';
 }
