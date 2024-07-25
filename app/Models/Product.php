@@ -5,39 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
-{
-    use HasFactory;
-    protected $primaryKey = 'category_id';
-    protected $fillable = [
-        'category_id',
-        'category',
-        'category_desc'
-    ];
-    public $incrementing = false;
-}
-
-class Material extends Model
-{
-    use HasFactory;
-    protected $primaryKey = 'material_id';
-    protected $fillable = [
-        'material_id',
-        'material',
-        'material_desc'
-    ];
-    public $incrementing = false;
-}
-class Brand extends Model
-{
-    use HasFactory;
-    protected $primaryKey = 'brand_id';
-    protected $fillable = [
-        'brand_id',
-        'brand'
-    ];
-    public $incrementing = false;
-}
 
 class Product extends Model
 {
@@ -68,8 +35,8 @@ class Product extends Model
         ];
     }
 
-    public function stock()
+    public function stocks()
     {
-        return $this->hasMany(Stock::class, 'product_id');
+        return $this->hasMany(Stocks::class, 'product_id');
     }
 }
