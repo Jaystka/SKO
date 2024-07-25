@@ -91,22 +91,38 @@
             preview.style.display = "block";
         }
     }
-
-    function confirmDelete() {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('deleteForm').submit();
-            }
-        });
+    // Function to show image preview
+    function showPreview(event, previewId) {
+        if (event.target.files.length > 0) {
+            var src = URL.createObjectURL(event.target.files[0]);
+            var preview = document.getElementById(previewId);
+            preview.src = src;
+            preview.style.display = "block";
+        }
     }
+
+    // Function to handle form submission with confirmation
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('editProduct').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent the form from submitting immediately
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to save the changes?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, save changes!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit the form if user confirms
+                    e.target.submit();
+                }
+            });
+        });
+    });
+
 </script>
 @endsection
 

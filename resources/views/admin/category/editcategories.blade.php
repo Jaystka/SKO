@@ -28,3 +28,32 @@
     </div>
 </main>
 @endsection
+
+@section('script')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+
+    // Function to handle form submission with confirmation
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('editcategory').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent the form from submitting immediately
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to save the changes?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, save changes!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit the form if user confirms
+                    e.target.submit();
+                }
+            });
+        });
+    });
+
+</script>
+@endsection

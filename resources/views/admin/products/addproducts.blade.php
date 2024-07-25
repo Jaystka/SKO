@@ -84,7 +84,44 @@
 @endsection
 
 @section('script')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    function showPreview(event, previewId) {
+        const input = event.target;
+        const preview = document.getElementById(previewId);
+        const reader = new FileReader();
+
+        reader.onload = function(){
+            preview.src = reader.result;
+            preview.style.display = 'block';
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('addProduct');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // Mencegah pengiriman form secara default
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to save this product?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, save it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Kirim form jika pengguna mengkonfirmasi
+                    form.submit();
+                }
+            });
+        });
+    });
+
     function showPreview(event, previewId) {
         const input = event.target;
         const preview = document.getElementById(previewId);
