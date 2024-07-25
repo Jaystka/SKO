@@ -127,38 +127,99 @@
         </div>
         <div class="py-5">
           <h2 class="text-2xl font-bold">Sepatu {{ $product->product }}</h2>
-          <h1 class="text-3xl font-MadeTomy-Bold">{{ $product->brand }}</h1>
+          <h1 class="text-3xl font-MadeTomy-Bold">{{ $product->series }}</h1>
         </div>
         <p class="text-red-600 text-xl font-MadeTomy-Medium">IDR {{ number_format($product->price, 0, ',', '.')}}</p>
 
+
         <form class="addCart" id="addCart" action="{{ route('cart.store') }}" method="POST">
           @csrf
-          <input type="hidden" name="customer_id">
+          @auth
+          <input type="hidden" name="customer_id" value="{{ auth()->user()->customer_id }}">
+          <input type="hidden" name="quantity" value="1">
+          <input type="hidden" name="product_id" value="{{ $product->product_id }}">
+          @endauth
           <div class="grid grid-cols-5 gap-2 my-4">
             <label class="cursor-pointer">
               <input {{ $isDisabled($product, '36' ) }} id="option1" name="size" class="peer sr-only" type="radio"
-                value="36">
+                value="36" required>
               <div
                 class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
                 <p>36</p>
               </div>
             </label>
             <label class="cursor-pointer">
-              <input {{ $isDisabled($product, '37' ) }} id="option1" name="size" class="peer sr-only" type="radio"
-                value="37">
+              <input {{ $isDisabled($product, '37' ) }} id="option2" name="size" class="peer sr-only" type="radio"
+                value="37" required>
               <div
                 class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
                 <p>37</p>
               </div>
             </label>
-            <button class="p-2 border rounded">38</button>
-            <button class="p-2 border rounded">39</button>
-            <button class="p-2 border rounded">40</button>
-            <button class="p-2 border rounded">41</button>
-            <button class="p-2 border rounded">42</button>
-            <button class="p-2 border rounded">43</button>
-            <button class="p-2 border rounded">44</button>
-            <button class="p-2 border rounded">45</button>
+            <label class="cursor-pointer">
+              <input {{ $isDisabled($product, '38' ) }} id="option2" name="size" class="peer sr-only" type="radio"
+                value="38" required>
+              <div
+                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
+                <p>38</p>
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input {{ $isDisabled($product, '39' ) }} id="option4" name="size" class="peer sr-only" type="radio"
+                value="39" required>
+              <div
+                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
+                <p>39</p>
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input {{ $isDisabled($product, '40' ) }} id="option5" name="size" class="peer sr-only" type="radio"
+                value="40" required>
+              <div
+                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
+                <p>40</p>
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input {{ $isDisabled($product, '41' ) }} id="option6" name="size" class="peer sr-only" type="radio"
+                value="41" required>
+              <div
+                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
+                <p>41</p>
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input {{ $isDisabled($product, '42' ) }} id="option7" name="size" class="peer sr-only" type="radio"
+                value="42" required>
+              <div
+                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
+                <p>42</p>
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input {{ $isDisabled($product, '43' ) }} id="option8" name="size" class="peer sr-only" type="radio"
+                value="43" required>
+              <div
+                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
+                <p>43</p>
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input {{ $isDisabled($product, '44' ) }} id="option8" name="size" class="peer sr-only" type="radio"
+                value="44" required>
+              <div
+                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
+                <p>44</p>
+              </div>
+            </label>
+            <label class="cursor-pointer">
+              <input {{ $isDisabled($product, '45' ) }} id="option8" name="size" class="peer sr-only" type="radio"
+                value="45" required>
+              <div
+                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
+                <p>45</p>
+              </div>
+            </label>
           </div>
         </form>
 
@@ -217,6 +278,24 @@
       $('.nav-button[data-hash="'+ hash +'"]').addClass('active');
     }
   });
+});
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var sizeRadios = document.querySelectorAll('input[name="size"]');
+    
+    sizeRadios.forEach(function(radio) {
+        radio.oninvalid = function(event) {
+            this.setCustomValidity('Pilih Ukuran');
+        };
+
+        radio.onchange = function(event) {
+            // Hapus custom validity message dari semua radio button dengan nama "size"
+            sizeRadios.forEach(function(radio) {
+                radio.setCustomValidity('');
+            });
+        };
+    });
 });
 </script>
 @endsection

@@ -11,17 +11,21 @@ class Payment extends Model
     protected $primaryKey = 'payment_id';
     protected $fillable = [
         'payment_id',
+        'customer_id',
+        'product_id',
+        'transaction_id',
         'cart_id',
+        'total_price',
+        'qty',
         'status',
-        'payment_method',
-        'expedition',
-        'date'
+        'created_at',
+        'updated_at'
     ];
     public $incrementing = false;
 
-    protected $table = 'payment';
-    public function cart()
-    {
-        return $this->belongsTo(Cart::class);
-    }
+    // protected $table = 'payment';
+    // public function cart()
+    // {
+    //     return $this->belongsTo(Cart::class);
+    // }
 }

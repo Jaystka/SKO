@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class Customer extends Model
+class Customer extends Authenticatable
 {
     use HasFactory, Notifiable;
 
@@ -17,8 +17,10 @@ class Customer extends Model
      *
      * @var array<int, string>
      */
+    protected $primaryKey = 'customer_id';
     protected $fillable = [
         'customer_id',
+        'name',
         'username',
         'email',
         'password',
@@ -26,6 +28,7 @@ class Customer extends Model
         'address'
     ];
 
+    public $incrementing = false;
     /**
      * The attributes that should be hidden for serialization.
      *

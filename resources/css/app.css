@@ -4,32 +4,32 @@
 
 @font-face {
     font-family: "MadeTomy-Regular";
-    src: url("font/MADE TOMMY Regular_PERSONAL USE.otf") format("opentype");
+    src: url("font/MADE Tommy Soft Regular PERSONAL USE.otf") format("opentype");
 }
 
 @font-face {
     font-family: "MadeTomy-Light";
-    src: url("font/MADE TOMMY Light_PERSONAL USE.otf") format("opentype");
+    src: url("font/MADE Tommy Soft Light PERSONAL USE.otf") format("opentype");
 }
 
 @font-face {
     font-family: "MadeTomy-Bold";
-    src: url("font/MADE TOMMY Bold_PERSONAL USE.otf") format("opentype");
+    src: url("font/MADE Tommy Soft Bold PERSONAL USE.otf") format("opentype");
 }
 
 @font-face {
     font-family: "MadeTomy-ExtraBold";
-    src: url("font/MADE TOMMY ExtraBold_PERSONAL USE.otf") format("opentype");
+    src: url("font/MADE Tommy Soft ExtraBold PERSONAL USE.otf") format("opentype");
 }
 
 @font-face {
     font-family: "MadeTomy-Medium";
-    src: url("font/MADE TOMMY Medium_PERSONAL USE.otf") format("opentype");
+    src: url("font/MADE Tommy Soft Medium PERSONAL USE.otf") format("opentype");
 }
 
 @font-face {
     font-family: "MadeTomy-Thin";
-    src: url("font/MADE TOMMY Thin_PERSONAL USE.otf") format("opentype");
+    src: url("font/MADE Tommy Soft Thin PERSONAL USE.otf") format("opentype");
 }
 
 @font-face /*perintah untuk memanggil font eksternal*/ {
@@ -247,7 +247,7 @@ body {
 
   .checkbox-wrapper-18 .round label {
     background-color: #fff;
-    border: 1px solid #ccc;
+    border: 2px solid #000;
     border-radius: 30%;
     cursor: pointer;
     height: 24px;
@@ -256,7 +256,7 @@ body {
   }
 
   .checkbox-wrapper-18 .round label:after {
-    border: 2px solid #fff;
+    border: 2px solid #000;
     border-top: none;
     border-right: none;
     content: "";
@@ -276,10 +276,64 @@ body {
   }
 
   .checkbox-wrapper-18 .round input[type="checkbox"]:checked + label {
-    background-color: #000;
+    background-color: #F8F7F3;
     border-color: #000;
   }
 
   .checkbox-wrapper-18 .round input[type="checkbox"]:checked + label:after {
     opacity: 1;
   }
+
+html:has(dialog[open]) {
+      overflow: hidden;
+    }
+
+    @keyframes scaleDown {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      100% {
+        opacity: 0;
+        transform: scale(0);
+      }
+    }
+
+    @keyframes slideInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(20%);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    dialog[open]::backdrop {
+      backdrop-filter: blur(0.3px);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      dialog {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+
+      dialog.showing {
+        animation: slideInUp 0.3s ease-out forwards;
+      }
+
+      dialog.closing {
+        animation: scaleDown 0.3s ease-in forwards;
+      }
+    }
+
+    .close-button {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      cursor: pointer;
+    }

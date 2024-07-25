@@ -17,6 +17,8 @@ module.exports = {
         third:'#F0EEE5',
         fourth: '#3C4043',
         fifth: '#BAE6FF',
+        redBtn: '#C53F3F',
+        blueBtn: '#407BFF',
       },
       fontFamily: {
         'MadeTomy-Light': ['MadeTomy-Light'],

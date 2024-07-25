@@ -105,7 +105,7 @@
                 didOpen: () => {
                 },
                 willClose: () => {
-                location.href = '/home'
+                location.href = res.data.url
                 }
             });
             }).catch(err => {

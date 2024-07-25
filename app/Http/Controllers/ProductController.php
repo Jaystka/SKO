@@ -15,9 +15,9 @@ class ProductController extends Controller
     {
         // Mencari produk berdasarkan slug di database
         $product = Product::with('stock')
-            ->join('category', 'products.category_id', '=', 'category.category_id')
-            ->join('material', 'products.material_id', '=', 'material.material_id')
-            ->select('products.*', 'category.category', 'category.category_desc', 'material.material', 'material.material_desc')
+            ->join('categories', 'products.category_id', '=', 'categories.category_id')
+            ->join('materials', 'products.material_id', '=', 'materials.material_id')
+            ->select('products.*', 'categories.category', 'categories.category_desc', 'materials.material', 'materials.material_desc')
             ->where('slug', $slug)->firstOrFail();
 
         return view('product.product', compact('product'));

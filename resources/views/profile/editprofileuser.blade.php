@@ -17,7 +17,7 @@
           class="mt-4 bg-[#FFF3B2] hover:bg-black text-gray-800 hover:text-white py-4 px-8 rounded-full shadow-md bodycopy">Change</button>
       </div>
       <!-- Profile Details -->
-      <form class="formEdit" action="{{ route('editprofile.update', auth()->user()->id) }}" method="POST">
+      <form class="formEdit" action="{{ route('editprofile.update', auth()->user()->customer_id) }}" method="POST">
         @csrf
         @method('PUT')
 
@@ -26,6 +26,11 @@
           <div class="flex gap-x-4 items-center">
             <label for="username" class="bodycopy text-base w-1/4">Username : </label>
             <input type="text" id="username" name="username" class="p-2 border rounded-md w-3/4"
+              value="{{auth()->user()->username}}">
+          </div>
+          <div class="flex gap-x-4 items-center">
+            <label for="name" class="bodycopy text-base w-1/4">name : </label>
+            <input type="text" id="name" name="name" class="p-2 border rounded-md w-3/4"
               value="{{auth()->user()->name}}">
           </div>
           <div class="flex gap-x-4 items-center">
