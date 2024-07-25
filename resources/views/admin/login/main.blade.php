@@ -8,18 +8,21 @@
 <div class="flex items-center justify-center min-h-screen">
     <div class="bg-transparent rounded-lg p-8 w-full max-w-sm">
         <h1 class="font-[Azonix] text-7xl font-medium text-center mb-8">SKO</h1>
-        <form action="#">
+        <form action="{{ route('admin.login') }}" method="POST">
+            @csrf
             <div class="mb-4">
-                <label for="email" class="block font-[MADETommy] text-black text-sm font-bold">Email</label>
-                <input type="email" id="email" placeholder="Enter your email"
-                    class="mt-1 w-full px-3 py-4 border border-gray-300 rounded-xl shadow-sm bg-transparent focus:outline-none focus:ring-2 focus:ring-yellow-400">
-            </div>
-            <div class="mb-6">
-                <label for="password" class="block font-[MADETommy] text-black text-sm font-bold">Password</label>
-                <div class="relative">
-                    <input type="password" id="password" placeholder="Enter your password"
-                        class="mt-1 w-full px-3 py-4 border border-gray-300 rounded-md shadow-sm bg-transparent focus:outline-none focus:ring-2 focus:ring-yellow-400">
-                    <button type="button" onclick="showHide()"
+                <label for="email" class="block font-MadeTommy text-black text-sm font-bold">Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email"
+                class="mt-1 w-full px-3 py-4 border border-gray-300 rounded-xl shadow-sm bg-transparent focus:outline-none focus:ring-2 focus:ring-yellow-400" required>
+            <span class="text-red-600 text-sm" id="error-email"></span>
+        </div>
+        <div class="mb-6">
+            <label for="password" class="block font-MadeTommy text-black text-sm font-bold">Password</label>
+            <div class="relative">
+                <input type="password" id="password" name="password" placeholder="Enter your password"
+                    class="mt-1 w-full px-3 py-4 border border-gray-300 rounded-md shadow-sm bg-transparent focus:outline-none focus:ring-2 focus:ring-yellow-400" required>
+                <span class="text-red-600 text-sm" id="error-password"></span>
+                    <button type="button" onclick="togglePasswordVisibility()"
                         class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 focus:outline-none">
                         <svg id="show" class="hidden mr-3" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             viewBox="0 0 256 256">
@@ -54,21 +57,38 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-function showHide() {
-    var inputan = document.getElementById("password");
-    var show = document.getElementById("show");
-    var hide = document.getElementById("hide");
-    if (inputan.type === "password") {
-        inputan.type = "text";
-        show.classList.add('block');
-        show.classList.remove('hidden');
-        hide.classList.add('hidden');
-    } else {
-        inputan.type = "password";
-        hide.classList.add('block');
-        hide.classList.remove('hidden');
-        show.classList.add('hidden');
-    } 
-}
+    function togglePasswordVisibility() {
+        const passwordField = document.getElementById('password');
+        const showIcon = document.getElementById('show');
+        const hideIcon = document.getElementById('hide');
+
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            showIcon.classList.remove('hidden');
+            hideIcon.classList.add('hidden');
+        } else {
+            passwordField.type = 'password';
+            showIcon.classList.add('hidden');
+            hideIcon.classList.remove('hidden');
+        }
+    }
+
+    $(document).ready(function() {
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Login Berhasil',
+                text: '{{ session('success') }}'
+            });
+        @endif
+
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Login Gagal',
+                text: '{{ session('error') }}'
+            });
+        @endif
+    });
 </script>
 @endsection

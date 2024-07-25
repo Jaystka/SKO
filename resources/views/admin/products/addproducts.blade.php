@@ -10,7 +10,7 @@
         <h1 class="text-xl font-MadeTomy-Medium text-[#3C4043]">Products</h1>
     </div>
     <div class="max-w-full mx-auto bg-[#F8F7F3] px-8 py-4 rounded-xl shadow-lg">
-        <form id="addProduct" action="/products1" method="POST" enctype="multipart/form-data">
+        <form id="addProduct" action="{{ route('products.add') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="mb-4 flex items-center">
                 <label for="photo" class="block text-[#3C4043] font-MadeTomy-Regular w-32">Photo Product:</label>

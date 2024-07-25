@@ -97,9 +97,9 @@ class ProductAdminController extends Controller
         return redirect()->route('products')->with('success', 'Product added successfully.');
     }
 
-    public function deleteProduct($slug)
+    public function deleteProduct($product_id)
     {
-        $product = Product::where('slug', $slug)->first();
+        $product = Product::where('product_id', $product_id)->first();
         if (!$product) {
             return redirect()->route('products')->with('error', 'Product not found');
         }

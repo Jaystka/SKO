@@ -12,11 +12,11 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProductCategoryController;
-use App\Http\Controllers\LoginadminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductAdminController;
 use App\Http\Controllers\CategoryAdminController;
-use App\Http\Controllers\MaterialAdminController;
+use App\Http\Controllers\MaterialAdminController; 
+use App\Http\Controllers\Auth\AdminAuthController;
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/register', [CustomerAuthController::class, 'registerView'])->name('register');
@@ -33,33 +33,46 @@ Route::get('/blog', [BlogController::class, 'blogView'])->name('blog');
 Route::get('/product/{slug}', [ProductController::class, 'show'])
     ->where('slug', '[A-Za-z0-9-]+');
 
+Route::prefix('admin')->group(function () {
+    Route::middleware('guest:admin')->group(function () {
+        Route::get('loginadmin', [AdminAuthController::class, 'loginView'])->name('admin.login');
+        Route::post('loginadmin', [AdminAuthController::class, 'loginPost']);
+    });
+
+    Route::middleware('auth:admin')->group(function () {
+        Route::post('logoutadmin', [AdminAuthController::class, 'logoutadmin'])->name('admin.logout');
+        Route::get('dashboard', [DashboardController::class, 'dashboardView'])->name('dashboard');
+        Route::get('products', [ProductAdminController::class, 'productsView'])->name('products');
+        // Add other admin routes here that require authentication
+    });
+});
 // Route::prefix('admin')->group(function(){
-    Route::get('/loginadmin', [LoginadminController::class, 'loginadminView'])->name('loginadmin');
-    Route::get('admin/dashboard', [DashboardController::class, 'dashboardView'])->name('dashboard');
-    // Products
-    Route::get('admin/products', [ProductAdminController::class, 'productsView'])->name('products');
-    Route::get('admin/addproducts', [ProductAdminController::class, 'addproductsView'])->name('addproducts');
-    Route::post('admin/addProducts', [ProductAdminController::class, 'addProduct']);
-    Route::delete('admin/{product}', [ProductAdminController::class, 'deleteProduct'])->name('products.delete');
-    Route::get('admin/edit/{slug}', [ProductAdminController::class, 'editProductView'])->name('products.edit');
-    Route::put('admin/update/{slug}', [ProductAdminController::class, 'updateProduct'])->name('products.update');
+// Route::get('/loginadmin', [LoginadminController::class, 'loginadminView'])->name('loginadmin');
+
+// Products
+
+Route::get('admin/addproducts', [ProductAdminController::class, 'addproductsView'])->name('addproducts');
+Route::post('admin/addProducts', [ProductAdminController::class, 'addProduct'])->name('products.add');
+Route::delete('admin/{product_id}', [ProductAdminController::class, 'deleteProduct'])->name('products.delete');
+Route::get('admin/edit/{slug}', [ProductAdminController::class, 'editProductView'])->name('products.edit');
+Route::put('admin/update/{slug}', [ProductAdminController::class, 'updateProduct'])->name('products.update');
     // category
-    Route::get('admin/category', [CategoryAdminController::class, 'categoriesadminView'])->name('category');
-    Route::get('admin/addcategories', [CategoryAdminController::class, 'addcategories'])->name('admin.category.addcategory');
-    Route::post('admin/addcategories', [CategoryAdminController::class, 'addCategory'])->name('admin.category.add');
-    Route::get('admin/editcategory/{id}', [CategoryAdminController::class, 'editCategory'])->name('editcategory');
-    Route::post('admin/updatecategory/{id}', [CategoryAdminController::class, 'updateCategory'])->name('admin.category.update');
-    Route::delete('admin/deletecategory/{id}', [CategoryAdminController::class, 'deleteCategory'])->name('admin.category.delete');
+Route::get('admin/category', [CategoryAdminController::class, 'categoriesadminView'])->name('category');
+Route::get('admin/addcategories', [CategoryAdminController::class, 'addcategories'])->name('admin.category.addcategory');
+Route::post('admin/addcategories', [CategoryAdminController::class, 'addCategory'])->name('admin.category.add');
+Route::get('admin/editcategory/{id}', [CategoryAdminController::class, 'editCategory'])->name('editcategory');
+Route::post('admin/updatecategory/{id}', [CategoryAdminController::class, 'updateCategory'])->name('admin.category.update');
+Route::delete('admin/deletecategory/{id}', [CategoryAdminController::class, 'deleteCategory'])->name('admin.category.delete');
     // customers
-    Route::get('admin/customers', [CustomerAuthController::class, 'showCustomers'])->name('customers');
+Route::get('admin/customers', [CustomerAuthController::class, 'showCustomers'])->name('customers');
     //materials
-    Route::get('/admin/materials', [MaterialAdminController::class, 'materialsadminView'])->name('materials');
-    Route::get('/admin/materials/add', [MaterialAdminController::class, 'showAddMaterialsForm'])->name('addmaterials');
-    Route::post('/admin/materials', [MaterialAdminController::class, 'addMaterials'])->name('storematerials');
-    Route::get('/admin/materials/{id}/edit', [MaterialAdminController::class, 'editMaterials'])->name('editmaterials');
-    Route::put('/admin/materials/{id}', [MaterialAdminController::class, 'updateMaterials'])->name('updatematerials');
-    Route::delete('/admin/materials/{id}', [MaterialAdminController::class, 'deleteMaterials'])->name('deletematerials');
-// })
+Route::get('/admin/materials', [MaterialAdminController::class, 'materialsadminView'])->name('materials');
+Route::get('/admin/materials/add', [MaterialAdminController::class, 'showAddMaterialsForm'])->name('addmaterials');
+Route::post('/admin/materials', [MaterialAdminController::class, 'addMaterials'])->name('storematerials');
+Route::get('/admin/materials/{id}/edit', [MaterialAdminController::class, 'editMaterials'])->name('editmaterials');
+Route::put('/admin/materials/{id}', [MaterialAdminController::class, 'updateMaterials'])->name('updatematerials');
+Route::delete('/admin/materials/{id}', [MaterialAdminController::class, 'deleteMaterials'])->name('deletematerials');
+
 
 
 Route::group(['middleware' => 'auth'], function () {

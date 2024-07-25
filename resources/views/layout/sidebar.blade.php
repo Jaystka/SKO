@@ -78,7 +78,12 @@
             </ul>
         </nav>
         <div class="p-4">
-        <button class="px-5 py-3 bg-[#B90000] text-white w-full flex items-center justify-center rounded-md font-semibold">Log out</button>
+            <form method="POST" action="{{ route('admin.logout') }}">
+                @csrf
+                <button type="submit" class="px-5 py-3 bg-[#B90000] text-white w-full flex items-center justify-center rounded-md font-semibold">
+                    Log out
+                </button>
+            </form>
         </div>
     </div>
 
