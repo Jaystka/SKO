@@ -15,7 +15,7 @@ class ShopDisplays extends Model
         'number'
     ];
 
-    protected $table = 'ShopDisplays';
+    protected $table = 'shopdisplays';
 
     public $incrementing = false;
 }

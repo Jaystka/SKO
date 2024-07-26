@@ -7,7 +7,7 @@
 
 @section('content')
 <main class="bg-gray-100 py-28 font-MadeTomy-Medium">
-
+    @if($products->count() > 0)
     <div class="container mx-auto px-4 sm:px-6 lg:px-28">
         <!-- Tombol Kembali -->
         <div class="pl-4 xl:pl-12"><a href="shop"
@@ -15,10 +15,8 @@
                 <img src="dist/img/right-arrow.png" alt="Arrow" class="w-3 h-3 rotate-180">
             </a>
         </div>
-        @foreach ($products as $product)
-        @endforeach
         <div class="pl-4 xl:pl-12">
-            <h1 class="text-2xl font-bold mb-4 pt-7 ">Sepatu {{$product->brand}}</h1>
+            <h1 class="text-2xl font-bold mb-4 pt-7 ">Sepatu {{$brand}}</h1>
         </div>
 
         <div class="flex justify-center py-10">
@@ -38,6 +36,10 @@
             @endforeach
         </div>
     </div>
-
+    @else
+    <div class="text-center text-gray-500 font-MadeTomy-thin text-2xl pt-32" colspan="5">
+        Yahh... Produk yang kamu cari tidak tersedia!!
+    </div>
+    @endif
 </main>
 @endsection

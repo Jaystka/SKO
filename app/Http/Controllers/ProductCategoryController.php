@@ -16,13 +16,25 @@ class ProductCategoryController extends Controller
                 ->join('brands', 'products.brand_id', '=', 'brands.brand_id')
                 ->select('brands.*', 'products.*')
                 ->paginate(10);
+
+            if ($products->isNotEmpty()) {
+                $brand = $products->first()->brand; // Mengambil brand dari produk pertama jika ada produk
+            } else {
+                $brand = 'Tidak ada produk yang ditemukan';
+            }
         } else {
             $products = Product::orderBy('created_at', 'DESC')
                 ->join('brands', 'products.brand_id', '=', 'brands.brand_id')
                 ->select('brands.*', 'products.*')
                 ->get();
+
+            if ($products->isNotEmpty()) {
+                $brand = $products->first()->brand; // Mengambil brand dari produk pertama jika ada produk
+            } else {
+                $brand = 'Tidak ada produk yang ditemukan';
+            }
         }
 
-        return view('shop.productcategory', compact('products'));
+        return view('shop.productcategory', compact('products', 'brand'));
     }
 }

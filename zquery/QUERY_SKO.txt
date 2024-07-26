@@ -85,22 +85,26 @@ END //
 DELIMITER ;
 
 
+--DEPLOY
+DELIMITER //
+CREATE PROCEDURE cart_insert(cart_idc VARCHAR(255), customer_idc VARCHAR(255), quantityc int, product_idc VARCHAR(255), sizec VARCHAR(255))	
 BEGIN
 	DECLARE priceproduct int(11);
 	DECLARE pricecart int(11);
 	DECLARE statuss int(11);
 	DECLARE quantityUpdate int(11);
-	SELECT COUNT(product_id) INTO statuss FROM carts WHERE product_id = product_idc COLLATE utf8mb4_unicode_ci  AND customer_id = customer_idc COLLATE utf8mb4_unicode_ci  AND size = sizec COLLATE utf8mb4_unicode_ci AND `status` IN ('0', '1');
-    SELECT price INTO priceproduct  from products where product_id = product_idc COLLATE utf8mb4_unicode_ci;
+	SELECT COUNT(product_id) INTO statuss FROM carts WHERE product_id = product_idc   AND customer_id = customer_idc  AND size = sizec AND `status` IN ('0', '1');
+    SELECT price INTO priceproduct  from products where product_id = product_idc ;
 	IF statuss = 0 THEN
 	SET @pricecart = priceproduct*quantityc;
    	INSERT INTO `carts`(`cart_id`, `customer_id`, `quantity`, `cart_price`, `product_id`, `size`, `status`,`updated_at`,`created_at`) VALUES (cart_idc, customer_idc, quantityc, @pricecart, product_idc, sizec, '1', NOW(), NOW());
 
 
 ELSEIF statuss > 0 THEN
-	SELECT quantity INTO quantityUpdate FROM carts WHERE product_id = product_idc COLLATE utf8mb4_unicode_ci  AND customer_id = customer_idc COLLATE utf8mb4_unicode_ci  AND size = sizec COLLATE utf8mb4_unicode_ci;
+	SELECT quantity INTO quantityUpdate FROM carts WHERE product_id = product_idc AND customer_id = customer_idc  AND size = sizec;
 	SET quantityUpdate = quantityUpdate + 1;
 	SET pricecart = priceproduct*quantityUpdate;
-   	UPDATE `carts` SET `quantity`= quantityUpdate,`cart_price`= pricecart, `updated_at`= NOW() WHERE product_id = product_idc COLLATE utf8mb4_unicode_ci  AND customer_id = customer_idc COLLATE utf8mb4_unicode_ci  AND size = sizec COLLATE utf8mb4_unicode_ci  AND `status` NOT IN ('2');
+   	UPDATE `carts` SET `quantity`= quantityUpdate,`cart_price`= pricecart, `updated_at`= NOW() WHERE product_id = product_idc  AND customer_id = customer_idc AND size = sizec AND `status` NOT IN ('2');
 	END IF;
-END
+END //
+DELIMITER ;
