@@ -14,7 +14,7 @@ class ProductController extends Controller
     public function show($slug)
     {
         // Mencari produk berdasarkan slug di database
-        $product = Product::with('stock')
+        $product = Product::with('stocks')
             ->join('categories', 'products.category_id', '=', 'categories.category_id')
             ->join('materials', 'products.material_id', '=', 'materials.material_id')
             ->select('products.*', 'categories.category', 'categories.category_desc', 'materials.material', 'materials.material_desc')
