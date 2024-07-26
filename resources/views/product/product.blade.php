@@ -112,7 +112,7 @@
     <!-- Right Column -->
     @php
     $isDisabled = function ($product, $size) {
-    $stock = $product->stock->firstWhere('size', $size);
+    $stock = $product->stocks->firstWhere('size', $size);
     return optional($stock)->total_stock == '0' ? 'disabled' : '';
     };
     @endphp
