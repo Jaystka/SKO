@@ -1,4 +1,4 @@
-@extends('../layout/sidebar')
+@extends('layout.sidebar')
 
 @section('head')
 <title>Categories - SKO</title>
@@ -12,7 +12,7 @@
         <div class="mb-10 pb-2">
         <h1 class="text-xl font-MadeTomy-Medium">Category</h1>
         </div>
-        <a href="addcategories" class="bg-[#04238E] text-white px-10 py-3 rounded-md text-sm">
+        <a href="{{ route('admin.category.addcategory') }}" class="bg-[#04238E] text-white px-10 py-3 rounded-md text-sm">
           <span class="text-2xl">+ </span><span class="inline-block align-baseline">Add Category</span>
         </a>
     </div>
@@ -36,7 +36,7 @@
                             <path d="M34.5167 11.7333C35.1667 11.0833 35.1667 10 34.5167 9.38335L30.6167 5.48335C30 4.83335 28.9167 4.83335 28.2667 5.48335L25.2 8.53335L31.45 14.7833M5 28.75V35H11.25L29.6833 16.55L23.4333 10.3L5 28.75Z" fill="white"/>
                         </svg>
                     </a>
-                <form id="deleteButton" action="{{ route('admin.category.delete', ['id' => $category->category_id]) }}" method="POST" style="display:inline;">
+                <form data-confirm="Data yang dihapus tidak dapat dikembalikan." action="{{ route('admin.category.delete', ['id' => $category->category_id]) }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')
                         <button type="submit" class="bg-red-600 text-white p-2 rounded">
@@ -56,31 +56,3 @@
 </main>
 @endsection
 
-@section('script')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-        document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('deleteButton').addEventListener('submit', function(e) {
-        e.preventDefault(); // Mencegah pengiriman form secara default
-
-        // Tampilkan konfirmasi SweetAlert2
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Kirim form jika pengguna mengkonfirmasi
-                e.target.submit();
-            }
-        });
-    });
-});
-
-    </script>
-
-@endsection

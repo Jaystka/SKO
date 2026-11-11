@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categories;
+use App\Models\Product;
+use App\Support\IdGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -10,7 +12,8 @@ class CategoryAdminController extends Controller
 {
     public function categoriesadminView()
     {
-        $categories = Categories::all();
+        $categories = Categories::query()->withCount('products')->orderBy('category')->get();
+
         return view('admin/category/categories', compact('categories'));
     }
 
@@ -21,56 +24,49 @@ class CategoryAdminController extends Controller
 
     public function addCategory(Request $request)
     {
-        $request->validate([
-            'category' => 'required|string|max:255',
-            'category_desc' => 'required|string|max:255',
-        ]);
+        $data = $this->validated($request);
 
-        // Generate new category_id
-        $latestCategory = Categories::orderBy(DB::raw('CAST(SUBSTRING(category_id, 2) AS UNSIGNED)'), 'desc')->first();
-        if ($latestCategory) {
-            $lastCategoryId = intval(substr($latestCategory->category_id, 1));
-            $newCategoryId = 'C' . str_pad($lastCategoryId + 1, 4, '0', STR_PAD_LEFT);
-        } else {
-            $newCategoryId = 'C0001';
-        }
+        DB::transaction(fn () => Categories::create([
+            'category_id' => IdGenerator::next('categories', 'category_id', 'C'),
+            ...$data,
+        ]));
 
-        Categories::create([
-            'category_id' => $newCategoryId,
-            'category' => $request->input('category'),
-            'category_desc' => $request->input('category_desc'),
-        ]);
-
-        return redirect()->route('category')->with('success', 'Category added successfully');
+        return redirect()->route('category')->with('success', 'Kategori berhasil ditambahkan.');
     }
 
-    public function editCategory($id)
+    public function editCategory(string $id)
     {
         $category = Categories::findOrFail($id);
+
         return view('admin/category/editcategories', compact('category'));
     }
 
-    public function updateCategory(Request $request, $id)
+    public function updateCategory(Request $request, string $id)
     {
-        $request->validate([
-            'category' => 'required|string|max:255',
-            'category_desc' => 'required|string|max:255',
-        ]);
+        Categories::findOrFail($id)->update($this->validated($request));
 
-        $category = Categories::findOrFail($id);
-        $category->update([
-            'category' => $request->input('category'),
-            'category_desc' => $request->input('category_desc'),
-        ]);
-
-        return redirect()->route('category')->with('success', 'Category updated successfully');
+        return redirect()->route('category')->with('success', 'Kategori berhasil diperbarui.');
     }
 
-    public function deleteCategory($id)
+    public function deleteCategory(string $id)
     {
         $category = Categories::findOrFail($id);
+
+        if (Product::query()->where('category_id', $category->category_id)->exists()) {
+            return redirect()->route('category')
+                ->with('error', 'Kategori masih dipakai oleh produk, pindahkan produknya terlebih dahulu.');
+        }
+
         $category->delete();
 
-        return redirect()->route('category')->with('success', 'Category deleted successfully');
+        return redirect()->route('category')->with('success', 'Kategori berhasil dihapus.');
+    }
+
+    private function validated(Request $request): array
+    {
+        return $request->validate([
+            'category' => ['required', 'string', 'max:255'],
+            'category_desc' => ['required', 'string', 'max:1000'],
+        ]);
     }
 }

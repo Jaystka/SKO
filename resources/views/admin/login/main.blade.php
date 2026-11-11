@@ -1,4 +1,4 @@
-@extends('../layout/login')
+@extends('layout.login')
 
 @section('head')
 <title>Login - SKO</title>
@@ -12,7 +12,7 @@
             @csrf
             <div class="mb-4">
                 <label for="email" class="block font-MadeTommy text-black text-sm font-bold">Email</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email"
+                <input type="email" id="email" name="email" value="{{ old('email') }}" autocomplete="username" placeholder="Enter your email"
                     class="mt-1 w-full px-3 py-4 border border-gray-300 rounded-xl shadow-sm bg-transparent focus:outline-none focus:ring-2 focus:ring-yellow-400"
                     required>
                 <span class="text-red-600 text-sm" id="error-email"></span>
@@ -52,8 +52,6 @@
 @endsection
 
 @section('script')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     function togglePasswordVisibility() {
@@ -72,22 +70,5 @@
         }
     }
 
-    $(document).ready(function() {
-        @if(session('success'))
-            Swal.fire({
-                icon: 'success',
-                title: 'Login Berhasil',
-                text: '{{ session('success') }}'
-            });
-        @endif
-
-        @if(session('error'))
-            Swal.fire({
-                icon: 'error',
-                title: 'Login Gagal',
-                text: '{{ session('error') }}'
-            });
-        @endif
-    });
 </script>
 @endsection

@@ -1,4 +1,4 @@
-@extends('../layout/main')
+@extends('layout.main')
 
 @section('head')
 <title>Home - SKO</title>
@@ -31,11 +31,11 @@
                 </span>
             </div>
         </div>
-        <img class="mt-[50px] max-h-[900px]" src="dist/img/sepatu 1.png" alt="">
+        <img class="mt-[50px] max-h-[900px]" src="{{ asset('dist/img/sepatu 1.png') }}" alt="Sepatu SKO">
         <div class="hidden lg:block" id="shadow"></div>
-        <img class="hidden absolute h-[350px] mt-[-500px] ml-[950px] xl:block" src="dist/img/sepatu 2.png" alt="">
+        <img class="hidden absolute h-[350px] mt-[-500px] ml-[950px] xl:block" src="{{ asset('dist/img/sepatu 2.png') }}" alt="Sepatu SKO">
         <div class=" lg:mt-[-220px]">
-            <a href="shop"><button
+            <a href="{{ route('shop') }}"><button
                     class="rounded-lg text-sm px-24 py-10 mx-auto flex justify-between items-center custom-btn btn-15 font-MadeTomy-Regular">Shop
                     Now</button></a>
         </div>
@@ -44,7 +44,7 @@
 
 <footer>
     <div class="container w-full h-5 text-center mt-20">
-        <p class="text-gray-500">©SKO 2023. All rights reserved.</p>
+        <p class="text-gray-500">&copy; SKO {{ now()->year }}. All rights reserved.</p>
     </div>
 </footer>
 

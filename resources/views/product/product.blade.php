@@ -1,7 +1,11 @@
-@extends('../layout/main')
+@extends('layout.main')
+
+@section('description', \Illuminate\Support\Str::limit(strip_tags((string) $product->description), 155))
+@section('og_title', $product->series.' - SKO')
 
 @section('head')
-<title>Home - SKO</title>
+<title>{{ $product->series }} - SKO</title>
+<meta property="og:image" content="{{ $product->image_url }}">
 <!-- <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css"> -->
 <link rel="stylesheet" href="{{ asset('dist/css/owl.carousel.min.css') }}">
 <style>
@@ -17,16 +21,16 @@
         <div class="flex items-center space-x-4">
           <div
             class=" rounded-2xl h-16 w-16 p-2 shadow-xl flex justify-center items-center text-center outline outline-1 bg-[#F0EEE5]">
-            <p class="font-MadeTomy-Regular">{{$product->material}}</p>
+            <p class="font-MadeTomy-Regular">{{ $product->material?->material }}</p>
           </div>
-          <span>{{$product->material_desc}}</span>
+          <span>{{ $product->material?->material_desc }}</span>
         </div>
         <div class="flex items-center space-x-4 py-8">
           <div
             class="rounded-2xl h-16 w-16 p-2 shadow-xl flex justify-center items-center text-center outline outline-1 bg-[#F0EEE5]">
-            <p class="font-MadeTomy-Regular">{{$product->category}}</p>
+            <p class="font-MadeTomy-Regular">{{ $product->category?->category }}</p>
           </div>
-          <span>{{$product->category_desc}}</span>
+          <span>{{ $product->category?->category_desc }}</span>
         </div>
       </div>
 
@@ -92,17 +96,17 @@
         <div class="owl-carousel owl-theme" id="productImages">
           <!-- <div class="swiper-slide flex justify-center"> -->
           <div class="item flex justify-center" data-hash="image1">
-            <img src="{{ asset($product['image']) }}" alt="Proto Lite Purple" class="w-full max-w-xs xl:max-w-sm">
+            <img src="{{ $product->image_url }}" alt="{{ $product->series }}" class="w-full max-w-xs xl:max-w-sm">
           </div>
           <div class="item flex justify-center" data-hash="image2">
-            <img src="{{ asset($product['image']) }}" alt="Proto Lite Purple" class="w-full max-w-xs xl:max-w-sm">
+            <img src="{{ $product->image_url }}" alt="{{ $product->series }}" class="w-full max-w-xs xl:max-w-sm">
           </div>
         </div>
         <div class="flex justify-center mt-4 space-x-2 ">
-          <img src="{{ asset($product['image']) }}" alt="Proto Lite Purple"
+          <img src="{{ $product->image_url }}" alt="{{ $product->series }}"
             class=" nav-button w-16 h-16 object-contain rounded-lg shadow-md hover:border border-black"
             data-hash="image1">
-          <img src="{{ asset($product['image']) }}" alt="Proto Lite Purple"
+          <img src="{{ $product->image_url }}" alt="{{ $product->series }}"
             class="nav-button w-16 h-16 object-contain rounded-lg shadow-md hover:border border-black"
             data-hash="image2">
         </div>
@@ -110,138 +114,62 @@
     </div>
 
     <!-- Right Column -->
-    @php
-    $isDisabled = function ($product, $size) {
-    $stock = $product->stocks->firstWhere('size', $size);
-    return optional($stock)->total_stock == '0' ? 'disabled' : '';
-    };
-    @endphp
     <div class="w-full lg:w-1/4 items-center md:items-start">
       <div class="space-y-2 text-center md:text-left">
-        <div class="flex items-center justify-center md:justify-start">
-          <span class="text-yellow-500">
-            @php
-            for($x=1;$x<=$product->rating;$x++) { echo "★" ; } @endphp </span>
-          <span class="pl-2">372
-            Reviews</span>
+        @if ($product->rating > 0)
+        <div class="flex items-center justify-center md:justify-start" aria-label="Rating {{ $product->rating }} dari 5">
+          <span class="text-yellow-500">{{ str_repeat('★', min(5, $product->rating)) }}</span>
         </div>
+        @endif
         <div class="py-5">
-          <h2 class="text-2xl font-bold">Sepatu {{ $product->product }}</h2>
+          <h2 class="text-2xl font-bold">Sepatu {{ $product->brand?->brand ?? $product->product }}</h2>
           <h1 class="text-3xl font-MadeTomy-Bold">{{ $product->series }}</h1>
         </div>
-        <p class="text-red-600 text-xl font-MadeTomy-Medium">IDR {{ number_format($product->price, 0, ',', '.')}}</p>
-
+        <p class="text-red-600 text-xl font-MadeTomy-Medium">IDR {{ number_format($product->price, 0, ',', '.') }}</p>
 
         <form class="addCart" id="addCart" action="{{ route('cart.store') }}" method="POST">
           @csrf
-          @auth
-          <input type="hidden" name="customer_id" value="{{ auth()->user()->customer_id }}">
-          <input type="hidden" name="quantity" value="1">
           <input type="hidden" name="product_id" value="{{ $product->product_id }}">
-          @endauth
-          <div class="grid grid-cols-5 gap-2 my-4">
-            <label class="cursor-pointer">
-              <input {{ $isDisabled($product, '36' ) }} id="option1" name="size" class="peer sr-only" type="radio"
-                value="36" required>
+          <input type="hidden" name="quantity" value="1">
+          <div class="grid grid-cols-5 gap-2 my-4" role="radiogroup" aria-label="Pilih ukuran">
+            @foreach (\App\Models\Product::SIZES as $size)
+            @php $stock = (int) ($stockBySize[$size] ?? 0); @endphp
+            <label class="cursor-pointer sko-size" title="{{ $stock > 0 ? 'Stok: '.$stock : 'Habis' }}">
+              <input id="size-{{ $size }}" name="size" class="peer sr-only" type="radio" value="{{ $size }}"
+                data-stock="{{ $stock }}" @disabled($stock <= 0) required>
               <div
                 class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
-                <p>36</p>
+                <p>{{ $size }}</p>
               </div>
             </label>
-            <label class="cursor-pointer">
-              <input {{ $isDisabled($product, '37' ) }} id="option2" name="size" class="peer sr-only" type="radio"
-                value="37" required>
-              <div
-                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
-                <p>37</p>
-              </div>
-            </label>
-            <label class="cursor-pointer">
-              <input {{ $isDisabled($product, '38' ) }} id="option2" name="size" class="peer sr-only" type="radio"
-                value="38" required>
-              <div
-                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
-                <p>38</p>
-              </div>
-            </label>
-            <label class="cursor-pointer">
-              <input {{ $isDisabled($product, '39' ) }} id="option4" name="size" class="peer sr-only" type="radio"
-                value="39" required>
-              <div
-                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
-                <p>39</p>
-              </div>
-            </label>
-            <label class="cursor-pointer">
-              <input {{ $isDisabled($product, '40' ) }} id="option5" name="size" class="peer sr-only" type="radio"
-                value="40" required>
-              <div
-                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
-                <p>40</p>
-              </div>
-            </label>
-            <label class="cursor-pointer">
-              <input {{ $isDisabled($product, '41' ) }} id="option6" name="size" class="peer sr-only" type="radio"
-                value="41" required>
-              <div
-                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
-                <p>41</p>
-              </div>
-            </label>
-            <label class="cursor-pointer">
-              <input {{ $isDisabled($product, '42' ) }} id="option7" name="size" class="peer sr-only" type="radio"
-                value="42" required>
-              <div
-                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
-                <p>42</p>
-              </div>
-            </label>
-            <label class="cursor-pointer">
-              <input {{ $isDisabled($product, '43' ) }} id="option8" name="size" class="peer sr-only" type="radio"
-                value="43" required>
-              <div
-                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
-                <p>43</p>
-              </div>
-            </label>
-            <label class="cursor-pointer">
-              <input {{ $isDisabled($product, '44' ) }} id="option8" name="size" class="peer sr-only" type="radio"
-                value="44" required>
-              <div
-                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
-                <p>44</p>
-              </div>
-            </label>
-            <label class="cursor-pointer">
-              <input {{ $isDisabled($product, '45' ) }} id="option8" name="size" class="peer sr-only" type="radio"
-                value="45" required>
-              <div
-                class="p-2 border rounded text-center text-gray-600 transition-all hover:shadow peer-checked:bg-third peer-checked:text-fourth peer-checked:border-fourth">
-                <p>45</p>
-              </div>
-            </label>
+            @endforeach
           </div>
+          <p class="sko-stock-hint" id="stockHint">
+            @if ($stockBySize->sum() <= 0) Stok sedang habis. @endif
+          </p>
         </form>
 
         <div class="py-5">
           <p class="font-MadeTomy-Medium">About</p>
-          <p class="text-sm text-justify">{{$product->description}}</p>
+          <p class="text-sm text-justify">{{ $product->description }}</p>
         </div>
-        <div class="flex justify-end"><button type="submit" form="addCart"
-            class="bg-yellow-300 text-black py-4 px-16 rounded-md shadow-md">Buy</button>
+        <div class="flex justify-end">
+          @auth('web')
+          <button type="submit" form="addCart" id="btnBuy" @disabled($stockBySize->sum() <= 0)
+            class="sko-btn bg-yellow-300 text-black py-4 px-16 rounded-md shadow-md">Buy</button>
+          @else
+          <a href="{{ route('login') }}" class="bg-yellow-300 text-black py-4 px-16 rounded-md shadow-md">Login untuk membeli</a>
+          @endauth
         </div>
       </div>
     </div>
   </div>
 </main>
 
-<footer class="px-8 py-4 text-center text-black">
-  ©SKO 2023. All rights reserved.
-</footer>
+@include('partials.footer')
 @endsection
 
 @section('script')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="{{ asset('dist/js/owl.carousel.min.js') }}"></script>
 <script>
   $(document).ready(function() {
@@ -281,21 +209,46 @@
 });
 </script>
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var sizeRadios = document.querySelectorAll('input[name="size"]');
-    
-    sizeRadios.forEach(function(radio) {
-        radio.oninvalid = function(event) {
-            this.setCustomValidity('Pilih Ukuran');
-        };
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('addCart');
+    const hint = document.getElementById('stockHint');
+    const btn = document.getElementById('btnBuy');
+    const radios = form.querySelectorAll('input[name="size"]');
 
-        radio.onchange = function(event) {
-            // Hapus custom validity message dari semua radio button dengan nama "size"
-            sizeRadios.forEach(function(radio) {
-                radio.setCustomValidity('');
-            });
-        };
+    radios.forEach((radio) => {
+      radio.addEventListener('invalid', () => radio.setCustomValidity('Pilih ukuran terlebih dahulu'));
+      radio.addEventListener('change', () => {
+        radios.forEach((r) => r.setCustomValidity(''));
+        const stock = Number(radio.dataset.stock);
+        hint.textContent = stock <= 5 ? `Sisa ${stock} pasang` : '';
+      });
     });
-});
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!btn || !form.reportValidity()) return;
+
+      btn.disabled = true;
+      btn.classList.add('is-loading');
+
+      $.ajax({ url: form.action, method: 'POST', data: $(form).serialize() })
+        .done(() => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Masuk keranjang!',
+            showDenyButton: true,
+            confirmButtonText: 'Lihat Keranjang',
+            denyButtonText: 'Lanjut Belanja',
+            confirmButtonColor: '#3C4043',
+            denyButtonColor: '#979797',
+          }).then((r) => { if (r.isConfirmed) location.href = @json(route('cart.index')); });
+        })
+        .fail((xhr) => {
+          if (xhr.status === 401) { location.href = @json(route('login')); return; }
+          SKO.toast('error', SKO.errorMessage(xhr));
+        })
+        .always(() => { btn.disabled = false; btn.classList.remove('is-loading'); });
+    });
+  });
 </script>
 @endsection
