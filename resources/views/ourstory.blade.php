@@ -1,4 +1,4 @@
-@extends('../layout/main')
+@extends('layout.main')
 
 @section('head')
 <title>Ourstory - SKO</title>
@@ -13,7 +13,7 @@
 @section('content')
 
 <section class="bg-cover bg-center -z-50 w-screen h-screen flex justify-center items-center"
-  style="background-image: url('dist/img/bg2.jpg');">
+  style="background-image: url('{{ asset('dist/img/bg2.jpg') }}');">
   <h1 class="text-[50px] mb-4 text-white fonthin">OUR COMPANY STORY</h1>
 </section>
 
@@ -40,7 +40,7 @@
   <div class="container mx-auto  text-center justify-items-center text-white">
     <div class="text-[125px] font-bold logosko">SKO<sup style="font-family:Poppins ; font-size: 72px;">®</sup></a>
     </div>
-    <p class="text-sm text-[#646666]">&copy; SKO 2023. All rights reserved.</p>
+    <p class="text-sm text-[#646666]">&copy; SKO {{ now()->year }}. All rights reserved.</p>
   </div>
 </footer>
 @endsection

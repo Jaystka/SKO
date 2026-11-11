@@ -3,91 +3,81 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
-use App\Models\Post;
 use App\Models\Product;
-use Illuminate\Support\Facades\Auth;
+use App\Services\CartService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use Carbon\Carbon;
-
+use Illuminate\Validation\Rule;
 
 class CartController extends Controller
 {
-    public function generateUniqueId()
+    public function __construct(private readonly CartService $carts)
     {
-        return date('YmdHis') . Str::random(6); // Kombinasi tanggal dan random string
     }
 
     public function index()
     {
-        $customer_id = Auth::id(); // Mengambil ID pengguna yang sedang terautentikasi
-
-        $carts = Cart::where('customer_id', $customer_id)
-            ->join('products', 'carts.product_id', '=', 'products.product_id')
-            ->join('brands', 'brands.brand_id', '=', 'products.brand_id')
-            ->select('carts.*', 'products.*', 'brands.*')
-            ->orderBy('carts.created_at', 'desc')
-            ->get();
-        return view('cart.cart', compact('carts'));
+        return view('cart.cart');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $cart_id)
+    /** Fragmen HTML daftar keranjang (dimuat via AJAX). */
+    public function itemsView(Request $request)
     {
+        $carts = $this->carts->activeItems($request->user());
 
-        $rental = Cart::findOrFail($cart_id);
-        $rental->delete();
-        return response()->json(['success' => 'Post created successfully.']);
-    }
-
-    public function store(Request $request)
-    {
-
-        $request->validate([
-            'customer_id' => 'required|string|max:255',
-            'quantity' => 'required|int',
-            'product_id' => 'required|string|max:255',
-            'size' => 'required|string|max:255',
-        ]);
-
-        $cartId = $this->generateUniqueId();
-
-        $customer_id = $request->customer_id;
-        $quantity = $request->quantity;
-        $product_id = $request->product_id;
-        $size = $request->size;
-        Post::spInsertCart($cartId, $customer_id, $quantity, $product_id, $size);
-
-        // Alert::success('Berhasil ditambahkan')->background('#F2F2F0')->showConfirmButton('Ok', '#0b8a0b')->autoClose(3000);
-        return redirect()->route('cart.index');
-    }
-
-    public function update(Request $request, $cart_id)
-    {
-        $cart = Cart::findOrFail($cart_id);
-
-        $cart->update([
-            'quantity' => $request->quantity,
-            'cart_price' => DB::raw('quantity * (SELECT price FROM products WHERE product_id = carts.product_id)')
-        ]);
-        return response()->json(['success' => 'Cart updated successfully.']);
-    }
-
-    function itemsView()
-    {
-        $customer_id = Auth::id(); // Mengambil ID pengguna yang sedang terautentikasi
-
-        $carts = Cart::where('customer_id', $customer_id)
-            ->whereRaw("status NOT IN ('2')")
-            ->join('products', 'carts.product_id', '=', 'products.product_id')
-            ->join('brands', 'brands.brand_id', '=', 'products.brand_id')
-            ->select('carts.*', 'products.*', 'brands.*')
-            ->orderBy('carts.created_at', 'desc')
-            ->get();
         return view('cart.items', compact('carts'));
+    }
+
+    public function store(Request $request): JsonResponse|RedirectResponse
+    {
+        $data = $request->validate([
+            'product_id' => ['required', 'string', 'exists:products,product_id'],
+            'size' => ['required', 'string', Rule::in(Product::SIZES)],
+            'quantity' => ['nullable', 'integer', 'min:1', 'max:'.Cart::MAX_QUANTITY],
+        ], [
+            'size.required' => 'Pilih ukuran terlebih dahulu.',
+        ]);
+
+        $product = Product::findOrFail($data['product_id']);
+        $this->carts->add($request->user(), $product, $data['size'], (int) ($data['quantity'] ?? 1));
+
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true, 'message' => 'Produk ditambahkan ke keranjang.']);
+        }
+
+        return redirect()->route('cart.index')->with('success', 'Produk ditambahkan ke keranjang.');
+    }
+
+    public function update(Request $request, string $cart_id): JsonResponse
+    {
+        $data = $request->validate([
+            'quantity' => ['required', 'integer', 'min:1', 'max:'.Cart::MAX_QUANTITY],
+        ]);
+
+        $cart = $this->findOwnCart($request, $cart_id);
+        $cart = $this->carts->updateQuantity($cart, (int) $data['quantity']);
+
+        return response()->json([
+            'success' => true,
+            'quantity' => $cart->quantity,
+            'cart_price' => $cart->cart_price,
+        ]);
+    }
+
+    public function destroy(Request $request, string $cart_id): JsonResponse
+    {
+        $this->findOwnCart($request, $cart_id)->delete();
+
+        return response()->json(['success' => true, 'message' => 'Item dihapus dari keranjang.']);
+    }
+
+    private function findOwnCart(Request $request, string $cartId): Cart
+    {
+        return Cart::query()
+            ->where('cart_id', $cartId)
+            ->where('customer_id', $request->user()->customer_id)
+            ->where('status', '!=', Cart::STATUS_ORDERED)
+            ->firstOrFail();
     }
 }

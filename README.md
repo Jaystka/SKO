@@ -1,60 +1,111 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SKO — Toko Sepatu Lokal
 
+Aplikasi e-commerce sepatu lokal berbasis **Laravel 11**, pembayaran **Midtrans Snap**, dan frontend Blade + Tailwind CSS.
 
-## About Laravel
+## Fitur
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Storefront**: beranda, shop per brand, pencarian (paginasi), detail produk dengan stok per ukuran.
+- **Customer**: registrasi/login (rate-limited), profil, keranjang (validasi stok), checkout dengan alamat wilayah Indonesia, pembayaran Midtrans.
+- **Admin** (`/admin`): dashboard pendapatan, CRUD produk + stok per ukuran + upload gambar, kategori, material, daftar customer, daftar penjualan dengan filter status.
+- **Pembayaran**: webhook Midtrans terverifikasi signature, status idempoten, stok dikurangi otomatis saat pembayaran lunas.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Kebutuhan
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.2+ (ekstensi: `pdo_mysql`, `mbstring`, `openssl`, `fileinfo`, `gd`)
+- Composer 2
+- MySQL 8 / MariaDB 10.6+
+- Node.js 18+ (hanya untuk build ulang CSS/JS)
 
-## Learning Laravel
+## Setup lokal
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+# isi DB_*, MIDTRANS_* (kunci sandbox), ADMIN_EMAIL, ADMIN_PASSWORD di .env
+php artisan migrate
+php artisan db:seed            # kurir, pajak default, akun admin (+ produk demo bila APP_ENV=local)
+php artisan serve
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Build ulang aset (setelah mengubah kelas Tailwind di view):
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+npm install
+npm run prod
+```
 
-## Laravel Sponsors
+> Beberapa utilitas baru sementara didefinisikan di `public/dist/css/sko.css` agar tampilan benar tanpa rebuild. Setelah `npm run prod`, kelas yang sama juga dihasilkan oleh Tailwind.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Konfigurasi Midtrans
 
-### Premium Partners
+1. Isi `MIDTRANS_SERVER_KEY` dan `MIDTRANS_CLIENT_KEY` (sandbox untuk staging, produksi untuk live).
+2. Set `MIDTRANS_IS_PRODUCTION=true` hanya di server produksi — URL `snap.js` otomatis mengikuti.
+3. Di dashboard Midtrans → *Settings → Payment → Notification URL*, isi:
+   ```
+   https://<domain-anda>/payment/notification
+   ```
+   URL lama `/payment/midtrans-notification` tetap didukung.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+Status transaksi disimpan sesuai status Midtrans (`pending`, `settlement`, `capture`, `expire`, `cancel`, `deny`, ...). Stok berkurang satu kali saat transaksi pertama kali berstatus lunas (`settlement`/`capture` dengan fraud `accept`).
 
-## Contributing
+## Deploy produksi
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Push ke `main` menjalankan workflow `LARAVEL_CI-CD_MAIN`: test → `composer install --no-dev` → upload FTP.
 
-## Code of Conduct
+Setelah deploy pertama dengan versi ini, jalankan di server (SSH / terminal cPanel):
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+# 1. BACKUP database terlebih dahulu!
+mysqldump -u USER -p NAMA_DB > backup-$(date +%F).sql
 
-## Security Vulnerabilities
+# 2. Migrasi — aman untuk database lama: hanya membuat tabel/kolom yang belum ada
+php artisan migrate --force
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# 3. Data referensi + akun admin (idempoten)
+php artisan db:seed --force
 
-## License
+# 4. Optimasi
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Checklist `.env` produksi:
+
+| Variabel | Nilai |
+|---|---|
+| `APP_ENV` | `production` |
+| `APP_DEBUG` | `false` |
+| `APP_URL` | `https://domain-anda` (HTTPS dipaksa otomatis) |
+| `LOG_LEVEL` | `warning` |
+| `SESSION_SECURE_COOKIE` | `true` |
+| `MIDTRANS_IS_PRODUCTION` | `true` |
+
+Folder yang harus bisa ditulis web server: `storage/`, `bootstrap/cache/`, `public/dist/img/products/` (gambar produk hasil upload).
+
+### Catatan migrasi dari versi lama
+
+- Stored procedure `cart_insert` (lihat `zquery/QUERY_SKO.txt`) **tidak lagi dipakai**; logika keranjang kini ada di `App\Services\CartService`. Prosedur boleh dibiarkan atau dihapus dari database.
+- Order ID baru berformat `SKO-YYMMDDhhmmss-XXXXXX`. Migrasi `reconcile_sko_schema` mengubah kolom `transaction_id` menjadi string bila sebelumnya integer; data lama tetap utuh.
+- Pengeluaran via `GET /logout` dinonaktifkan (rawan CSRF); gunakan tombol Logout (POST).
+
+## Testing
+
+```bash
+php artisan test
+```
+
+Test memakai SQLite in-memory dan payment gateway palsu (tidak memanggil Midtrans). Cakupan: halaman publik, auth & rate limit, otorisasi keranjang antar customer, checkout (total = tagihan Midtrans, rollback bila Midtrans gagal), webhook (signature, idempotensi stok), admin CRUD & upload, proxy wilayah, serta upgrade dari skema database lama.
+
+## Struktur penting
+
+```
+app/Services/CartService.php            logika keranjang + validasi stok
+app/Services/CheckoutService.php        pembuatan order atomik + Snap token
+app/Services/PaymentStatusService.php   penerapan status Midtrans (idempoten)
+app/Services/Payment/                   abstraksi gateway (MidtransGateway)
+app/Support/IdGenerator.php             ID berurutan (C0001, P0001, PY001) yang portabel
+app/Http/Middleware/SecurityHeaders.php header keamanan HTTP
+database/migrations/                    skema lengkap (idempoten terhadap DB lama)
+```

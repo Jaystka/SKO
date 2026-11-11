@@ -2,25 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ShopDisplays;
 
 class ShopController extends Controller
 {
-    function shopView()
+    public function shopView()
     {
-        $display1 = ShopDisplays::where('number', '1')
-            ->firstOrFail();
-        $categories1 = Product::where('brand_id', $display1['brand_id'])
-            ->orderBy('created_at', 'DESC')
-            ->paginate(7);
-        $display2 = ShopDisplays::where('number', '2')
-            ->firstOrFail();
-        $categories2 = Product::where('brand_id', $display2['brand_id'])
-            ->orderBy('created_at', 'DESC')
-            ->paginate(7);
+        // Setiap "display" menampilkan satu brand di halaman shop (urut berdasarkan number).
+        $sections = ShopDisplays::query()
+            ->with('brand')
+            ->orderBy('number')
+            ->get()
+            ->filter(fn (ShopDisplays $display) => $display->brand !== null)
+            ->map(fn (ShopDisplays $display) => [
+                'brand' => $display->brand->brand,
+                'products' => Product::query()
+                    ->where('brand_id', $display->brand_id)
+                    ->latest()
+                    ->limit(8)
+                    ->get(),
+            ])
+            ->values();
 
-        return view('shop.shop', compact('categories1', 'categories2'));
+        // Fallback bila display belum dikonfigurasi: tampilkan produk terbaru.
+        $latest = $sections->isEmpty()
+            ? Product::query()->latest()->limit(12)->get()
+            : collect();
+
+        return view('shop.shop', compact('sections', 'latest'));
     }
 }

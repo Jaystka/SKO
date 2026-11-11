@@ -2,277 +2,121 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\Status;
-use App\Models\Cart;
-use App\Models\Customer;
 use App\Models\Expedition;
-use App\Models\Payment;
 use App\Models\Transaction;
-use App\Services\Midtrans\CallbackService;
+use App\Services\CartService;
+use App\Services\CheckoutService;
+use App\Services\Payment\PaymentGateway;
+use App\Services\Payment\PaymentGatewayException;
+use App\Services\PaymentStatusService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class CheckoutController extends Controller
 {
-    public function index()
-    {
-        $customer_id = Auth::id();
-
-        $carts = Cart::where('customer_id', $customer_id)
-            ->whereAll(['status'], '=', '1')
-            ->join('products', 'carts.product_id', '=', 'products.product_id')
-            ->join('brands', 'brands.brand_id', '=', 'products.brand_id')
-            ->join('tax', 'products.tax_id', '=', 'tax.tax_id')
-            ->select('carts.*', 'products.*', 'brands.*', 'tax.tax')
-            ->orderBy('carts.created_at', 'desc')
-            ->get();
-
-        if ($carts->count() > 0) {
-            $customer = Customer::where('customer_id', $customer_id)
-                ->select('name', 'phone', 'address')
-                ->get();
-
-            $expeditions = Expedition::get();
-
-            $midtransClientKey = config('midtrans.clientKey');
-
-            return view('cart/checkout', compact('carts', 'customer', 'midtransClientKey', 'expeditions'));
-        } else {
-
-            $carts = Cart::where('customer_id', $customer_id)
-                ->join('products', 'carts.product_id', '=', 'products.product_id')
-                ->join('brands', 'brands.brand_id', '=', 'products.brands_id')
-                ->select('carts.*', 'products.*', 'brands.*')
-                ->orderBy('carts.created_at', 'desc')
-                ->get();
-            return view('cart.cart', compact('carts'));
-        }
+    public function __construct(
+        private readonly CheckoutService $checkout,
+        private readonly CartService $carts,
+    ) {
     }
 
-    public function checkoutProduct(Request $request)
+    public function index(Request $request)
     {
-        $request->validate([
-            'options' => 'array',
-            'options.*.cart_id' => 'required|string|exists:carts,cart_id', // Ganti your_table_name dengan nama tabel Anda
-            'options.*.status' => 'required|boolean',
-            // 'options.*.status' => ['required', Rule::in(Status::getValues())],
+        $customer = $request->user();
+        $carts = $this->checkout->selectedItems($customer);
+
+        if ($carts->isEmpty()) {
+            return redirect()->route('cart.index')->with('error', 'Pilih minimal satu produk untuk checkout.');
+        }
+
+        return view('cart.checkout', [
+            'carts' => $carts,
+            'customer' => $customer,
+            'summary' => $this->checkout->summary($carts),
+            'expeditions' => Expedition::query()->orderBy('expedition')->get(),
+            'midtransClientKey' => config('midtrans.clientKey'),
+            'midtransSnapUrl' => config('midtrans.snapUrl'),
+        ]);
+    }
+
+    /** Menyimpan item yang dicentang di halaman keranjang. */
+    public function checkoutProduct(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'options' => ['present', 'array', 'max:200'],
+            'options.*.cart_id' => ['required', 'string'],
+            'options.*.status' => ['required', 'boolean'],
         ]);
 
-        $options = $request->input('options', []);
+        $this->carts->setSelection($request->user(), $data['options']);
 
-        foreach ($options as $option) {
-            DB::table('carts')
-                ->where('cart_id', $option['cart_id'])
-                ->update(['status' => $option['status']]);
-        }
-
-        return response()->json(['success' => 'Options updated successfully']);
+        return response()->json(['success' => true]);
     }
 
-    public function process(Request $request)
+    public function process(Request $request): JsonResponse
     {
-        $customer_id = Auth::id();
-        // Mengambil semua item dari cart dengan status 1 untuk customer saat ini
-        $cartItems = Cart::where('customer_id', $customer_id)
-            ->join('products', 'carts.product_id', '=', 'products.product_id')
-            ->join('brands', 'brands.brand_id', '=', 'products.brand_id')
-            ->select('carts.*', 'products.*', 'brands.*')
-            ->whereAll(['status'], '=', '1')
-            ->orderBy('carts.created_at', 'desc')
-            ->get();
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:20', 'regex:/^[0-9+\-\s()]{8,20}$/'],
+            'address' => ['required', 'string', 'max:1500'],
+            'expedition' => ['required', 'string', Rule::exists('expeditions', 'expedition')],
+        ], [
+            'phone.regex' => 'Format nomor HP tidak valid.',
+            'expedition.required' => 'Pilih kurir pengiriman.',
+            'expedition.exists' => 'Kurir pengiriman tidak valid.',
+        ]);
 
-        // Mengambil semua cart_id dari cartItems
-        $cartIds = $cartItems->pluck('cart_id')->toArray();
-
-        // Melakukan pengecekan di tabel Payment untuk cart_id yang ada di cartItems
-        $existingPayments = Payment::whereIn('cart_id', $cartIds)->pluck('cart_id')->count();
-
-        $customer = Customer::findOrFail($customer_id);
-
-        if ($existingPayments < 1) {
-            $grossAmount = $cartItems->sum('cart_price');
-            // Set your Merchant Server Key
-            \Midtrans\Config::$serverKey = config('midtrans.serverKey');
-            // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-            \Midtrans\Config::$isProduction = false;
-            // Set sanitization on (default)
-            \Midtrans\Config::$isSanitized = true;
-            // Set 3DS transaction for credit card to true
-            \Midtrans\Config::$is3ds = true;
-
-            // Menyiapkan items_details array
-            $itemsDetails = $cartItems->map(function ($cartItem) {
-                return [
-                    'id' => $cartItem->cart_id,
-                    'price' => $cartItem->price,
-                    'quantity' => $cartItem->quantity,
-                    'name' => $cartItem->series . " Size " . $cartItem->size,
-                    'brand' => $cartItem->brand,
-                    "merchant_name" => "SKO",
-                ];
-            })->toArray();
-
-            $customer_details = [
-                "customer_details" => [
-                    "first_name" => $customer->name,
-                    "email" => $customer->email,
-                    "phone" => $customer->phone,
-                ]
-            ];
-
-            $transaction_id = rand();
-
-            $params = [
-                'transaction_details' => [
-                    'order_id' => $transaction_id,
-                    'gross_amount' => $grossAmount,
-                ],
-                'item_details' => $itemsDetails,
-                "customer_details" =>  $customer_details,
-
-            ];
-
-            $transaction = Transaction::create([
-                'transaction_id' => $transaction_id,
-                'customer_id' => $customer_id,
-                'address' => $request->address,
-                'expedition' => $request->expedition,
+        try {
+            $transaction = $this->checkout->placeOrder($request->user(), $data);
+        } catch (PaymentGatewayException $e) {
+            Log::error('Checkout gagal membuat Snap token', [
+                'customer_id' => $request->user()->customer_id,
+                'error' => $e->getMessage(),
             ]);
-            $snapToken = \Midtrans\Snap::getSnapToken($params);
 
-            $transaction->snap_token = $snapToken;
-            $transaction->save();
-
-            try {
-                // Mulai transaksi
-                DB::beginTransaction();
-
-                // Loop melalui semua item di cart dan tambahkan ke payment
-                foreach ($cartItems as $cartItem) {
-                    $countCart = Payment::where('cart_id', $cartItem->cart_id)
-                        ->get();
-                    $lastPayment = Payment::latest('payment_id')->first();
-
-                    if ($countCart->count() < 1) {
-                        if ($lastPayment === null) {
-                            $id = 'PY001';
-                        } else {
-                            $number = (int)substr($lastPayment->payment_id, 2);
-                            $new_id = str_pad($number + 1, 3, "0", STR_PAD_LEFT);
-                            $id = 'PY' . $new_id;
-                        }
-                        Payment::create([
-                            'payment_id' => $id,
-                            'transaction_id' => $transaction_id,
-                            'customer_id' => $customer_id,
-                            'cart_id' => $cartItem->cart_id,
-                            'product_id' => $cartItem->product_id,
-                            'total_price' => $cartItem->cart_price,  // Asumsi Anda memiliki kolom 'price' di tabel 'carts'
-                            'qty' => $cartItem->quantity,
-                            'status' => 'pending',
-                        ]);
-
-                        Cart::where('cart_id', $cartItem->cart_id)
-                            ->whereAll(['status'], '=', '1')
-                            ->delete();
-                    }
-                }
-
-                DB::commit();
-            } catch (\Exception $e) {
-                DB::rollBack();
-                return response()->json(['error' => 'Something went wrong!'], 500);
-            }
-        } else {
-            $snapToken = Payment::whereIn('cart_id', $cartIds)
-                ->join('transactions', 'payments.transaction_id', '=', 'transactions.transaction_id')
-                ->select('transactions.snap_token as token')
-                ->firstOrFail();
-
-            return $snapToken->toArray();
+            return response()->json([
+                'message' => 'Layanan pembayaran sedang bermasalah. Silakan coba beberapa saat lagi.',
+            ], 502);
         }
-
-        return response()->json(['token' => $snapToken]);
-        // return redirect()->route('checkout', $payment->id);
-        //return view('checkout',  compact('transaction'));
-    }
-
-    // public function pay(Transaction $transaction)
-    // {
-
-    //     return view('checkout',  compact('transaction'));
-    // }
-
-    public function receive()
-    {
-        $callback = new CallbackService;
-
-        if ($callback->isSignatureKeyVerified()) {
-            $notification = $callback->getNotification();
-            $Transaction = $callback->getTransaction();
-
-            if ($callback->isSuccess()) {
-                Transaction::where('transaction_id ', $Transaction->id)->update([
-                    'payment_status' => 2,
-                ]);
-            }
-
-            if ($callback->isExpire()) {
-                Transaction::where('transaction_id ', $Transaction->id)->update([
-                    'payment_status' => 3,
-                ]);
-            }
-
-            if ($callback->isCancelled()) {
-                Transaction::where('transaction_id ', $Transaction->id)->update([
-                    'payment_status' => 4,
-                ]);
-            }
-
-            return response()
-                ->json([
-                    'success' => true,
-                    'message' => 'Notification successfully processed',
-                ]);
-        } else {
-            return response()
-                ->json([
-                    'error' => true,
-                    'message' => 'Signature key not verified',
-                ], 403);
-        }
-    }
-
-    public function checkStatus(Request $request)
-    {
-        \Midtrans\Config::$serverKey = config('midtrans.serverKey');
-        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-        \Midtrans\Config::$isProduction = false;
-        // Set sanitization on (default)
-        \Midtrans\Config::$isSanitized = true;
-        // Set 3DS transaction for credit card to true
-        \Midtrans\Config::$is3ds = true;
-
-        $transactionId = $request->input('order_id');
-
-        $status = \Midtrans\Transaction::status($transactionId);
-
-        // Mengambil status transaksi dari response Midtrans
-        $transactionStatus = $status->transaction_status;
-        $paymentMethod = $status->payment_type;
-
-        var_dump($paymentMethod);
-        Transaction::where('transaction_id', $transactionId)->update([
-            'status' => $transactionStatus,
-            'payment_method' => $paymentMethod,
-            'total_payment' => $status->gross_amount,
-        ]);
-
 
         return response()->json([
-            'status' => $status->transaction_status, // 'success', 'pending', 'failed', etc.
+            'token' => $transaction->snap_token,
+            'order_id' => $transaction->transaction_id,
+        ]);
+    }
+
+    /** Sinkronisasi status dari Midtrans setelah popup Snap ditutup. */
+    public function checkStatus(Request $request, PaymentGateway $gateway, PaymentStatusService $statuses): JsonResponse
+    {
+        $data = $request->validate([
+            'order_id' => ['required', 'string', 'max:64'],
+        ]);
+
+        $transaction = Transaction::query()
+            ->where('transaction_id', $data['order_id'])
+            ->where('customer_id', $request->user()->customer_id)
+            ->firstOrFail();
+
+        try {
+            $status = $gateway->status($transaction->transaction_id);
+        } catch (PaymentGatewayException $e) {
+            Log::warning('Gagal cek status Midtrans', ['order_id' => $transaction->transaction_id, 'error' => $e->getMessage()]);
+
+            return response()->json(['status' => $transaction->status], 202);
+        }
+
+        $transaction = $statuses->apply(
+            $transaction->transaction_id,
+            $status['transaction_status'],
+            $status['payment_type'],
+            $status['fraud_status'],
+        );
+
+        return response()->json([
+            'status' => $transaction->status,
+            'paid' => $transaction->isPaid(),
         ]);
     }
 }

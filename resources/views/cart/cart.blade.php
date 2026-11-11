@@ -1,320 +1,146 @@
-@extends('../layout/main')
+@extends('layout.main')
 
 @section('head')
 <title>Cart - SKO</title>
-<link rel="stylesheet" href="dist/css/owl.carousel.min.css">
 @endsection
 
 @section('content')
 <div class="container mx-auto p-4">
-    <div class="" id="div_cart">
+    <div id="div_cart" aria-live="polite">
+        <p class="text-center text-gray-500 pt-32">Memuat keranjang...</p>
     </div>
 </div>
 @endsection
 
 @section('script')
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.all.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.min.css">
 <script>
-    $.ajaxSetup({
+    (function () {
+        const container = document.getElementById('div_cart');
+        const urls = {
+            items: @json(route('cart.items')),
+            update: (id) => @json(url('/cart/update')) + '/' + encodeURIComponent(id),
+            destroy: (id) => @json(url('/cart')) + '/' + encodeURIComponent(id),
+            select: @json(route('checkout.select')),
+            checkout: @json(route('checkout')),
+        };
 
-        headers: {
-
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-
+        function loadContent() {
+            $.ajax({ url: urls.items, method: 'GET', dataType: 'html', headers: { Accept: 'text/html' } })
+                .done((html) => { container.innerHTML = html; refreshSummary(); })
+                .fail((xhr) => {
+                    container.innerHTML = '<p class="text-center text-red-600 pt-32">Gagal memuat keranjang. <a href="" class="underline">Muat ulang</a></p>';
+                    if (xhr.status === 401) location.href = @json(route('login'));
+                });
         }
 
-    });
-    
-    function loadContent() {
-        axios.get('cart/items')
-        .then(response => {
-        document.getElementById('div_cart').innerHTML = response.data;
-        initializeItems(); // Re-initialize event listeners
-        loadCheck();
-        })
-        .catch(error => {
-        console.error('Error loading content:', error);
-        });
-    };
+        function rows() {
+            return Array.from(container.querySelectorAll('.cart-item'));
+        }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            loadContent();
-            });
-
-
-    function clicked(id) {
-        event.preventDefault(); //prevent default action
-        let post_url = 'cart/'+id; //get form action url
-        let request_method = 'DELETE'; //get form GET/POST method
-        let form_data = $(this).serialize(); //Encode form elements for submission
-        Swal.fire({
-            title: 'Hapus?',
-            text: "Yakin Gak Jadi Beli Sepatunya!",
-            icon: 'warning',
-            showDenyButton: true,
-            confirmButtonColor: '#223e8c',
-            denyButtonColor: '#b91c1c',
-            confirmButtonText: 'Ya, Hapus',
-            denyButtonText: 'Batal',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: post_url,
-                    type: 'DELETE',
-                    data: {
-                    cart_id: id },
-                    success: function (data) {
-                        if ($.isEmptyObject(data.error)) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Data Berhasil Dihapus',
-                                timer: 1500
-                            })
-
-                            loadContent();
-                            // $("#div_cart").load(window.location.href + " #div_cart" );
-                            //location.reload(true);
-                            } else {
-                                Swal.fire({
-                                    title: 'Gagal Dihapus!',
-                                    text: 'Terjadi kesalahan sistem!',
-                                    icon: 'warning',
-                                    confirmButtonText: 'OK',
-                                    confirmButtonColor: 'orange'
-                                }
-                                );
-                        }
-
-                    }
-                });
-            }
-        })
-    };
-</script>
-<script>
-    function formatNumber(number) {
-		return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-	}
-
-	// Function to save input value to localStorage
-	function saveInputValue(productId, value) {
-		localStorage.setItem('product_' + productId, value);
-	}
-
-	// Function to get input value from localStorage
-	function getInputValue(productId) {
-		return localStorage.getItem('product_' + productId) || '1'; // Default value is '1'
-	}
-
-	// Function untuk memeriksa dan mengatur nilai input dari localStorage
-	function setInitialValues() {
-		$('.input-qty').each(function() {
-			let productId = $(this).closest('.cart-item').data('cart-id');
-			let quantity = $(this).closest('.quantity').data('quantity');
-			saveInputValue(productId, quantity);
-            let storedValue = localStorage.getItem('product_' + productId);
-
-			if (storedValue !== null) {
-				$(this).val(storedValue);
-			}
-		});
-	}
-
-    function initializeItems (){
-	$(document).ready(function() {
-		let delayTimer;
-        let debounceTimer;
-
-		setInitialValues();
-
-        const debounce = (func, delay) => {
-            return function(args) {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => func.apply(this, args), delay);
-            };
-            };
-
-		$('.input-qty').on('input',
-		function(e) {
-			e.preventDefault();
-			clearTimeout(delayTimer);
-
-			let $this = $(this);
-			let cartId = $this.closest('.cart-item').data('cart-id');
-			let $input = $this;
-			let price = $this.closest('.cart-item').find('.price').data('price');
-			let value = parseInt($input.val());
-
-			if (value >= 1) {
-				value = value;
-			} else {
-				value = 0;
-			}
-
-			$input.val(value);
-
-			delayTimer = setTimeout(function() {
-				let total = value * price;
-				let totalFormatted = formatNumber(total);
-				$('#total-price-' + cartId).text('IDR ' + totalFormatted);
-			},
-			500); // Delay 600 milidetik (0.6 detik)
-		});
-
-		$('.minus-btn').on('click',
-		function(e) {
-			e.preventDefault();
-
-			let $this = $(this);
-			let cartId = $this.closest('.cart-item').data('cart-id');
-			let $input = $this.closest('.cart-item').find('.input-qty');
-			let price = $this.closest('.cart-item').find('.price').data('price');
-			let value = parseInt($input.val());
-
-			if (value > 1) {
-				value = value - 1;
-			} else {
-				value = 1;
-			}
-
-			$input.val(value);
-
-			let total = value * price;
-			let totalFormatted = formatNumber(total);
-			$('#total-price-' + cartId).text('IDR ' + totalFormatted);
-            
-            let post_url = 'cart/update/'+cartId;
-            const delayTimer = debounce(() => {
-            $.ajax({
-            method: 'PUT',
-            url: post_url,
-            data: {
-            quantity: value,
-            total: total
-            }
-            });
-            },
-            650); // Delay 600 milidetik (0.6 detik)
-
-            delayTimer();
-		});
-
-		$('.plus-btn').on('click',
-		function(e) {
-			e.preventDefault();
-
-			let $this = $(this);
-			let cartId = $this.closest('.cart-item').data('cart-id');
-			let $input = $this.closest('.cart-item').find('.input-qty');
-			let price = $this.closest('.cart-item').find('.price').data('price');
-			let value = parseInt($input.val());
-
-			if (value < 100) {
-				value = value + 1;
-			} else {
-				value = 100;
-			}
-			$input.val(value);
-			let total = value * price;
-			let totalFormatted = formatNumber(total);
-			$('#total-price-' + cartId).text('IDR ' + totalFormatted);
-
-            let post_url = 'cart/update/'+cartId;
-            const delayTimer = debounce(() => {
-            $.ajax({
-            method: 'PUT',
-            url: post_url,
-            data: {
-            quantity: value,
-            total: total
-            }
-            });
-            },
-            650); // Delay 600 milidetik (0.6 detik)
-
-            delayTimer();
-		});
-        @if($carts->count() > 0)
-        document.getElementById('submitBtn').addEventListener('click', function(event) {
-            event.preventDefault(); // Prevent default action
-            
-            const url = this.href;
-            
-            setTimeout(function() {
-            window.location.href = url;
-            }, 150);
-            });
-            @endif
-	});
-    };
-</script>
-{{-- Update pemilihan barang secara realtime --}}
-<script>
-    function loadCheck() {
-                const checkboxes = document.querySelectorAll('input[name="options"]');
-                const output = document.getElementById('output');
-    
-                function getCheckedValues() {
-                    const values = [];
-                    checkboxes.forEach((checkbox) => {
-                        values.push({
-                            cart_id: checkbox.dataset.id,
-                            status: checkbox.checked ? 1 : 0
-                        });
-                    });
-                    return values;
+        function refreshSummary() {
+            let total = 0, count = 0;
+            rows().forEach((row) => {
+                const checked = row.querySelector('input[name="options"]').checked;
+                if (checked) {
+                    total += Number(row.dataset.price) * Number(row.querySelector('.input-qty').value);
+                    count++;
                 }
-    
-                function sendDataToServer(values) {
-                $.ajax({
-                        url: '/checkout',
-                        method: 'POST',
-                        data:{
-                        options: values
-                        },
-                    });
-                    // .catch(error => {
-                    //     console.error(error);
-                    //     output.innerHTML = `<p>Error updating data.</p>`;
-                    // });
-                }
-    
-                checkboxes.forEach((checkbox) => {
-                    checkbox.addEventListener('change', () => {
-                        const values = getCheckedValues();
-                        sendDataToServer(values);
-                    });
-                });
-            };
-</script>
-{{-- Update Ketika Dilakukan Checkout // submitBtn ubah menjadi button --}}
-{{-- <script>
-    let button = document.querySelector('#submitBtn');
-    
-    button.addEventListener('click', ()=>{
-                const checkboxes = document.querySelectorAll('input[name="options"]');
-    
-                    const values = [];
-                    checkboxes.forEach((checkbox) => {
-                        values.push({
-                            cart_id: checkbox.dataset.id,
-                            status: checkbox.checked ? 1 : 0
-                        });
-                    });
+            });
+            const totalEl = document.getElementById('selectedTotal');
+            const btn = document.getElementById('submitBtn');
+            if (totalEl) totalEl.textContent = SKO.formatRupiah(total);
+            if (btn) btn.classList.toggle('is-loading', count === 0);
+        }
 
+        function selection() {
+            return rows().map((row) => ({
+                cart_id: row.dataset.cartId,
+                status: row.querySelector('input[name="options"]').checked ? 1 : 0,
+            }));
+        }
 
-                $.ajax({
-                        url: '/checkout',
-                        type: 'POST',
-                        data:{
-                        options: values
-                        },
+        let qtyTimers = {};
+        function changeQty(row, delta) {
+            const input = row.querySelector('.input-qty');
+            const previous = Number(input.dataset.saved || input.value);
+            const max = Number(row.dataset.stock) || 100;
+            const next = Math.min(Math.max(Number(input.value) + delta, 1), Math.min(max, 100));
+            if (next === Number(input.value)) {
+                if (delta > 0) SKO.toast('info', `Stok tersisa ${max}`);
+                return;
+            }
+
+            input.value = next;
+            row.querySelector('.price').textContent = SKO.formatRupiah(next * Number(row.dataset.price));
+            refreshSummary();
+
+            const id = row.dataset.cartId;
+            clearTimeout(qtyTimers[id]);
+            qtyTimers[id] = setTimeout(() => {
+                $.ajax({ url: urls.update(id), method: 'PUT', data: { quantity: input.value } })
+                    .done((res) => {
+                        input.dataset.saved = res.quantity;
+                        row.querySelector('.price').textContent = SKO.formatRupiah(res.cart_price);
                     })
-                    .then(response => {
-                    window.location = '/checkout';
-                    });            
+                    .fail((xhr) => {
+                        input.value = previous;
+                        row.querySelector('.price').textContent = SKO.formatRupiah(previous * Number(row.dataset.price));
+                        refreshSummary();
+                        SKO.toast('error', SKO.errorMessage(xhr));
+                    });
+            }, 500);
+        }
+
+        function removeItem(row) {
+            Swal.fire({
+                title: 'Hapus?',
+                text: 'Yakin nggak jadi beli sepatunya?',
+                icon: 'warning',
+                showDenyButton: true,
+                confirmButtonColor: '#223e8c',
+                denyButtonColor: '#b91c1c',
+                confirmButtonText: 'Ya, Hapus',
+                denyButtonText: 'Batal',
+            }).then((result) => {
+                if (!result.isConfirmed) return;
+                $.ajax({ url: urls.destroy(row.dataset.cartId), method: 'DELETE' })
+                    .done(() => { SKO.toast('success', 'Item dihapus'); loadContent(); })
+                    .fail((xhr) => SKO.toast('error', SKO.errorMessage(xhr, 'Gagal menghapus item')));
             });
-</script> --}}
+        }
+
+        // Delegasi event karena konten keranjang dimuat ulang via AJAX.
+        container.addEventListener('click', (e) => {
+            const row = e.target.closest('.cart-item');
+            if (e.target.closest('.minus-btn')) { e.preventDefault(); changeQty(row, -1); }
+            else if (e.target.closest('.plus-btn')) { e.preventDefault(); changeQty(row, 1); }
+            else if (e.target.closest('.remove-btn')) { e.preventDefault(); removeItem(row); }
+            else if (e.target.closest('#submitBtn')) {
+                e.preventDefault();
+                const btn = e.target.closest('#submitBtn');
+                if (!selection().some((s) => s.status === 1)) {
+                    SKO.toast('warning', 'Pilih minimal satu produk');
+                    return;
+                }
+                btn.classList.add('is-loading');
+                $.ajax({ url: urls.select, method: 'POST', data: { options: selection() } })
+                    .done(() => { location.href = urls.checkout; })
+                    .fail((xhr) => { btn.classList.remove('is-loading'); SKO.toast('error', SKO.errorMessage(xhr)); });
+            }
+        });
+
+        let selectTimer;
+        container.addEventListener('change', (e) => {
+            if (e.target.name !== 'options') return;
+            refreshSummary();
+            clearTimeout(selectTimer);
+            selectTimer = setTimeout(() => {
+                $.ajax({ url: urls.select, method: 'POST', data: { options: selection() } })
+                    .fail((xhr) => SKO.toast('error', SKO.errorMessage(xhr)));
+            }, 300);
+        });
+
+        document.addEventListener('DOMContentLoaded', loadContent);
+    })();
+</script>
 @endsection

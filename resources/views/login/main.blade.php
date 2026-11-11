@@ -1,4 +1,4 @@
-@extends('../layout/login')
+@extends('layout.login')
 
 @section('head')
 <title>Login - SKO</title>
@@ -7,7 +7,7 @@
 @section('content')
 <div class="flex flex-col md:flex-row min-h-screen">
     <!-- Left Section -->
-    <div class="flex-1 bg-cover bg-center relative" style="background-image: url('dist/img/loginuser.jpg');">
+    <div class="flex-1 bg-cover bg-center relative" style="background-image: url('{{ asset('dist/img/loginuser.jpg') }}');">
         <div class="absolute inset-0 bg-[#FFF3B2] opacity-25"></div>
         <div class="relative z-10 flex items-center justify-center h-full p-8">
             <div class="text-center text-white">
@@ -25,7 +25,7 @@
             <form class="space-y-4" id="login-form">
                 <div>
                     <label for="email" class="block text-sm font-medium text-black">Email</label>
-                    <input type="email" id="email"
+                    <input type="email" id="email" name="email" autocomplete="email" required
                         class="login__input form-control mt-1 block w-full px-3 py-6 border rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         placeholder="Enter your email">
                     <div id="error-email" class="login__input-error text-red-600 mt-2 text-sm"></div>
@@ -34,10 +34,10 @@
                     <label for="password"
                         class="login__input form-control block text-sm font-medium text-black">Password</label>
                     <div class="flex border rounded-xl mt-1 h-16 items-center shadow-sm">
-                        <input type="password" id="password"
+                        <input type="password" id="password" name="password" autocomplete="current-password" required
                             class="  w-full ml-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             placeholder="Enter your password">
-                        <button type="button" onclick="showHide()">
+                        <button type="button" onclick="showHide()" aria-label="Tampilkan/sembunyikan password">
                             <svg id="show" class="hidden mr-3" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 256 256">
                                 <path fill="fill-current"
@@ -56,17 +56,14 @@
                     <div id="error-password" class="login__input-error text-red-600 mt-2 text-sm"></div>
                 </div>
             </form>
-            <div class="flex items-center justify-between py-4">
-                <a href="#" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">Forgot
-                    password?</a>
-            </div>
+            <div class="py-4"></div>
             <div class="flex justify-center">
                 <button id="btn-login" type="submit"
                     class="w-3/4 py-5 px-4 border flex justify-center border-transparent rounded-md shadow-sm text-sm font-bold text-gray-700 bg-[#FFF3B5] hover:bg-gray-700 hover:text-[#FFF3B5] ">
                     Login</button>
             </div>
             <div class="text-center">
-                <p class="text-sm text-black">Are you new? <a href="/register"
+                <p class="text-sm text-black">Are you new? <a href="{{ route('register') }}"
                         class="font-medium text-indigo-600 hover:text-indigo-500">Create an account</a></p>
             </div>
         </div>
@@ -75,80 +72,68 @@
 @endsection
 
 @section('script')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <script>
-    (function() {
-        async function login() {
-            // Reset state
-            $('#login-form').find('.login__input').removeClass('border-red-600')
-            $('#login-form').find('.login__input-error').html('')
+    (function () {
+        const $btn = $('#btn-login');
+        let busy = false;
 
-            // Post form
-            let email = $('#email').val()
-            let password = $('#password').val()
+        function resetErrors() {
+            $('#login-form').find('input').removeClass('sko-input-error');
+            $('#login-form').find('.login__input-error').html('');
+        }
 
-            // Loading state
-            $('#btn-login').html('<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"> <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"> </path></svg>')
-            await helper.delay(1500)
+        function showError(field, message) {
+            $(`#${field}`).addClass('sko-input-error');
+            $(`#error-${field}`).text(message);
+        }
 
-            axios.post(`login`, {
-                email: email,
-                password: password
-            }).then(res => {
-                Swal.fire({icon: "success",
-                title: "Berhasil Login!",
-                text: "Selamat Datang, Selamat Belanja!",
-                showConfirmButton: false,
-                timer: 700,
-                didOpen: () => {
-                },
-                willClose: () => {
-                location.href = res.data.url
-                }
-            });
-            }).catch(err => {
-                console
-                $('#btn-login').html('Login')
-                if (err.response.data.message != 'Email atau Password salah') {
-                    for (const [key, val] of Object.entries(err.response.data.errors)) {
-                        $(`#${key}`).addClass('border-red-600')
-                        $(`#error-${key}`).html(val)
+        function login() {
+            if (busy) return;
+            busy = true;
+            resetErrors();
+            $btn.prop('disabled', true).addClass('is-loading').text('Memproses...');
+
+            axios.post(@json(route('login')), {
+                email: $('#email').val(),
+                password: $('#password').val(),
+            }).then((res) => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil Login!',
+                    text: 'Selamat Datang, Selamat Belanja!',
+                    showConfirmButton: false,
+                    timer: 800,
+                    willClose: () => { location.href = res.data.url || '/'; },
+                });
+            }).catch((err) => {
+                const res = err.response || {};
+                const data = res.data || {};
+                if (data.errors) {
+                    for (const [key, val] of Object.entries(data.errors)) {
+                        showError(key, val[0]);
                     }
                 } else {
-                    $(`#password`).addClass('border-red-600')
-                    $(`#error-password`).html(err.response.data.message)
+                    showError('password', SKO.errorMessage({ status: res.status, responseJSON: data }));
                 }
-            })
+            }).finally(() => {
+                busy = false;
+                $btn.prop('disabled', false).removeClass('is-loading').text('Login');
+            });
         }
 
-        $('#login-form').on('keyup', function(e) {
-            if (e.keyCode === 13) {
-                login()
-            }
-        })
-
-        $('#btn-login').on('click', function() {
-            login()
-        })
-    })()
+        $('#login-form').on('submit', (e) => { e.preventDefault(); login(); });
+        $('#login-form').on('keyup', (e) => { if (e.key === 'Enter') login(); });
+        $btn.on('click', login);
+    })();
 
     function showHide() {
-        var inputan = document.getElementById("password");
-        var show = document.getElementById("show");
-        var hide = document.getElementById("hide");
-        if (inputan.type === "password") {
-        inputan.type = "text";
-        show.classList.add('block');
-        show.classList.remove('hidden');
-        hide.classList.add('hidden');
-        } else {
-        inputan.type = "password";
-        hide.classList.add('block');
-        hide.classList.remove('hidden');
-        show.classList.add('hidden');
-        }
-        }
+        const input = document.getElementById('password');
+        const show = document.getElementById('show');
+        const hide = document.getElementById('hide');
+        const visible = input.type === 'password';
+        input.type = visible ? 'text' : 'password';
+        show.classList.toggle('hidden', !visible);
+        hide.classList.toggle('hidden', visible);
+    }
 </script>
 @endsection

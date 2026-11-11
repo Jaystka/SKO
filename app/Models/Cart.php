@@ -4,13 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Webpatser\Uuid\Uuid;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
 class Cart extends Model
 {
     use HasFactory;
 
+    public const STATUS_UNSELECTED = '0';
+    public const STATUS_SELECTED = '1';
+    public const STATUS_ORDERED = '2';
+
+    public const MAX_QUANTITY = 100;
+
     protected $primaryKey = 'cart_id';
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected $fillable = [
         'cart_id',
         'customer_id',
@@ -19,32 +29,34 @@ class Cart extends Model
         'product_id',
         'size',
         'status',
-        'updated_at',
-        'created_at'
     ];
 
-    public $incrementing = false; // Nonaktifkan auto-increment
-    protected $keyType = 'string'; // Ubah tipe kunci menjadi string
-
-    protected static function boot()
+    protected function casts(): array
     {
-        parent::boot();
+        return [
+            'quantity' => 'integer',
+            'cart_price' => 'integer',
+            // Kolom status di DB lama bisa bertipe int; normalisasi ke string.
+            'status' => 'string',
+        ];
+    }
 
-        static::creating(function ($model) {
-            if (!$model->cart_id) {
-                $model->cart_id = (string) Uuid::generate(4);
+    protected static function booted(): void
+    {
+        static::creating(function (Cart $cart) {
+            if (! $cart->cart_id) {
+                $cart->cart_id = (string) Str::ulid();
             }
         });
     }
-}
 
-class Expedition extends Model
-{
-    use HasFactory;
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'product_id');
+    }
 
-    protected $primaryKey = 'expedition';
-    protected $fillable = [
-        'expedition'];
-
-    public $incrementing = false;
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class, 'customer_id', 'customer_id');
+    }
 }

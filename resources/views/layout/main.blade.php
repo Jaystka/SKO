@@ -1,4 +1,4 @@
-@extends('../layout/base')
+@extends('layout.base')
 
 @section('body')
 
@@ -8,7 +8,7 @@
         <div class="px-4 mx-auto items-center flex justify-between relative">
             <!-- Start Menu Button -->
             <div class="lg:hidden flex items-center">
-                <button class="outline-none mobile-menu-button">
+                <button type="button" class="outline-none mobile-menu-button" aria-label="Buka menu" aria-controls="nav-menu">
                     <svg class=" w-6 h-6 text-gray-500 hover:text-gray-400" fill="none" stroke-linecap="round"
                         stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
                         <path d="M4 6h16M4 12h16M4 18h16"></path>
@@ -18,7 +18,7 @@
 
             <!-- Start Logo -->
             <div class="px-4">
-                <a id="logo" class="py-6 text-xl hidden lg:static lg:block" href="/">SKO<sup
+                <a id="logo" class="py-6 text-xl hidden lg:static lg:block" href="{{ route('/') }}">SKO<sup
                         style="font-family: Poppins; font-size: 14px;">®</sup></a>
             </div>
 
@@ -27,26 +27,27 @@
                 class="hidden absolute bg-white shadow-lg rounded-lg max-w-[150px] w-full top-full lg:block lg:static lg:max-w-fit lg:shadow-none lg:bg-transparent lg:pl-20">
                 <ul id="navbar-nav" class="block lg:flex">
                     <li class="group flex"><a
-                            class="mx-8 py-2 lg:py-2 lg:mx-14  after:border-b-[1px]  after:{{ $textColor ?? null == 'text-white' ? 'border-white' : 'border-[#3c4043]' }}"
+                            class="mx-8 py-2 lg:py-2 lg:mx-14  after:border-b-[1px]  after:{{ ($textColor ?? null) == 'text-white' ? 'border-white' : 'border-[#3c4043]' }}"
                             href="{{ route('/') }}">Home</a></li>
                     <li class="group flex"><a
-                            class="mx-8 py-2 lg:py-2 lg:mx-14 after:border-b-[1px] after:{{ $textColor ?? null == 'text-white' ? 'border-white' : 'border-[#3c4043]' }}"
+                            class="mx-8 py-2 lg:py-2 lg:mx-14 after:border-b-[1px] after:{{ ($textColor ?? null) == 'text-white' ? 'border-white' : 'border-[#3c4043]' }}"
                             href="{{ route('shop') }}">Shop</a></li>
                     <li class="group flex"><a
-                            class="mx-8 py-2 lg:py-2 lg:mx-14 after:border-b-[1px] after:{{ $textColor ?? null == 'text-white' ? 'border-white' : 'border-[#3c4043]' }}"
+                            class="mx-8 py-2 lg:py-2 lg:mx-14 after:border-b-[1px] after:{{ ($textColor ?? null) == 'text-white' ? 'border-white' : 'border-[#3c4043]' }}"
                             href="{{ route('ourstory') }}">Our Story</a></li>
                     <li class="group flex"><a
-                            class="mx-8 py-2 lg:py-2 lg:mx-14 after:border-b-[1px] after:{{ $textColor ?? null == 'text-white' ? 'border-white' : 'border-[#3c4043]' }}"
+                            class="mx-8 py-2 lg:py-2 lg:mx-14 after:border-b-[1px] after:{{ ($textColor ?? null) == 'text-white' ? 'border-white' : 'border-[#3c4043]' }}"
                             href="{{ route('blog') }}">Blog</a></li>
                 </ul>
             </div>
 
             <!-- Start Search -->
             <div class="w-5/6 md:w-1/4 xl:w-1/5">
-                <form class="flex mx-3" method="GET" action="/categories">
+                <form class="flex mx-3" method="GET" action="{{ route('categories') }}" role="search">
                     <input class="focus:outline-none w-full mr-5 rounded-lg px-2 text-black border" name="search"
-                        type="search" />
-                    <button class="p-[6px] hover:bg-black hover:text-white rounded-full">
+                        type="search" value="{{ request('search') }}" maxlength="100" placeholder="Cari sepatu..."
+                        aria-label="Cari sepatu" />
+                    <button type="submit" class="p-[6px] hover:bg-black hover:text-white rounded-full" aria-label="Cari">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -61,7 +62,7 @@
             <!-- Start Profile Icon -->
             <div class="flex items-center text-left">
                 <!-- Start Cart -->
-                <a class="hidden lg:block lg:pr-10" href="{{ route('cart.index') }}">
+                <a class="hidden lg:block lg:pr-10" href="{{ route('cart.index') }}" aria-label="Keranjang">
                     <div
                         class="rounded-full p-[6px] text-sm text-gray-800 hover:bg-black hover:text-white focus:outline-none focus:bg-black">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -72,17 +73,18 @@
                 </a>
                 <div class="relative">
                     <!-- End Cart -->
-                    <button onclick="toggleDropdown('profileDropdown')"
-                        class="profile-button flex items-center focus:outline-none">
-                        <img class="w-8 h-8 rounded-full" src="{{ asset(auth()->user()->profile_picture) }}"
-                            alt="Profile">
+                    <button type="button" onclick="toggleDropdown('profileDropdown')"
+                        class="profile-button flex items-center focus:outline-none" aria-label="Menu akun"
+                        aria-haspopup="true">
+                        <img class="w-8 h-8 rounded-full" src="{{ auth()->user()->avatar_url }}"
+                            alt="Foto profil">
                     </button>
                     <!-- Dropdown menu -->
                     <div id="profileDropdown"
                         class="dropdown-content hidden right-0 left-auto absolute mt-5 w-80 max-w-40 rounded-md shadow-lg bg-white">
                         <div class="py-3 px-5 m-2 bg-gray-100 rounded-t-lg">
                             <p class="text-sm text-gray-500">Signed in as</p>
-                            <p class="text-sm font-medium text-gray-800 uppercase">{{auth()->user()->username}}</p>
+                            <p class="text-sm font-medium text-gray-800 uppercase">{{ auth()->user()->username }}</p>
                         </div>
                         <div class="mt-2 py-3 first:pt-3 last:pb-4">
                             <a class="py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-black hover:text-white focus:outline-none focus:bg-black mb-1"
@@ -103,17 +105,21 @@
                                 </svg>
                                 <span class="transition-colors duration-300">Cart</span>
                             </a>
-                            <a class="flex items-center gap-x-32 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-black hover:text-white focus:outline-none focus:bg-black"
-                                href="{{ route('logout') }}" style="display: flex;column-gap: 7px">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit"
+                                    class="w-full flex items-center py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-black hover:text-white focus:outline-none focus:bg-black"
+                                    style="display: flex;column-gap: 7px">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
                                     class="bi bi-box-arrow-right" viewBox="0 0 16 16">
                                     <path fill-rule="evenodd"
                                         d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z" />
                                     <path fill-rule="evenodd"
                                         d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z" />
                                 </svg>
-                                <span class="transition-colors duration-300">Logout</span>
-                            </a>
+                                    <span class="transition-colors duration-300">Logout</span>
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -124,9 +130,8 @@
 
             @guest
             <div class="relative inline-block text-left">
-                <a href="{{ route('login') }}">
-                    <div class="rounded-full  {{ $textColor ?? null == 'text-white' ? 'border-white' : 'border-[#3c4043]' }}""><svg xmlns="
-                        http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 1024 1024">
+                <a href="{{ route('login') }}" aria-label="Login">
+                    <div class="rounded-full {{ ($textColor ?? null) == 'text-white' ? 'border-white' : 'border-[#3c4043]' }}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 1024 1024">
                         <path fill="currentColor"
                             d="M521.7 82c-152.5-.4-286.7 78.5-363.4 197.7c-3.4 5.3.4 12.3 6.7 12.3h70.3c4.8 0 9.3-2.1 12.3-5.8c7-8.5 14.5-16.7 22.4-24.5c32.6-32.5 70.5-58.1 112.7-75.9c43.6-18.4 90-27.8 137.9-27.8s94.3 9.3 137.9 27.8c42.2 17.8 80.1 43.4 112.7 75.9s58.1 70.4 76 112.5C865.7 417.8 875 464.1 875 512s-9.4 94.2-27.8 137.8c-17.8 42.1-43.4 80-76 112.5s-70.5 58.1-112.7 75.9A352.8 352.8 0 0 1 520.6 866c-47.9 0-94.3-9.4-137.9-27.8A353.8 353.8 0 0 1 270 762.3c-7.9-7.9-15.3-16.1-22.4-24.5c-3-3.7-7.6-5.8-12.3-5.8H165c-6.3 0-10.2 7-6.7 12.3C234.9 863.2 368.5 942 520.6 942c236.2 0 428-190.1 430.4-425.6C953.4 277.1 761.3 82.6 521.7 82M395.02 624v-76h-314c-4.4 0-8-3.6-8-8v-56c0-4.4 3.6-8 8-8h314v-76c0-6.7 7.8-10.5 13-6.3l141.9 112a8 8 0 0 1 0 12.6l-141.9 112c-5.2 4.1-13 .4-13-6.3" />
                         </svg>
@@ -143,58 +148,37 @@
     <div class="loader">
         <img class="loader-icon" src="{{ asset('dist/img/loader.gif') }}" alt="">
     </div>
+
+    @include('partials.flash')
+
     <script>
-        //Loader
-                window.addEventListener("load", () => {
-                    const loader = document.querySelector(".loader");
-        
-                    loader.classList.add("loader--hidden");
-        
-                    loader.addEventListener("transitionend", () => {
-                        if (loader.childNodes.length = 0) {
-                            document.body.removeChild(loader);
-                        }
-                    });
-        
-                });
-    </script>
-    <script>
+        // Loader
+        window.addEventListener('load', () => {
+            const loader = document.querySelector('.loader');
+            if (!loader) return;
+            loader.classList.add('loader--hidden');
+            loader.addEventListener('transitionend', () => loader.remove(), { once: true });
+        });
+
+        // Dropdown profil
         function toggleDropdown(dropdownId) {
-                                    var dropdown = document.getElementById(dropdownId);
-                                    dropdown.classList.toggle('hidden');
-                                }
-                        
-                                // Close the dropdown if the user clicks outside of it
-                                window.onclick = function(event) {
-                                    if (!event.target.matches('.profile-button') && !event.target.matches('.profile-button *')) {
-                                        var dropdowns = document.getElementsByClassName("dropdown-content");
-                                        for (var i = 0; i < dropdowns.length; i++) {
-                                            var openDropdown = dropdowns[i];
-                                            if (!openDropdown.classList.contains('hidden')) {
-                                                openDropdown.classList.add('hidden');
-                                            }
-                                        }
-                                    }
-                                }
-    </script>
-    <script>
-        // Navbar Fixed
-        window.onscroll = function(){
-        const header = document.querySelector('nav');
-        const fixedNav = header.offsetTop;
-        
-        if(window.pageYOffset > fixedNav){
-        header.classList.add('navbar-fixed');
-        }else{
-        header.classList.remove('navbar-fixed');
+            document.getElementById(dropdownId)?.classList.toggle('hidden');
         }
-        }
-        
-        //Menu Button
-        const btn = document.querySelector("button.mobile-menu-button");
-        const menu = document.getElementById("nav-menu");
-        btn.addEventListener("click", () => {
-        menu.classList.toggle("hidden");
+        document.addEventListener('click', (event) => {
+            if (!event.target.closest('.profile-button') && !event.target.closest('.dropdown-content')) {
+                document.querySelectorAll('.dropdown-content').forEach((el) => el.classList.add('hidden'));
+            }
+        });
+
+        // Navbar fixed saat scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('nav.navbar');
+            if (header) header.classList.toggle('navbar-fixed', window.pageYOffset > header.offsetTop);
+        }, { passive: true });
+
+        // Tombol menu mobile
+        document.querySelector('button.mobile-menu-button')?.addEventListener('click', () => {
+            document.getElementById('nav-menu').classList.toggle('hidden');
         });
     </script>
     @yield('script')

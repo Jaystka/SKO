@@ -18,3 +18,9 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+/database/*.sqlite
+/public/dist/img/products/*
+!/public/dist/img/products/.gitkeep
+/storage/*.key
+*.log
+.DS_Store

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Materials;
+use App\Models\Product;
+use App\Support\IdGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -10,7 +12,8 @@ class MaterialAdminController extends Controller
 {
     public function materialsadminView()
     {
-        $materials = Materials::all();
+        $materials = Materials::query()->withCount('products')->orderBy('material')->get();
+
         return view('admin/materials/materials', compact('materials'));
     }
 
@@ -21,55 +24,49 @@ class MaterialAdminController extends Controller
 
     public function addMaterials(Request $request)
     {
-        $request->validate([
-            'material' => 'required|string|max:255',
-            'material_desc' => 'required|string|max:255',
-        ]);
+        $data = $this->validated($request);
 
-        $latestMaterial = Materials::orderBy(DB::raw('CAST(SUBSTRING(material_id, 2) AS UNSIGNED)'), 'desc')->first();
-        if ($latestMaterial) {
-            $lastMaterialId = intval(substr($latestMaterial->material_id, 1));
-            $newMaterialId = 'M' . str_pad($lastMaterialId + 1, 4, '0', STR_PAD_LEFT);
-        } else {
-            $newMaterialId = 'M0001';
-        }
+        DB::transaction(fn () => Materials::create([
+            'material_id' => IdGenerator::next('materials', 'material_id', 'M'),
+            ...$data,
+        ]));
 
-        Materials::create([
-            'material_id' => $newMaterialId,
-            'material' => $request->input('material'),
-            'material_desc' => $request->input('material_desc'),
-        ]);
-
-        return redirect()->route('materials')->with('success', 'Material added successfully');
+        return redirect()->route('materials')->with('success', 'Material berhasil ditambahkan.');
     }
 
-    public function editMaterials($id)
+    public function editMaterials(string $id)
     {
         $material = Materials::findOrFail($id);
+
         return view('admin/materials/editmaterials', compact('material'));
     }
 
-    public function updateMaterials(Request $request, $id)
+    public function updateMaterials(Request $request, string $id)
     {
-        $request->validate([
-            'material' => 'required|string|max:255',
-            'material_desc' => 'required|string|max:255',
-        ]);
+        Materials::findOrFail($id)->update($this->validated($request));
 
-        $material = Materials::findOrFail($id);
-        $material->update([
-            'material' => $request->input('material'),
-            'material_desc' => $request->input('material_desc'),
-        ]);
-
-        return redirect()->route('materials')->with('success', 'Materials updated successfully');
+        return redirect()->route('materials')->with('success', 'Material berhasil diperbarui.');
     }
 
-    public function deleteMaterials($id)
+    public function deleteMaterials(string $id)
     {
         $material = Materials::findOrFail($id);
+
+        if (Product::query()->where('material_id', $material->material_id)->exists()) {
+            return redirect()->route('materials')
+                ->with('error', 'Material masih dipakai oleh produk, ubah produknya terlebih dahulu.');
+        }
+
         $material->delete();
 
-        return redirect()->route('materials')->with('success', 'Materials deleted successfully');
+        return redirect()->route('materials')->with('success', 'Material berhasil dihapus.');
+    }
+
+    private function validated(Request $request): array
+    {
+        return $request->validate([
+            'material' => ['required', 'string', 'max:255'],
+            'material_desc' => ['required', 'string', 'max:1000'],
+        ]);
     }
 }

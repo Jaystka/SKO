@@ -1,0 +1,80 @@
+/*
+ * Gaya tambahan SKO di luar build Tailwind (public/dist/css/app.css).
+ * Dipakai untuk komponen yang ditambahkan tanpa perlu rebuild aset.
+ */
+
+/* ---------- Form ---------- */
+.sko-field-error { color: #b91c1c; font-size: .8125rem; margin-top: .25rem; }
+.sko-input-error { border-color: #b91c1c !important; }
+
+.sko-btn[disabled], .sko-btn.is-loading { opacity: .6; cursor: not-allowed; pointer-events: none; }
+
+/* ---------- Pagination (Laravel tailwind view) ---------- */
+nav[role="navigation"] { margin-top: 1.5rem; }
+nav[role="navigation"] svg { width: 1.25rem; height: 1.25rem; }
+nav[role="navigation"] > div:first-child { display: flex; justify-content: space-between; gap: .5rem; }
+@media (min-width: 640px) {
+    nav[role="navigation"] > div:first-child { display: none; }
+    nav[role="navigation"] > div:last-child { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+}
+@media (max-width: 639px) {
+    nav[role="navigation"] > div:last-child { display: none; }
+}
+nav[role="navigation"] a, nav[role="navigation"] span[aria-current] span, nav[role="navigation"] span[aria-disabled] span {
+    display: inline-flex; align-items: center; padding: .4rem .75rem; border: 1px solid #d1d5db;
+    background: #fff; font-size: .875rem; color: #3c4043; text-decoration: none;
+}
+nav[role="navigation"] span[aria-current] span { background: #3c4043; color: #fff; border-color: #3c4043; }
+nav[role="navigation"] span[aria-disabled] span { color: #9ca3af; }
+nav[role="navigation"] p { font-size: .875rem; color: #6b7280; }
+
+/* ---------- Product size selector ---------- */
+.sko-size input:disabled + div { opacity: .35; text-decoration: line-through; cursor: not-allowed; }
+.sko-stock-hint { font-size: .75rem; color: #6b7280; min-height: 1rem; }
+
+/* ---------- Badge status transaksi ---------- */
+.sko-badge { display: inline-block; padding: .2rem .6rem; border-radius: 9999px; font-size: .75rem; font-weight: 600; white-space: nowrap; }
+.sko-badge--paid { background: #dcfce7; color: #166534; }
+.sko-badge--pending { background: #fef9c3; color: #854d0e; }
+.sko-badge--failed { background: #fee2e2; color: #991b1b; }
+
+/* ---------- Cart ---------- */
+.sko-cart-summary { display: flex; justify-content: flex-end; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+
+/* ---------- Responsif: padding besar di halaman lama ---------- */
+@media (max-width: 767px) {
+    .sko-cart-wrap { padding-left: 1rem !important; padding-right: 1rem !important; }
+    .sko-cart-head { display: none !important; }
+    #modal { width: 90% !important; }
+    .sko-region { flex-wrap: wrap; }
+    .sko-region > div { width: 100% !important; }
+}
+
+/* ---------- Admin ---------- */
+.sko-admin-table { width: 100%; border-collapse: separate; border-spacing: 0 .5rem; font-size: .875rem; }
+.sko-admin-table th { text-align: left; color: #6b7280; font-weight: 700; padding: .5rem .75rem; }
+.sko-admin-table td { background: #fff; padding: .75rem; vertical-align: middle; }
+.sko-admin-table tr td:first-child { border-radius: .75rem 0 0 .75rem; }
+.sko-admin-table tr td:last-child { border-radius: 0 .75rem .75rem 0; }
+.sko-empty { text-align: center; color: #6b7280; padding: 2rem 0; }
+
+/* ---------- Error pages ---------- */
+.sko-error { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; padding: 2rem; text-align: center; background: #F8F7F3; color: #3C4043; }
+.sko-error h1 { font-size: 4rem; font-weight: 800; line-height: 1; }
+.sko-error a { background: #FFF3B2; padding: .75rem 1.5rem; border-radius: .5rem; box-shadow: 0 4px 10px rgba(0,0,0,.08); color: #3C4043; text-decoration: none; }
+.hidden-file-input { display: none; }
+
+/* ---------- Shim utilitas Tailwind yang belum ada di build app.css ----------
+ * Akan otomatis tersedia juga setelah `npm run prod`; definisi di sini identik. */
+.gap-y-8 { row-gap: 2rem; }
+.items-end { align-items: flex-end; }
+.self-start { align-self: flex-start; }
+.mb-3 { margin-bottom: .75rem; }
+.pb-8 { padding-bottom: 2rem; }
+.pt-6 { padding-top: 1.5rem; }
+.pl-32 { padding-left: 8rem; }
+.rounded-t-md { border-top-left-radius: .375rem; border-top-right-radius: .375rem; }
+.text-right { text-align: right; }
+.whitespace-nowrap { white-space: nowrap; }
+@media (min-width: 768px) { .md\:w-1\/3 { width: 33.333333%; } }
+@media (min-width: 1280px) { .xl\:px-12 { padding-left: 3rem; padding-right: 3rem; } }

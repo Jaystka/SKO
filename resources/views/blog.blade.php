@@ -1,4 +1,4 @@
-@extends('../layout/main')
+@extends('layout.main')
 
 @section('head')
 <title>Blog - SKO</title>
@@ -22,9 +22,9 @@
                     <div class="mt-4">
                         <h3 class="text-sm font-bold mb-2">OFFICIAL BRAND</h3>
                         <div class="flex space-x-4">
-                            <img src="img/brand1.png" alt="Compass" class="h-8">
-                            <img src="img/brand2.png" alt="Ventela" class="h-8">
-                            <img src="img/brand3.png" alt="Patrobas" class="h-8">
+                            <img src="{{ asset('img/brand1.png') }}" alt="Compass" class="h-8">
+                            <img src="{{ asset('img/brand2.png') }}" alt="Ventela" class="h-8">
+                            <img src="{{ asset('img/brand3.png') }}" alt="Patrobas" class="h-8">
                         </div>
                     </div>
                 </div>
@@ -64,7 +64,7 @@
         </div>
         <div class="bg-[#3C4040] py-4 mt-auto">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <p class="text-sm">&copy;SKO 2023. All rights reserved.</p>
+                <p class="text-sm">&copy; SKO {{ now()->year }}. All rights reserved.</p>
             </div>
         </div>
     </footer>

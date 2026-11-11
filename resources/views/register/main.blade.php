@@ -1,4 +1,4 @@
-@extends('../layout/register')
+@extends('layout.register')
 
 @section('head')
 <title>Register - SKO</title>
@@ -7,7 +7,7 @@
 @section('content')
 <div class="flex flex-col md:flex-row min-h-screen">
     <!-- Left Section -->
-    <div class="flex-1 bg-cover bg-center relative" style="background-image: url('dist/img/registeruser.jpg');">
+    <div class="flex-1 bg-cover bg-center relative" style="background-image: url('{{ asset('dist/img/registeruser.jpg') }}');">
         <div class="absolute inset-0 bg-[#FFF3B2] opacity-25"></div>
         <div class="relative z-10 flex items-center justify-center h-full p-8">
             <div class="text-center text-white">
@@ -25,21 +25,21 @@
             <form class="space-y-4" id="signup-form">
                 <div>
                     <label for="username" class="block text-sm font-medium text-black">Username</label>
-                    <input type="username" id="username"
+                    <input type="text" id="username" name="name" autocomplete="username" maxlength="255"
                         class="mt-1 block w-full px-3 py-6 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         placeholder="Username" required>
                 </div>
                 <div>
                     <label for="email" class="block text-sm font-medium text-black">Email</label>
-                    <input type="email" id="email"
+                    <input type="email" id="email" name="email" autocomplete="email"
                         class="mt-1 block w-full px-3 py-6 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                         placeholder="Email" required>
                 </div>
                 <div>
                     <label for="password" class="block text-sm font-medium text-black">Password</label>
-                    <input type="password" id="password"
+                    <input type="password" id="password" name="password" autocomplete="new-password" minlength="8"
                         class="mt-1 block w-full px-3 py-6 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        placeholder="Password" required>
+                        placeholder="Password (minimal 8 karakter)" required>
                 </div>
             </form>
             <div class="flex justify-center py-4">
@@ -48,7 +48,7 @@
                     Up</button>
             </div>
             <div class="text-center">
-                <p class="text-sm text-black">Already have an account? <a href="/login"
+                <p class="text-sm text-black">Already have an account? <a href="{{ route('login') }}"
                         class="font-medium text-indigo-600 hover:text-indigo-500">Login</a></p>
             </div>
         </div>
@@ -57,86 +57,41 @@
 @endsection
 
 @section('script')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <script>
-    (function() {
-        async function signup() {
+    (function () {
+        const $btn = $('#btn-signup');
+        let busy = false;
 
-            // Post form
-            let email = $('#email').val()
-            let password = $('#password').val()
-            let username = $('#username').val()
+        function signup() {
+            if (busy) return;
+            busy = true;
+            $('#signup-form input').removeClass('sko-input-error');
+            $btn.prop('disabled', true).addClass('is-loading').text('Memproses...');
 
-            // Loading state
-            $('#btn-signup').html('<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"> <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"> </path></svg>')
-            await helper.delay(1500)
-
-            axios.post(`register`, {
-                email: email,
-                password: password,
-                name: username
-            }).then(res => {
-                location.href = 'login'
-            }).catch(err => {
-                if(err.response.data.errors.email == 'The email has already been taken.'){
-                $('#btn-signup').html('Sign Up')
-                const Toast = Swal.mixin({
-                toast: true,
-                position: "top-end",
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
+            axios.post(@json(route('register')), {
+                name: $('#username').val(),
+                email: $('#email').val(),
+                password: $('#password').val(),
+            }).then((res) => {
+                Swal.fire({ icon: 'success', title: 'Registrasi berhasil!', text: 'Silakan login dengan akun Anda.', timer: 1500, showConfirmButton: false })
+                    .then(() => { location.href = res.data.url || @json(route('login')); });
+            }).catch((err) => {
+                const res = err.response || {};
+                const data = res.data || {};
+                if (data.errors) {
+                    const map = { name: '#username', email: '#email', password: '#password' };
+                    Object.keys(data.errors).forEach((key) => $(map[key] || `#${key}`).addClass('sko-input-error'));
                 }
-                });
-                Toast.fire({
-                icon: "error",
-                title: "Email Sudah Digunakan!"
-                });}else{
-                    $('#btn-signup').html('Sign Up')
-                    const Toast = Swal.mixin({
-                    toast: true,
-                    position: "top-end",
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                    toast.onmouseenter = Swal.stopTimer;
-                    toast.onmouseleave = Swal.resumeTimer;
-                    }
-                    });
-                    Toast.fire({
-                    icon: "error",
-                    title: "Isi Semua Data!"
-                    });
-                }
-
-                // $('#btn-signup').html('register')
-                // if (err.response.data.message != 'Wrong email or password.') {
-                //     for (const [key, val] of Object.entries(err.response.data.errors)) {
-                //         $(`#${key}`).addClass('border-danger')
-                //         $(`#error-${key}`).html(val)
-                //     }
-                // } else {
-                //     $(`#password`).addClass('border-danger')
-                //     $(`#error-password`).html(err.response.data.message)
-                // }
-            })
+                SKO.toast('error', SKO.errorMessage({ status: res.status, responseJSON: data }));
+            }).finally(() => {
+                busy = false;
+                $btn.prop('disabled', false).removeClass('is-loading').text('Sign Up');
+            });
         }
 
-        $('#signup-form').on('keyup', function(e) {
-            if (e.keyCode === 13) {
-                signup()
-            }
-        })
-
-        $('#btn-signup').on('click', function() {
-            signup()
-        })
-    })()
+        $('#signup-form').on('submit', (e) => { e.preventDefault(); signup(); });
+        $('#signup-form').on('keyup', (e) => { if (e.key === 'Enter') signup(); });
+        $btn.on('click', signup);
+    })();
 </script>
 @endsection

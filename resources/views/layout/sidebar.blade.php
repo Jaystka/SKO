@@ -1,8 +1,8 @@
-@extends('../layout/base')
+@extends('layout.base')
 
 @section('body')
 
-<body class="login">
+<body class="admin">
 <div class="flex h-screen bg-[#F8F7F3]">
     <div class="w-60 flex flex-col bg-[#F8F7F3] shadow-2xl">
         <div class="p-12 text-center">
@@ -88,26 +88,41 @@
 
     <!-- Content -->
     <div class="flex-1 flex flex-col overflow-hidden">
-    <header class="flex justify-end items-center p-4 py-5 pb-10 shadow-[#575757] shadow-sm z-10">
-        <div class="flex items-start">
-            <div class="relative text-gray-600 pr-20">
-                <input type="search" name="search" class="bg-[#F8F7F3] h-10 px-5 w-80 rounded-xl text-sm focus:outline-none drop-shadow-xl mr-16">
-                <button type="submit" class="absolute right-20 top-0 mt-3 mr-20">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
-                </button>
-            </div
-        </div>
-        </div>
-        <div class="flex items-center px-8">
-            <img src="path_to_logo.png" alt="Logo" class="h-10 w-10">
+    <header class="flex justify-end items-center p-4 py-5 shadow-[#575757] shadow-sm z-10">
+        <div class="flex items-center px-8 text-sm text-gray-600">
+            {{ auth('admin')->user()?->name }}
         </div>
     </header>
     @yield('content')
+    </div>
+</div>
 
+    @include('partials.flash')
+    <script>
+        // Konfirmasi untuk semua form hapus / simpan di panel admin.
+        document.addEventListener('submit', function (e) {
+            const form = e.target;
+            const message = form.dataset.confirm;
+            if (!message || form.dataset.confirmed) return;
+            e.preventDefault();
+            Swal.fire({
+                title: 'Yakin?',
+                text: message,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3C4043',
+                cancelButtonColor: '#B90000',
+                confirmButtonText: 'Ya, lanjutkan',
+                cancelButtonText: 'Batal',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.dataset.confirmed = '1';
+                    form.querySelectorAll('button[type="submit"]').forEach((b) => b.disabled = true);
+                    form.submit();
+                }
+            });
+        });
+    </script>
     @yield('script')
 </body>
 @endsection

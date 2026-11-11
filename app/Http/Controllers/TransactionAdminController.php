@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Transactions;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class TransactionAdminController extends Controller
 {
-    public function transactionsadminView()
+    public function transactionsadminView(Request $request)
     {
-        $transactions = DB::table('transactions')
-            ->join('customers', 'transactions.customer_id', '=', 'customers.customer_id')
-            ->select('transactions.*', 'customers.name as customer_name')
-            ->get();
+        $status = $request->query('status');
 
-        return view('admin/sells', compact('transactions'));
+        $transactions = Transaction::query()
+            ->with('customer')
+            ->when($status, fn ($q) => $q->where('status', $status))
+            ->latest()
+            ->paginate(25)
+            ->withQueryString();
+
+        return view('admin/sells', compact('transactions', 'status'));
     }
 }

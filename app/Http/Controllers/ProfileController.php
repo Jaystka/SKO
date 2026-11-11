@@ -2,35 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
-use Illuminate\Foundation\Auth\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-
 
 class ProfileController extends Controller
 {
-    function profileView()
+    public function profileView(Request $request)
     {
-        return view('profile/profileuser');
+        return view('profile/profileuser', ['customer' => $request->user()]);
     }
 
-    function index()
+    public function index(Request $request)
     {
-        return view('profile/editprofileuser');
+        return view('profile/editprofileuser', ['customer' => $request->user()]);
     }
 
-    public function update(Request $request, string $customer_id)
+    /**
+     * Parameter route diabaikan: customer hanya bisa mengubah profilnya sendiri.
+     */
+    public function update(Request $request): JsonResponse|RedirectResponse
     {
+        $data = $request->validate([
+            'username' => ['required', 'string', 'max:255'],
+            'name' => ['nullable', 'string', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:20', 'regex:/^[0-9+\-\s()]{8,20}$/'],
+            'address' => ['nullable', 'string', 'max:1000'],
+        ], [
+            'phone.regex' => 'Format nomor HP tidak valid.',
+        ]);
 
-        $user = Customer::findOrFail($customer_id);
+        $request->user()->update($data);
 
-        $user->username = $request->username;
-        $user->name = $request->name;
-        $user->phone = $request->phone;
-        $user->address = $request->address;
+        if ($request->expectsJson()) {
+            return response()->json(['success' => true, 'message' => 'Profil berhasil diperbarui.']);
+        }
 
-        $user->update();
-
-        return redirect()->route('profileView');
+        return redirect()->route('profileView')->with('success', 'Profil berhasil diperbarui.');
     }
 }
